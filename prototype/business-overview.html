@@ -21,14 +21,6 @@
         extend: {
           fontFamily: {
             sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-          },
-          colors: {
-            primary: {
-              50: '#f8fafc',
-              100: '#f1f5f9',
-              600: '#0f172a',
-              700: '#020617',
-            }
           }
         }
       }
@@ -36,12 +28,11 @@
   </script>
   <style>
     body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    /* Subtle native-like scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-    /* Tab active states */
+    
     .view-tab-active {
       border-color: #0f172a;
       color: #0f172a;
@@ -61,7 +52,7 @@
 <body class="h-full flex overflow-hidden bg-slate-100 text-slate-900 text-sm antialiased">
 
   <!-- ========================================================= -->
-  <!-- 1. LEFT NAVIGATION SIDEBAR (Standard Enterprise ERP Layout) -->
+  <!-- 1. LEFT NAVIGATION SIDEBAR -->
   <!-- ========================================================= -->
   <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between flex-shrink-0 z-30 select-none">
     <div>
@@ -76,9 +67,12 @@
         </div>
       </div>
 
-      <!-- Store / Branch Selector -->
+      <!-- Store Scope Selector -->
       <div class="p-3 border-b border-slate-800/80">
-        <label class="block text-[10px] uppercase font-semibold text-slate-400 tracking-wider mb-1 px-1">Active Store Scope</label>
+        <div class="flex items-center justify-between mb-1 px-1">
+          <label class="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Store Scope</label>
+          <span id="scopeBadge" class="text-[9px] font-mono text-emerald-400 bg-emerald-950/60 px-1.5 py-0.2 rounded border border-emerald-800">GLOBAL</span>
+        </div>
         <select id="storeSelector" class="w-full bg-slate-800 border border-slate-700 text-xs text-white rounded px-2.5 py-1.5 focus:outline-none focus:border-slate-500 cursor-pointer">
           <option value="all">Global Omnichannel (All)</option>
           <option value="shopify_us">Shopify US Online Store</option>
@@ -88,7 +82,7 @@
         </select>
       </div>
 
-      <!-- Core ERP Modules (The 6 Canonical Modules) -->
+      <!-- Core ERP Modules -->
       <nav class="p-3 space-y-0.5">
         <div class="px-2 pt-2 pb-1 text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Operational Modules</div>
         
@@ -126,12 +120,12 @@
         </a>
 
         <!-- 5. Finance and Reconciliation -->
-        <a href="../dashboard/finance-and-reconciliation.md" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a id="navFinanceLink" href="../dashboard/finance-and-reconciliation.md" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
           <div class="flex items-center gap-2.5">
             <i data-lucide="file-spreadsheet" class="w-4 h-4 text-slate-400"></i>
-            <span>Finance & Reconciliation</span>
+            <span>Finance & Accounts</span>
           </div>
-          <span class="text-[10px] text-slate-400">T+2</span>
+          <span id="navFinanceBadge" class="text-[10px] text-slate-400">T+2</span>
         </a>
 
         <!-- 6. Store / POS -->
@@ -145,22 +139,19 @@
       </nav>
     </div>
 
-    <!-- User Profile & System Status -->
-    <div class="p-3 border-t border-slate-800 text-xs">
-      <div class="flex items-center justify-between px-2 py-1.5 text-slate-400">
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span class="text-[11px]">Database: Connected</span>
-        </div>
-        <span class="text-[10px] font-mono text-slate-400">US-EAST</span>
+    <!-- Active User & Role Details in Sidebar Footer -->
+    <div class="p-3 border-t border-slate-800 text-xs bg-slate-900/70">
+      <div class="flex items-center justify-between px-2 py-1 text-slate-400 text-[11px]">
+        <span>RBAC Policy:</span>
+        <span class="font-mono text-slate-300">v1.4 Enforced</span>
       </div>
-      <div class="mt-2 pt-2 border-t border-slate-800/60 flex items-center justify-between px-2">
-        <div>
-          <div class="font-semibold text-white text-xs">Alexander Ross</div>
-          <div class="text-[10px] text-slate-400">Finance & Commerce Admin</div>
+      <div class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between px-2">
+        <div class="min-w-0">
+          <div id="sidebarUserName" class="font-semibold text-white text-xs truncate">Alexander Ross</div>
+          <div id="sidebarUserRole" class="text-[10px] text-emerald-400 font-medium truncate">Business Owner</div>
         </div>
-        <button title="Settings" class="text-slate-400 hover:text-white">
-          <i data-lucide="settings" class="w-4 h-4"></i>
+        <button onclick="openRbacModal()" title="View Effective Permissions" class="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="shield-check" class="w-4 h-4"></i>
         </button>
       </div>
     </div>
@@ -171,7 +162,7 @@
   <!-- ========================================================= -->
   <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
 
-    <!-- GLOBAL HEADER BAR -->
+    <!-- GLOBAL HEADER BAR WITH PROMINENT ROLE SWITCHER -->
     <header class="h-14 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-20">
       <!-- Search Input -->
       <div class="w-80 relative">
@@ -183,36 +174,64 @@
         >
       </div>
 
-      <!-- Controls: Date Range, Currency, Actions -->
+      <!-- Controls: Role Selector, Date Filter, Actions -->
       <div class="flex items-center gap-3 text-xs">
+
+        <!-- PROMINENT ROLE-BASED ACCESS CONTROL (RBAC) SELECTOR -->
+        <div class="flex items-center bg-slate-50 border border-slate-300 rounded px-2.5 py-1 text-xs">
+          <i data-lucide="shield" class="w-3.5 h-3.5 text-slate-500 mr-1.5"></i>
+          <span class="text-slate-500 font-medium mr-1.5">Active Role:</span>
+          <select id="roleSelector" onchange="handleRoleChange(this.value)" class="bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer">
+            <option value="owner">Business Owner (Full Access)</option>
+            <option value="manager">E-Commerce Manager (Operations)</option>
+            <option value="admin">Commerce Admin (Integrations & Sync)</option>
+            <option value="viewer">Commerce Viewer (Read-Only)</option>
+          </select>
+          <button onclick="openRbacModal()" class="ml-2 text-slate-400 hover:text-slate-700" title="Inspect Permissions Matrix">
+            <i data-lucide="info" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <div class="h-4 w-px bg-slate-200"></div>
+
         <!-- Date Range Filter -->
         <div class="flex items-center bg-white border border-slate-300 rounded divide-x divide-slate-200 text-xs">
           <div class="px-2.5 py-1.5 flex items-center gap-1.5 text-slate-600">
             <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
             <span>Period:</span>
           </div>
-          <select id="dateRangeSelect" onchange="handleDateRangeChange(this.value)" class="bg-transparent px-2.5 py-1.5 font-medium text-slate-800 focus:outline-none cursor-pointer">
-            <option value="30d">Last 30 Days (Oct 26 - Nov 24)</option>
-            <option value="7d">Last 7 Days (Nov 17 - Nov 24)</option>
-            <option value="today">Today (Live 24h)</option>
-            <option value="mtd">Month to Date (MTD)</option>
-            <option value="ytd">Year to Date (YTD)</option>
+          <select id="dateRangeSelect" class="bg-transparent px-2 py-1.5 font-medium text-slate-800 focus:outline-none cursor-pointer">
+            <option value="30d">Last 30 Days</option>
+            <option value="7d">Last 7 Days</option>
+            <option value="today">Today (Live)</option>
+            <option value="mtd">MTD</option>
           </select>
         </div>
 
-        <!-- Export Report -->
-        <button onclick="alert('Generating consolidated Business Overview CSV report...')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium rounded transition">
+        <!-- Export Action (Controlled by Role) -->
+        <button id="btnExport" onclick="handleExportClick()" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium rounded transition">
           <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
-          <span>Export CSV</span>
+          <span>Export</span>
         </button>
 
-        <!-- New PO Action -->
-        <button onclick="openNewPoModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded transition">
+        <!-- New PO Action (Controlled by Role: Disabled for Viewer / Admin) -->
+        <button id="btnNewPo" onclick="handleNewPoClick()" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded transition">
           <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-          <span>New Purchase Order</span>
+          <span>New PO</span>
         </button>
       </div>
     </header>
+
+    <!-- DYNAMIC ROLE PERMISSION NOTIFICATION BANNER -->
+    <div id="roleAlertBanner" class="hidden bg-slate-100 border-b border-slate-200 px-6 py-2 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-2">
+        <i id="roleAlertIcon" data-lucide="info" class="w-4 h-4 text-slate-600 flex-shrink-0"></i>
+        <span id="roleAlertText" class="text-slate-700 font-medium"></span>
+      </div>
+      <button onclick="openRbacModal()" class="text-slate-900 font-semibold underline hover:text-slate-700 text-[11px]">
+        Review Permissions Matrix &rarr;
+      </button>
+    </div>
 
     <!-- MAIN SCROLLABLE CONTENT BODY -->
     <main class="flex-1 overflow-y-auto px-6 py-5 space-y-5 max-w-7xl mx-auto w-full">
@@ -225,14 +244,19 @@
             <i data-lucide="chevron-right" class="w-3 h-3 text-slate-400"></i>
             <span class="text-slate-800">Business Overview</span>
           </div>
-          <h1 class="text-xl font-bold text-slate-900 tracking-tight">Business Overview</h1>
+          <div class="flex items-center gap-3">
+            <h1 class="text-xl font-bold text-slate-900 tracking-tight">Business Overview</h1>
+            <span id="roleHeaderTag" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+              Role: Business Owner
+            </span>
+          </div>
         </div>
 
         <div class="flex items-center gap-4 text-xs text-slate-500">
           <span>Last automated sync: <strong class="text-slate-700">4 mins ago</strong></span>
           <span class="text-slate-300">|</span>
           <span class="flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> All 4 channels connected
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 4 channels connected
           </span>
         </div>
       </div>
@@ -249,18 +273,19 @@
           <button onclick="switchViewTab('tab-inventory', this)" class="view-tab-btn pb-2.5 border-b-2 view-tab-inactive transition">
             Inventory Health & Runway
           </button>
-          <button onclick="switchViewTab('tab-financial', this)" class="view-tab-btn pb-2.5 border-b-2 view-tab-inactive transition">
-            Financial & Cost Reconciliation
+          <button id="tabNavFinancialBtn" onclick="switchViewTab('tab-financial', this)" class="view-tab-btn pb-2.5 border-b-2 view-tab-inactive transition flex items-center gap-1.5">
+            <span>Financial & Cost Reconciliation</span>
+            <span id="tabFinancialLockBadge" class="hidden text-slate-400"><i data-lucide="lock" class="w-3 h-3"></i></span>
           </button>
         </nav>
       </div>
 
       <!-- ========================================================= -->
-      <!-- TAB 1: GENERAL OVERVIEW (DEFAULT) -->
+      <!-- TAB 1: GENERAL OVERVIEW -->
       <!-- ========================================================= -->
       <div id="tab-general" class="tab-pane space-y-5">
 
-        <!-- 1. KEY PERFORMANCE METRICS ROW (Clean, Solid, No Gradients) -->
+        <!-- 1. KEY PERFORMANCE METRICS ROW (WITH FIELD-LEVEL SECURITY RESTRICTIONS) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- Metric 1: Net Sales -->
           <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
@@ -277,7 +302,7 @@
             </div>
             <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between">
               <span>Gross Sales</span>
-              <span class="font-medium text-slate-700">$428,950.00</span>
+              <span id="kpiGrossSales" class="font-medium text-slate-700">$428,950.00</span>
             </div>
           </div>
 
@@ -319,25 +344,25 @@
             </div>
           </div>
 
-          <!-- Metric 4: Gross Margin -->
-          <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+          <!-- Metric 4: Gross Margin & Profit (SENSITIVE FINANCIAL DATA: RESTRICTED BY RBAC) -->
+          <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative">
             <div class="flex items-center justify-between text-slate-500 text-xs">
               <span>Gross Profit & Margin</span>
-              <span class="text-[11px] font-mono text-slate-400">FIFO</span>
+              <span id="flsBadge" class="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">CONFIDENTIAL</span>
             </div>
-            <div class="mt-2 text-2xl font-bold text-slate-900 tracking-tight" id="kpiMargin">41.2%</div>
+            <div class="mt-2 text-2xl font-bold text-slate-900 tracking-tight" id="kpiMarginValue">41.2%</div>
             <div class="mt-1 flex items-center justify-between text-xs">
-              <span class="text-slate-700 font-medium">Profit: $160,320.00</span>
+              <span id="kpiProfitSubtext" class="text-slate-700 font-medium">Profit: $160,320.00</span>
               <span class="text-slate-400 text-[11px]">Target &ge; 40%</span>
             </div>
             <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between">
               <span>Landed COGS</span>
-              <span class="font-medium text-slate-700">$228,800.00</span>
+              <span id="kpiCogsValue" class="font-medium text-slate-700">$228,800.00</span>
             </div>
           </div>
         </div>
 
-        <!-- 2. OPERATIONAL EXCEPTIONS BANNER (Grounded & Realistic) -->
+        <!-- 2. OPERATIONAL EXCEPTIONS BANNER -->
         <div class="bg-amber-50 border border-amber-200 rounded-lg p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
           <div class="flex items-start gap-3">
             <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0"></i>
@@ -353,7 +378,7 @@
             <a href="../dashboard/order-operations.md" class="px-3 py-1.5 bg-white border border-amber-300 hover:bg-amber-100 text-amber-900 font-medium rounded transition">
               Open Order Queue (14) &rarr;
             </a>
-            <button onclick="openNewPoModal('SKU-8841')" class="px-3 py-1.5 bg-amber-800 hover:bg-amber-900 text-white font-medium rounded transition">
+            <button id="btnBannerExpedite" onclick="handleNewPoClick('SKU-8841')" class="px-3 py-1.5 bg-amber-800 hover:bg-amber-900 text-white font-medium rounded transition">
               Expedite PO (SKU-8841)
             </button>
           </div>
@@ -464,7 +489,7 @@
           </div>
         </div>
 
-        <!-- 4. OPERATIONAL TABLES ROW: RECENT ORDERS & STOCK RUNWAY -->
+        <!-- 4. OPERATIONAL TABLES ROW -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
           <!-- Recent Orders (8 Cols) -->
@@ -472,7 +497,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <h2 class="text-xs font-semibold text-slate-900 uppercase tracking-wider">Recent Orders Snapshot</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Click any row to inspect line items, payments, and warehouse allocation</p>
+                <p class="text-xs text-slate-500 mt-0.5">Click any row to inspect line items and fulfillment allocations</p>
               </div>
               <a href="../dashboard/order-operations.md" class="text-xs text-slate-900 hover:underline font-medium">
                 View all in Order Operations &rarr;
@@ -493,7 +518,6 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-slate-800">
-                  <!-- Order 1 -->
                   <tr onclick="showOrderDetails('ORD-9422', 'Sarah Jenkins', 'Shopify US', '$189.50', 'Processing', '2 items')" class="hover:bg-slate-50 cursor-pointer transition">
                     <td class="py-2.5 px-3 font-mono font-medium text-slate-900">#ORD-9422</td>
                     <td class="py-2.5 px-3 text-slate-500">Today, 10:42 AM</td>
@@ -510,7 +534,6 @@
                     </td>
                   </tr>
 
-                  <!-- Order 2 -->
                   <tr onclick="showOrderDetails('ORD-9421', 'David Miller', 'Amazon NA', '$89.50', 'Shipped', '1 item')" class="hover:bg-slate-50 cursor-pointer transition">
                     <td class="py-2.5 px-3 font-mono font-medium text-slate-900">#ORD-9421</td>
                     <td class="py-2.5 px-3 text-slate-500">Today, 09:15 AM</td>
@@ -527,7 +550,6 @@
                     </td>
                   </tr>
 
-                  <!-- Order 3 -->
                   <tr onclick="showOrderDetails('ORD-9420', 'Apex Athletics', 'B2B Portal', '$1,240.00', 'Invoiced', '12 items')" class="hover:bg-slate-50 cursor-pointer transition">
                     <td class="py-2.5 px-3 font-mono font-medium text-slate-900">#ORD-9420</td>
                     <td class="py-2.5 px-3 text-slate-500">Yesterday</td>
@@ -544,7 +566,6 @@
                     </td>
                   </tr>
 
-                  <!-- Order 4: Delayed Exception -->
                   <tr onclick="showOrderDetails('ORD-9418', 'Marcus Thorne', 'Shopify US', '$64.00', 'Delayed', '1 item')" class="hover:bg-amber-50/50 cursor-pointer transition">
                     <td class="py-2.5 px-3 font-mono font-medium text-amber-900">#ORD-9418</td>
                     <td class="py-2.5 px-3 text-slate-500">Nov 22</td>
@@ -557,7 +578,7 @@
                       </span>
                     </td>
                     <td class="py-2.5 px-3 text-right">
-                      <a href="../dashboard/order-operations.md" class="text-amber-800 font-semibold hover:underline">Resolve &rarr;</a>
+                      <span class="text-amber-800 font-semibold hover:underline">Inspect &rarr;</span>
                     </td>
                   </tr>
                 </tbody>
@@ -565,7 +586,7 @@
             </div>
           </div>
 
-          <!-- Inventory Velocity & Reorder Alerts (4 Cols) -->
+          <!-- Inventory Velocity Watch -->
           <div class="lg:col-span-4 bg-white p-5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -573,9 +594,7 @@
                 <a href="../dashboard/inventory-and-replenishment.md" class="text-xs text-slate-900 hover:underline">Full Stock &rarr;</a>
               </div>
 
-              <!-- Product items -->
               <div class="divide-y divide-slate-100 text-xs mt-1">
-                <!-- SKU 1 -->
                 <div class="py-2.5 flex items-center justify-between">
                   <div>
                     <div class="font-medium text-slate-900">Classic Runner 10</div>
@@ -585,13 +604,12 @@
                     <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
                       24 units (1.3d)
                     </span>
-                    <button onclick="openNewPoModal('SKU-8841')" class="block text-[11px] text-slate-900 hover:underline mt-0.5">
+                    <button onclick="handleNewPoClick('SKU-8841')" class="btn-po-action block text-[11px] text-slate-900 hover:underline mt-0.5 font-medium">
                       Create PO
                     </button>
                   </div>
                 </div>
 
-                <!-- SKU 2 -->
                 <div class="py-2.5 flex items-center justify-between">
                   <div>
                     <div class="font-medium text-slate-900">Winter Trail Parka (L)</div>
@@ -601,13 +619,12 @@
                     <span class="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200">
                       42 units (7.0d)
                     </span>
-                    <button onclick="openNewPoModal('SKU-3120')" class="block text-[11px] text-slate-900 hover:underline mt-0.5">
+                    <button onclick="handleNewPoClick('SKU-3120')" class="btn-po-action block text-[11px] text-slate-900 hover:underline mt-0.5 font-medium">
                       Reorder
                     </button>
                   </div>
                 </div>
 
-                <!-- SKU 3 -->
                 <div class="py-2.5 flex items-center justify-between">
                   <div>
                     <div class="font-medium text-slate-900">Active Earbuds Pro</div>
@@ -625,7 +642,7 @@
 
             <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
               <span>Total Inventory Value:</span>
-              <span class="font-mono font-semibold text-slate-900">$612,400.00</span>
+              <span id="kpiInventoryVal" class="font-mono font-semibold text-slate-900">$612,400.00</span>
             </div>
           </div>
         </div>
@@ -633,7 +650,7 @@
       </div>
 
       <!-- ========================================================= -->
-      <!-- TAB 2: CHANNEL PERFORMANCE DEEP DIVE -->
+      <!-- TAB 2: CHANNEL PERFORMANCE -->
       <!-- ========================================================= -->
       <div id="tab-channels" class="tab-pane hidden space-y-5">
         <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm space-y-4">
@@ -709,7 +726,7 @@
               <h2 class="text-sm font-semibold text-slate-900">Stock Depletion Forecaster & Runway</h2>
               <p class="text-xs text-slate-500 mt-0.5">Calculated stockout dates based on 30-day velocity and supplier lead-times</p>
             </div>
-            <button onclick="openNewPoModal()" class="px-3 py-1.5 bg-slate-900 text-white font-medium text-xs rounded hover:bg-slate-800">
+            <button onclick="handleNewPoClick()" class="btn-po-action px-3 py-1.5 bg-slate-900 text-white font-medium text-xs rounded hover:bg-slate-800">
               Generate Recommended POs
             </button>
           </div>
@@ -734,7 +751,7 @@
                 <td class="py-3 px-3">14 days (Apex Mfg)</td>
                 <td class="py-3 px-3 font-bold text-rose-700 font-mono">1.3 Days</td>
                 <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300">STOCKOUT RISK</span></td>
-                <td class="py-3 px-3 text-right"><button onclick="openNewPoModal('SKU-8841')" class="text-slate-900 font-medium hover:underline">Create PO &rarr;</button></td>
+                <td class="py-3 px-3 text-right"><button onclick="handleNewPoClick('SKU-8841')" class="btn-po-action text-slate-900 font-medium hover:underline">Create PO &rarr;</button></td>
               </tr>
               <tr>
                 <td class="py-3 px-3 font-medium text-slate-900">SKU-3120 &bull; Winter Trail Parka (L)</td>
@@ -743,7 +760,7 @@
                 <td class="py-3 px-3">10 days</td>
                 <td class="py-3 px-3 font-bold text-amber-800 font-mono">7.0 Days</td>
                 <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-100 text-amber-900 border border-amber-300">REORDER TRIGGER</span></td>
-                <td class="py-3 px-3 text-right"><button onclick="openNewPoModal('SKU-3120')" class="text-slate-900 font-medium hover:underline">Create PO &rarr;</button></td>
+                <td class="py-3 px-3 text-right"><button onclick="handleNewPoClick('SKU-3120')" class="btn-po-action text-slate-900 font-medium hover:underline">Create PO &rarr;</button></td>
               </tr>
               <tr>
                 <td class="py-3 px-3 font-medium text-slate-900">SKU-4402 &bull; Active Earbuds Pro</td>
@@ -760,10 +777,21 @@
       </div>
 
       <!-- ========================================================= -->
-      <!-- TAB 4: FINANCIAL & COST RECONCILIATION -->
+      <!-- TAB 4: FINANCIAL & COST RECONCILIATION (ROLE PROTECTED) -->
       <!-- ========================================================= -->
       <div id="tab-financial" class="tab-pane hidden space-y-5">
-        <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm space-y-4">
+        <div id="financialRestrictedNotice" class="hidden p-8 bg-white border border-slate-200 rounded-lg text-center space-y-3">
+          <div class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center mx-auto">
+            <i data-lucide="lock" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-semibold text-slate-900">Financial Intelligence Restricted</h3>
+          <p class="text-xs text-slate-500 max-w-md mx-auto">
+            Your active role (<span class="active-role-name font-semibold text-slate-700"></span>) does not have sufficient permission to view general ledger profit margins, FIFO inventory valuation, or merchant fee reconciliation.
+          </p>
+          <div class="text-[11px] font-mono text-slate-400">Policy: SOX-404 Corporate Data Segregation</div>
+        </div>
+
+        <div id="financialContentArea" class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm space-y-4">
           <div class="flex items-center justify-between">
             <div>
               <h2 class="text-sm font-semibold text-slate-900">Financial Recognition & Unit Cost Breakdown</h2>
@@ -801,7 +829,7 @@
   </div>
 
   <!-- ========================================================= -->
-  <!-- 3. SLIDE-OVER DRAWER: ORDER INSPECTION (Real ERP Drilldown) -->
+  <!-- 3. SLIDE-OVER DRAWER: ORDER INSPECTION -->
   <!-- ========================================================= -->
   <aside id="orderDrawer" class="fixed right-0 top-0 bottom-0 w-[420px] bg-white border-l border-slate-300 shadow-xl z-50 transform translate-x-full transition-transform duration-200 flex flex-col">
     <div class="h-14 px-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
@@ -927,13 +955,96 @@
   </div>
 
   <!-- ========================================================= -->
-  <!-- JAVASCRIPT: CLEAN, PRACTICAL ERP SCRIPT -->
+  <!-- 5. MODAL: RBAC PERMISSIONS INSPECTOR -->
+  <!-- ========================================================= -->
+  <div id="rbacModal" class="fixed inset-0 bg-slate-950/40 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-300 rounded-lg max-w-2xl w-full p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-5 h-5 text-slate-900"></i>
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm">Role-Based Access Control (RBAC) Policy</h3>
+            <p class="text-xs text-slate-500">Effective permissions matrix and data governance for <strong id="rbacModalCurrentRole" class="text-slate-800">Business Owner</strong></p>
+          </div>
+        </div>
+        <button onclick="closeRbacModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <div class="overflow-x-auto text-xs">
+        <table class="w-full text-left border border-slate-200">
+          <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+            <tr>
+              <th class="py-2 px-3">ERP Functional Scope</th>
+              <th class="py-2 px-3 text-center">Business Owner</th>
+              <th class="py-2 px-3 text-center">E-com Manager</th>
+              <th class="py-2 px-3 text-center">Commerce Admin</th>
+              <th class="py-2 px-3 text-center">Commerce Viewer</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-700">
+            <tr>
+              <td class="py-2 px-3 font-medium text-slate-900">Gross Sales & Order Volume</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
+              <td class="py-2 px-3 text-center text-slate-500">Limited (L)</td>
+              <td class="py-2 px-3 text-center text-slate-500">View (V)</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-medium text-slate-900">Profit Margins & FIFO COGS</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
+              <td class="py-2 px-3 text-center font-mono text-amber-700 bg-amber-50/40">Masked (L)</td>
+              <td class="py-2 px-3 text-center font-mono text-rose-700 bg-rose-50/40">No Access (N)</td>
+              <td class="py-2 px-3 text-center font-mono text-rose-700 bg-rose-50/40">Masked (V)</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-medium text-slate-900">Order & Exceptions Queue</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
+              <td class="py-2 px-3 text-center text-slate-500">Limited (L)</td>
+              <td class="py-2 px-3 text-center text-slate-500">View (V)</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-medium text-slate-900">Channel & API Sync Monitor</td>
+              <td class="py-2 px-3 text-center text-slate-500">View (V)</td>
+              <td class="py-2 px-3 text-center text-slate-500">View (V)</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
+              <td class="py-2 px-3 text-center text-slate-400">None (N)</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-medium text-slate-900">Write Actions (POs, Expedites)</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Authorized</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Authorized</td>
+              <td class="py-2 px-3 text-center font-mono text-rose-700 bg-rose-50/40">Disabled</td>
+              <td class="py-2 px-3 text-center font-mono text-rose-700 bg-rose-50/40">Disabled</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-medium text-slate-900">Report & CSV Export</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Authorized</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Authorized</td>
+              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Authorized</td>
+              <td class="py-2 px-3 text-center font-mono text-rose-700 bg-rose-50/40">Restricted</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs">
+        <span class="text-slate-500">Policy enforced at API boundary (OAuth 2.0 Scopes & ABAC)</span>
+        <button onclick="closeRbacModal()" class="px-3.5 py-1.5 bg-slate-900 text-white rounded font-medium hover:bg-slate-800">
+          Close Inspector
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- JAVASCRIPT: COMPREHENSIVE ROLE-BASED ACCESS CONTROL (RBAC) -->
   <!-- ========================================================= -->
   <script>
     // Initialize icons
     lucide.createIcons();
 
-    // Chart.js Configuration (Clean, enterprise gray scale with dark slate lines)
+    // Chart instance
     let salesChart = null;
 
     function initSalesChart() {
@@ -950,7 +1061,7 @@
             {
               label: 'Actual Sales',
               data: sales,
-              borderColor: '#0f172a', // Solid Dark Slate
+              borderColor: '#0f172a',
               backgroundColor: 'rgba(15, 23, 42, 0.03)',
               borderWidth: 2,
               pointRadius: 3,
@@ -961,7 +1072,7 @@
             {
               label: 'Daily Target',
               data: target,
-              borderColor: '#94a3b8', // Subtle Gray
+              borderColor: '#94a3b8',
               borderWidth: 1.5,
               borderDash: [4, 4],
               pointRadius: 0,
@@ -1004,7 +1115,174 @@
       });
     }
 
-    // View Tabs Switching
+    // =========================================================
+    // DYNAMIC ROLE-BASED ACCESS CONTROL (RBAC) ENGINE
+    // =========================================================
+    let currentRole = 'owner';
+
+    const roleDefinitions = {
+      owner: {
+        title: 'Business Owner (Full Access)',
+        userName: 'Alexander Ross',
+        headerBadge: 'Role: Business Owner',
+        headerBadgeClass: 'px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200',
+        canViewProfit: true,
+        canViewFinanceTab: true,
+        canWriteActions: true,
+        canExport: true,
+        bannerText: null
+      },
+      manager: {
+        title: 'E-Commerce Manager',
+        userName: 'Elena Rostova',
+        headerBadge: 'Role: E-Commerce Manager',
+        headerBadgeClass: 'px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200',
+        canViewProfit: false,
+        canViewFinanceTab: true,
+        canWriteActions: true,
+        canExport: true,
+        bannerText: 'Operational Management View: Order and channel metrics are active. Sensitive financial margins and supplier cost bases are masked.'
+      },
+      admin: {
+        title: 'Commerce Admin (Integrations & Sync)',
+        userName: 'Marcus Vance',
+        headerBadge: 'Role: Commerce Admin',
+        headerBadgeClass: 'px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-50 text-purple-800 border border-purple-200',
+        canViewProfit: false,
+        canViewFinanceTab: false,
+        canWriteActions: false,
+        canExport: true,
+        bannerText: 'Technical Administration View: Prioritizing channel connectivity and sync latency. Financial margins and operational PO actions are restricted.'
+      },
+      viewer: {
+        title: 'Commerce Viewer (Read-Only)',
+        userName: 'Auditor Session',
+        headerBadge: 'Role: Commerce Viewer (Read-Only)',
+        headerBadgeClass: 'px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-300',
+        canViewProfit: false,
+        canViewFinanceTab: false,
+        canWriteActions: false,
+        canExport: false,
+        bannerText: 'Strict Read-Only Mode: You are viewing an unprivileged audit session. All write actions, PO creation, and financial figures are restricted.'
+      }
+    };
+
+    function handleRoleChange(selectedRole) {
+      currentRole = selectedRole;
+      const config = roleDefinitions[selectedRole];
+      if (!config) return;
+
+      // 1. Update User Details in Sidebar & Header
+      document.getElementById('sidebarUserName').innerText = config.userName;
+      document.getElementById('sidebarUserRole').innerText = config.title;
+      const headerTag = document.getElementById('roleHeaderTag');
+      headerTag.innerText = config.headerBadge;
+      headerTag.className = config.headerBadgeClass;
+
+      // 2. Banner Feedback
+      const banner = document.getElementById('roleAlertBanner');
+      const bannerText = document.getElementById('roleAlertText');
+      if (config.bannerText) {
+        banner.classList.remove('hidden');
+        bannerText.innerText = config.bannerText;
+      } else {
+        banner.classList.add('hidden');
+      }
+
+      // 3. Field-Level Security: Sensitive Financial Data Masking
+      const marginVal = document.getElementById('kpiMarginValue');
+      const profitSub = document.getElementById('kpiProfitSubtext');
+      const cogsVal = document.getElementById('kpiCogsValue');
+      const flsBadge = document.getElementById('flsBadge');
+
+      if (config.canViewProfit) {
+        marginVal.innerText = '41.2%';
+        marginVal.classList.remove('text-slate-400', 'font-normal');
+        marginVal.classList.add('text-slate-900', 'font-bold');
+        profitSub.innerHTML = 'Profit: $160,320.00';
+        cogsVal.innerText = '$228,800.00';
+        flsBadge.innerText = 'CONFIDENTIAL';
+        flsBadge.className = 'text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200';
+      } else {
+        marginVal.innerHTML = '<span class="text-sm font-normal text-slate-400 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 inline-flex items-center gap-1"><i data-lucide="lock" class="w-3 h-3"></i> Restricted</span>';
+        profitSub.innerHTML = '<span class="text-slate-400 text-[11px] font-normal">Restricted by Role</span>';
+        cogsVal.innerHTML = '<span class="text-slate-400 font-normal">Restricted</span>';
+        flsBadge.innerText = 'RESTRICTED';
+        flsBadge.className = 'text-[10px] font-mono text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200';
+      }
+
+      // 4. Action Buttons (New PO, Expedite PO) Disabled for Admin & Viewer
+      const btnNewPo = document.getElementById('btnNewPo');
+      const btnBannerExpedite = document.getElementById('btnBannerExpedite');
+      const poActionButtons = document.querySelectorAll('.btn-po-action');
+
+      if (config.canWriteActions) {
+        btnNewPo.className = 'flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded transition cursor-pointer';
+        btnNewPo.title = 'Create new Purchase Order';
+        btnBannerExpedite.className = 'px-3 py-1.5 bg-amber-800 hover:bg-amber-900 text-white font-medium rounded transition cursor-pointer';
+        btnBannerExpedite.title = 'Expedite PO';
+        poActionButtons.forEach(btn => {
+          btn.classList.remove('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+        });
+      } else {
+        btnNewPo.className = 'flex items-center gap-1.5 px-3 py-1.5 bg-slate-200 text-slate-400 font-medium rounded cursor-not-allowed';
+        btnNewPo.title = 'Action restricted: insufficient write permission';
+        btnBannerExpedite.className = 'px-3 py-1.5 bg-slate-200 text-slate-400 font-medium rounded cursor-not-allowed';
+        btnBannerExpedite.title = 'Action restricted: insufficient write permission';
+        poActionButtons.forEach(btn => {
+          btn.classList.add('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+        });
+      }
+
+      // 5. Export Action Permission
+      const btnExport = document.getElementById('btnExport');
+      if (config.canExport) {
+        btnExport.className = 'flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium rounded transition cursor-pointer';
+        btnExport.title = 'Export CSV summary';
+      } else {
+        btnExport.className = 'flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 border border-slate-200 text-slate-400 font-medium rounded cursor-not-allowed';
+        btnExport.title = 'Export restricted for viewer role';
+      }
+
+      // 6. Financial Tab Access Enforcement
+      const finNotice = document.getElementById('financialRestrictedNotice');
+      const finContent = document.getElementById('financialContentArea');
+      const finLockBadge = document.getElementById('tabFinancialLockBadge');
+      document.querySelectorAll('.active-role-name').forEach(el => el.innerText = config.title);
+
+      if (config.canViewFinanceTab) {
+        finNotice.classList.add('hidden');
+        finContent.classList.remove('hidden');
+        finLockBadge.classList.add('hidden');
+      } else {
+        finNotice.classList.remove('hidden');
+        finContent.classList.add('hidden');
+        finLockBadge.classList.remove('hidden');
+      }
+
+      lucide.createIcons();
+    }
+
+    // Action button intercepts
+    function handleNewPoClick(sku) {
+      const config = roleDefinitions[currentRole];
+      if (!config.canWriteActions) {
+        alert(`[Access Denied]\nYour active role (${config.title}) has read-only or administrative permissions. PO creation requires Business Owner or Operations Manager privileges.`);
+        return;
+      }
+      openNewPoModal(sku);
+    }
+
+    function handleExportClick() {
+      const config = roleDefinitions[currentRole];
+      if (!config.canExport) {
+        alert(`[Export Restricted]\nRole "${config.title}" is not authorized to export proprietary dataset tables.`);
+        return;
+      }
+      alert(`[Export Initiated]\nGenerating verified CSV digest for: ${config.title}`);
+    }
+
+    // Navigation Tabs
     function switchViewTab(targetId, btn) {
       document.querySelectorAll('.view-tab-btn').forEach(b => {
         b.className = 'view-tab-btn pb-2.5 border-b-2 view-tab-inactive transition';
@@ -1018,28 +1296,11 @@
       if (activePane) activePane.classList.remove('hidden');
     }
 
-    // Date Range Dropdown Handler
-    function handleDateRangeChange(range) {
-      if (range === 'today') {
-        document.getElementById('kpiNetSales').innerText = '$18,920.00';
-        document.getElementById('kpiOrders').innerText = '184';
-        document.getElementById('kpiAov').innerText = '$102.80';
-      } else if (range === '7d') {
-        document.getElementById('kpiNetSales').innerText = '$98,400.00';
-        document.getElementById('kpiOrders').innerText = '1,042';
-        document.getElementById('kpiAov').innerText = '$94.40';
-      } else {
-        document.getElementById('kpiNetSales').innerText = '$389,120.00';
-        document.getElementById('kpiOrders').innerText = '4,128';
-        document.getElementById('kpiAov').innerText = '$94.26';
-      }
-    }
-
-    // Order Details Slide-Over Drawer
+    // Modals & Drawers
     function showOrderDetails(orderId, customer, channel, total, status, items) {
       document.getElementById('drawerOrderId').innerText = '#' + orderId;
       document.getElementById('drawerCustomer').innerText = customer;
-      document.getElementById('drawerChannel').innerText = 'Channel: ' + channel;
+      document.getElementById('drawerChannel').innerText = channel;
       document.getElementById('drawerTotal').innerText = total;
       document.getElementById('drawerOrderStatus').innerText = status;
       document.getElementById('orderDrawer').classList.remove('translate-x-full');
@@ -1049,10 +1310,9 @@
       document.getElementById('orderDrawer').classList.add('translate-x-full');
     }
 
-    // Purchase Order Modal
     function openNewPoModal(sku) {
       if (sku) {
-        document.getElementById('poTargetSku').value = sku;
+        document.getElementById('poTargetSku').value = sku + ' - Classic Runner 10';
       }
       document.getElementById('newPoModal').classList.remove('hidden');
     }
@@ -1062,13 +1322,23 @@
     }
 
     function submitNewPo() {
-      alert('Purchase Order created successfully and submitted to Supplier EDI queue.');
+      alert('Purchase Order successfully approved and transmitted to supplier EDI.');
       closeNewPoModal();
+    }
+
+    function openRbacModal() {
+      document.getElementById('rbacModalCurrentRole').innerText = roleDefinitions[currentRole].title;
+      document.getElementById('rbacModal').classList.remove('hidden');
+    }
+
+    function closeRbacModal() {
+      document.getElementById('rbacModal').classList.add('hidden');
     }
 
     // Page Load
     window.onload = function() {
       initSalesChart();
+      handleRoleChange('owner');
     };
   </script>
 </body>
