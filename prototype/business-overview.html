@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50 text-slate-850">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex ERP | E-Commerce Business Overview & Intelligence</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Plus Jakarta Sans Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    /* Subtle custom scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .tab-active {
+      background-color: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      font-weight: 600;
+    }
+    .tab-inactive {
+      color: #64748b;
+      font-weight: 500;
+    }
+    .tab-inactive:hover {
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body class="h-full flex overflow-hidden bg-slate-50 text-slate-900 antialiased text-sm">
+
+  <!-- ======================================================== -->
+  <!-- 1. LEFT SIDEBAR (The 6 Canonical ERP Modules) -->
+  <!-- ======================================================== -->
+  <aside class="w-64 bg-white border-r border-slate-200/80 flex flex-col justify-between flex-shrink-0 z-30 select-none">
+    <div>
+      <!-- Brand Logo & App Name -->
+      <div class="h-16 px-5 flex items-center justify-between border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-sm shadow-brand-500/30">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-slate-900 text-base tracking-tight">Apex ERP</span>
+              <span class="text-[9px] px-1.5 py-0.2 bg-emerald-50 text-emerald-700 font-bold rounded border border-emerald-200">v2.4</span>
+            </div>
+            <span class="block text-[10px] text-slate-400 font-medium uppercase tracking-wider">Enterprise Commerce</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Store / Omnichannel Selector -->
+      <div class="p-3 border-b border-slate-100">
+        <div class="relative">
+          <button onclick="toggleStoreDropdown()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-slate-50 hover:bg-slate-100/80 text-xs text-slate-700 font-medium border border-slate-200/60 transition">
+            <div class="flex items-center gap-2 truncate">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span id="currentStoreName" class="truncate font-semibold text-slate-900">All Channels (Global)</span>
+            </div>
+            <i data-lucide="chevrons-up-down" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Core ERP Modules (The 6 modules in specification) -->
+      <nav class="p-3 space-y-1">
+        <div class="px-3 pt-2 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Core Modules</div>
+        
+        <!-- Active: Business Overview -->
+        <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-brand-50 text-brand-700 font-semibold transition group">
+          <div class="flex items-center gap-3">
+            <i data-lucide="layout-dashboard" class="w-4 h-4 text-brand-600"></i>
+            <span>Business Overview</span>
+          </div>
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span>
+        </a>
+
+        <!-- Order Operations -->
+        <a href="../dashboard/order-operations.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium transition group">
+          <div class="flex items-center gap-3">
+            <i data-lucide="shopping-bag" class="w-4 h-4 text-slate-400 group-hover:text-slate-600"></i>
+            <span>Order Operations</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded-full text-[10px] bg-amber-100 text-amber-800 font-bold">14</span>
+        </a>
+
+        <!-- Warehouse and Fulfillment -->
+        <a href="../dashboard/warehouse-and-fulfillment.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium transition group">
+          <div class="flex items-center gap-3">
+            <i data-lucide="truck" class="w-4 h-4 text-slate-400 group-hover:text-slate-600"></i>
+            <span>Warehouse & Fulfilment</span>
+          </div>
+          <span class="text-[10px] text-emerald-600 font-medium">96.4% SLA</span>
+        </a>
+
+        <!-- Inventory and Replenishment -->
+        <a href="../dashboard/inventory-and-replenishment.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium transition group">
+          <div class="flex items-center gap-3">
+            <i data-lucide="boxes" class="w-4 h-4 text-slate-400 group-hover:text-slate-600"></i>
+            <span>Inventory & Stock</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded-full text-[10px] bg-rose-50 text-rose-700 font-semibold">3 Low</span>
+        </a>
+
+        <!-- Finance and Reconciliation -->
+        <a href="../dashboard/finance-and-reconciliation.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium transition group">
+          <div class="flex items-center gap-3">
+            <i data-lucide="wallet" class="w-4 h-4 text-slate-400 group-hover:text-slate-600"></i>
+            <span>Finance & Accounts</span>
+          </div>
+          <span class="text-[10px] text-slate-400 font-mono">T+2</span>
+        </a>
+
+        <!-- Store / POS -->
+        <a href="../dashboard/store-pos.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium transition group">
+          <div class="flex items-center gap-3">
+            <i data-lucide="store" class="w-4 h-4 text-slate-400 group-hover:text-slate-600"></i>
+            <span>Store / POS</span>
+          </div>
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        </a>
+
+        <div class="pt-4 px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Intelligence Tools</div>
+
+        <!-- AI Business Copilot Link -->
+        <button onclick="openAiDrawer()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-purple-50 hover:text-purple-700 font-medium transition group">
+          <div class="flex items-center gap-3">
+            <i data-lucide="sparkles" class="w-4 h-4 text-purple-500"></i>
+            <span>Commerce Copilot</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded text-[9px] bg-purple-100 text-purple-700 font-bold uppercase">AI</span>
+        </button>
+
+        <!-- Margin Leakage Radar -->
+        <button onclick="switchTab('tab-leakage', document.getElementById('navTabLeakage'))" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-rose-50 hover:text-rose-700 font-medium transition group">
+          <div class="flex items-center gap-3">
+            <i data-lucide="shield-alert" class="w-4 h-4 text-rose-500"></i>
+            <span>Profit Leakage Radar</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded text-[10px] bg-rose-100 text-rose-700 font-bold">-$21.4k</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Active Persona & Workspace Settings Footer -->
+    <div class="p-3 border-t border-slate-100 bg-slate-50/50">
+      <div class="flex items-center justify-between p-2 rounded-lg hover:bg-white transition cursor-pointer border border-transparent hover:border-slate-200/60">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-slate-800 to-slate-700 text-white font-bold flex items-center justify-center text-xs shadow-xs">
+            AM
+          </div>
+          <div class="min-w-0">
+            <div class="font-semibold text-xs text-slate-900 truncate">Alex Morgan</div>
+            <div class="text-[10px] text-slate-400 flex items-center gap-1">
+              <span id="roleBadge" class="font-medium text-brand-600">Executive CEO</span>
+            </div>
+          </div>
+        </div>
+        <button onclick="toggleRoleSelector()" title="Change Role Persona" class="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+          <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- 2. MAIN APP CONTENT CONTAINER -->
+  <!-- ======================================================== -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+    <!-- TOP HEADER BAR -->
+    <header class="h-16 bg-white border-b border-slate-200/80 px-8 flex items-center justify-between flex-shrink-0 z-20">
+      <!-- Search Input -->
+      <div class="w-96 relative">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+        <input 
+          id="globalSearchInput"
+          type="text" 
+          placeholder="Search orders, SKU runway, customers, reports... (Press /)" 
+          class="w-full bg-slate-50 hover:bg-slate-100/70 focus:bg-white text-xs text-slate-800 placeholder-slate-400 rounded-lg pl-9 pr-8 py-2 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"
+          onkeydown="if(event.key === 'Enter') handleSearch(this.value)"
+        >
+        <kbd class="absolute right-2.5 top-2.5 text-[10px] font-mono text-slate-400 bg-slate-200/70 px-1.5 py-0.2 rounded border border-slate-300">/</kbd>
+      </div>
+
+      <!-- Right Header Actions -->
+      <div class="flex items-center gap-3">
+        <!-- Live Currency/Timezone Pill -->
+        <span class="hidden xl:inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 text-[11px] font-mono">
+          <i data-lucide="globe" class="w-3 h-3 text-slate-400"></i> USD ($) &bull; UTC-5
+        </span>
+
+        <!-- Timeframe Switcher -->
+        <div class="flex items-center bg-slate-100/90 border border-slate-200/80 rounded-lg p-0.5 text-xs">
+          <button onclick="changeTimeframe('today', this)" class="tf-btn px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 font-medium transition">Live Today</button>
+          <button onclick="changeTimeframe('7d', this)" class="tf-btn px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 font-medium transition">7D</button>
+          <button onclick="changeTimeframe('30d', this)" class="tf-btn px-2.5 py-1 rounded-md bg-white text-slate-900 font-semibold shadow-xs border border-slate-200/60 transition">Last 30 Days</button>
+          <button onclick="changeTimeframe('quarter', this)" class="tf-btn px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 font-medium transition">Q4 MTD</button>
+        </div>
+
+        <div class="h-5 w-px bg-slate-200"></div>
+
+        <!-- AI Advisor Quick Button -->
+        <button onclick="openAiDrawer()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white text-xs font-semibold shadow-sm shadow-brand-500/20 transition">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 animate-pulse text-amber-200"></i>
+          <span>Ask AI Copilot</span>
+        </button>
+
+        <!-- Notification Bell -->
+        <button onclick="toggleAlertsModal()" class="relative p-2 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition" title="Active Alerts">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500"></span>
+        </button>
+
+        <!-- Quick PO Creation / Action Button -->
+        <button onclick="openPoModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-xs transition">
+          <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-brand-600"></i>
+          <span>New PO</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- LIVE COMMERCE PULSE TICKER -->
+    <div class="bg-white border-b border-slate-200/70 px-8 py-1.5 flex items-center justify-between text-xs text-slate-500 select-none">
+      <div class="flex items-center gap-4 overflow-hidden">
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="flex h-2 w-2 relative">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span class="font-bold text-slate-700 text-[11px] tracking-tight uppercase">Live Stream</span>
+        </div>
+        <div id="liveTicker" class="truncate text-[11px] text-slate-600 flex items-center gap-2">
+          <span>⚡ <strong class="text-slate-900">Order #ORD-9422</strong> placed via Shopify ($189.50) &bull; 14s ago</span>
+          <span class="text-slate-300">|</span>
+          <span>📦 <strong class="text-slate-900">Batch #48</strong> dispatched from Whse Central &bull; 2m ago</span>
+          <span class="text-slate-300">|</span>
+          <span>🔄 Amazon FBA inventory sync completed &bull; 4m ago</span>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-3 text-[11px] flex-shrink-0">
+        <span class="text-slate-400">Confidence: <strong class="text-slate-700">98% Verified</strong></span>
+        <span class="text-slate-300">&bull;</span>
+        <button onclick="refreshData()" class="text-brand-600 hover:underline flex items-center gap-1 font-medium">
+          <i data-lucide="refresh-cw" class="w-3 h-3"></i> Sync Now
+        </button>
+      </div>
+    </div>
+
+    <!-- SCROLLABLE DASHBOARD VIEW -->
+    <main class="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+
+      <!-- ======================================================== -->
+      <!-- EXECUTIVE AI DAILY BRIEFING (High Value, Clean Collapsible) -->
+      <!-- ======================================================== -->
+      <div id="aiBriefingCard" class="bg-gradient-to-r from-brand-50/70 via-indigo-50/40 to-white border border-brand-100 rounded-xl p-4 shadow-xs relative overflow-hidden">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex items-start gap-3.5">
+            <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm shadow-brand-500/30">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-brand-900">Executive Daily Intelligence Briefing</h3>
+                <span class="px-1.5 py-0.2 rounded text-[10px] bg-brand-200/80 text-brand-800 font-bold">Generated Today 08:30 AM</span>
+              </div>
+              <p class="text-xs text-slate-700 mt-1 leading-relaxed">
+                Omnichannel net sales are tracking <strong>12.4% ahead</strong> of the monthly run-rate, propelled by Amazon NA Prime volume. However, <strong>Net Contribution Margin contracted by 0.8%</strong> due to rising reverse-shipping on Footwear (+12.4% returns) and express freight surcharges. 
+              </p>
+              <div class="mt-2.5 flex flex-wrap items-center gap-2 text-xs">
+                <span class="text-slate-400 text-[11px] font-medium">Instant AI Deep Dives:</span>
+                <button onclick="askCopilot('Why did contribution margin drop 0.8% this week?')" class="px-2.5 py-1 rounded-md bg-white border border-brand-200 hover:bg-brand-50 text-brand-700 font-medium text-[11px] shadow-2xs transition">
+                  🔍 Why did margin contract 0.8%?
+                </button>
+                <button onclick="askCopilot('Which SKUs will stockout before next supplier shipment arrives?')" class="px-2.5 py-1 rounded-md bg-white border border-brand-200 hover:bg-brand-50 text-brand-700 font-medium text-[11px] shadow-2xs transition">
+                  📉 Stockout runway on Hero SKUs
+                </button>
+                <button onclick="askCopilot('How can we recover the $21.4k margin leakage?')" class="px-2.5 py-1 rounded-md bg-white border border-brand-200 hover:bg-brand-50 text-brand-700 font-medium text-[11px] shadow-2xs transition">
+                  💡 Fix $21.4k profit leakage
+                </button>
+              </div>
+            </div>
+          </div>
+          <button onclick="document.getElementById('aiBriefingCard').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 p-1">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- DASHBOARD TABS (Clean Navigation Between Perspectives) -->
+      <!-- ======================================================== -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200/80 pb-3">
+        <div>
+          <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Business Overview</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Real-time omnichannel performance, unit economics, and operational runway.</p>
+        </div>
+
+        <!-- Clean Interactive View Tabs -->
+        <div class="flex items-center gap-1 bg-slate-200/70 p-1 rounded-lg text-xs">
+          <button id="navTabOverview" onclick="switchTab('tab-overview', this)" class="tab-btn px-3 py-1.5 rounded-md tab-active transition">
+            Executive Summary
+          </button>
+          <button id="navTabUnitEconomics" onclick="switchTab('tab-economics', this)" class="tab-btn px-3 py-1.5 rounded-md tab-inactive transition flex items-center gap-1">
+            <span>Unit Economics & Margin</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          </button>
+          <button id="navTabRunway" onclick="switchTab('tab-runway', this)" class="tab-btn px-3 py-1.5 rounded-md tab-inactive transition flex items-center gap-1">
+            <span>Inventory Runway</span>
+            <span class="px-1 rounded bg-rose-100 text-rose-700 text-[10px] font-bold">3 Low</span>
+          </button>
+          <button id="navTabLeakage" onclick="switchTab('tab-leakage', this)" class="tab-btn px-3 py-1.5 rounded-md tab-inactive transition flex items-center gap-1">
+            <span>Profit Leakage Radar</span>
+            <span class="px-1 rounded bg-amber-100 text-amber-800 text-[10px] font-bold">-$21.4k</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 1: EXECUTIVE SUMMARY (DEFAULT VIEW) -->
+      <!-- ======================================================== -->
+      <div id="tab-overview" class="tab-content space-y-6">
+
+        <!-- 4 Core Executive Metric Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1: Gross & Net Revenue -->
+          <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition">
+            <div class="flex items-center justify-between text-slate-500 text-xs">
+              <span class="font-medium">Total Net Revenue</span>
+              <div class="w-7 h-7 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <i data-lucide="dollar-sign" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+              <span id="kpiNetSales" class="text-2xl font-extrabold text-slate-900 tracking-tight">$389,120</span>
+              <span class="inline-flex items-center gap-0.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <i data-lucide="trending-up" class="w-3 h-3"></i> +12.4%
+              </span>
+            </div>
+            <div class="mt-2 flex items-center justify-between text-[11px] text-slate-400">
+              <span>Gross: $428,950</span>
+              <span class="text-slate-500 font-medium">Target: $400k (97.3%)</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Total Orders & Velocity -->
+          <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition">
+            <div class="flex items-center justify-between text-slate-500 text-xs">
+              <span class="font-medium">Total Orders Placed</span>
+              <div class="w-7 h-7 rounded-md bg-brand-50 text-brand-600 flex items-center justify-center">
+                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+              <span id="kpiTotalOrders" class="text-2xl font-extrabold text-slate-900 tracking-tight">4,128</span>
+              <span class="inline-flex items-center gap-0.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <i data-lucide="trending-up" class="w-3 h-3"></i> +8.1%
+              </span>
+            </div>
+            <div class="mt-2 flex items-center justify-between text-[11px] text-slate-400">
+              <span>137 orders / day</span>
+              <span class="text-emerald-600 font-medium">96.4% on-time ship</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Average Order Value & Basket -->
+          <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition">
+            <div class="flex items-center justify-between text-slate-500 text-xs">
+              <span class="font-medium">Average Order Value (AOV)</span>
+              <div class="w-7 h-7 rounded-md bg-purple-50 text-purple-600 flex items-center justify-center">
+                <i data-lucide="credit-card" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+              <span id="kpiAov" class="text-2xl font-extrabold text-slate-900 tracking-tight">$94.26</span>
+              <span class="inline-flex items-center gap-0.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <i data-lucide="trending-up" class="w-3 h-3"></i> +3.2%
+              </span>
+            </div>
+            <div class="mt-2 flex items-center justify-between text-[11px] text-slate-400">
+              <span>Basket: 2.4 units</span>
+              <span class="text-slate-500 font-medium">Repeat: 34.8%</span>
+            </div>
+          </div>
+
+          <!-- Card 4: True Contribution Margin -->
+          <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition">
+            <div class="flex items-center justify-between text-slate-500 text-xs">
+              <span class="font-medium">Contribution Margin</span>
+              <div class="w-7 h-7 rounded-md bg-amber-50 text-amber-600 flex items-center justify-center">
+                <i data-lucide="pie-chart" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+              <span id="kpiMargin" class="text-2xl font-extrabold text-slate-900 tracking-tight">41.2%</span>
+              <span class="inline-flex items-center gap-0.5 text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                <i data-lucide="trending-down" class="w-3 h-3"></i> -0.8%
+              </span>
+            </div>
+            <div class="mt-2 flex items-center justify-between text-[11px] text-slate-400">
+              <span>Net Profit: $160,320</span>
+              <button onclick="switchTab('tab-economics', document.getElementById('navTabUnitEconomics'))" class="text-brand-600 hover:underline font-semibold">Inspect &rarr;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTION REQUIRED BANNER (Fast Operational Interventions) -->
+        <div class="bg-gradient-to-r from-amber-50/80 via-white to-white border border-amber-200/90 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="font-bold text-xs text-slate-900 flex items-center gap-2">
+                <span>Operational Exceptions Requiring Attention</span>
+                <span class="px-2 py-0.2 rounded-full text-[10px] bg-rose-100 text-rose-800 font-bold">Immediate Impact: $17,540</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-0.5">
+                <strong>14 orders</strong> delayed beyond 24h fulfillment SLA &bull; <strong>3 Hero SKUs</strong> below 5 days of runway stock.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <a href="../dashboard/order-operations.md" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-xs transition">
+              Resolve 14 Orders &rarr;
+            </a>
+            <button onclick="openPoModal()" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-xs transition">
+              Expedite Supplier PO
+            </button>
+          </div>
+        </div>
+
+        <!-- MAIN SPLIT: REVENUE TREND + OMNICHANNEL CONTRIBUTION -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+          <!-- Left Column: Sales Curve & Benchmark (8 cols) -->
+          <div class="lg:col-span-8 bg-white p-6 rounded-xl border border-slate-200/80 shadow-xs space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div>
+                <h2 class="text-sm font-bold text-slate-900">Revenue Velocity & Pacing Target</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Daily realized gross sales vs daily target ($14k/day average)</p>
+              </div>
+              <div class="flex items-center gap-4 text-xs">
+                <span class="flex items-center gap-1.5 text-slate-700 font-medium">
+                  <span class="w-3 h-1 rounded-full bg-brand-600 inline-block"></span> Actual Sales ($)
+                </span>
+                <span class="flex items-center gap-1.5 text-slate-400">
+                  <span class="w-3 h-1 rounded-full bg-slate-300 inline-block"></span> Target Pace
+                </span>
+              </div>
+            </div>
+
+            <!-- Chart Canvas -->
+            <div class="h-64 w-full">
+              <canvas id="salesVelocityChart"></canvas>
+            </div>
+
+            <!-- Footer Benchmarks -->
+            <div class="pt-4 border-t border-slate-100 grid grid-cols-3 gap-4 text-center">
+              <div>
+                <span class="text-[11px] text-slate-400">Peak Velocity Day</span>
+                <div class="text-xs font-bold text-slate-800 mt-0.5">Fri, Nov 22 ($21,200)</div>
+              </div>
+              <div>
+                <span class="text-[11px] text-slate-400">Pacing Attainment</span>
+                <div class="text-xs font-bold text-emerald-600 mt-0.5">104.2% of MTD Target</div>
+              </div>
+              <div>
+                <span class="text-[11px] text-slate-400">Net Return Rate</span>
+                <div class="text-xs font-bold text-slate-800 mt-0.5">2.4% (Threshold: &le;4%)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Omnichannel Mix & Live Status (4 cols) -->
+          <div class="lg:col-span-4 bg-white p-6 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h2 class="text-sm font-bold text-slate-900">Omnichannel Sales Mix</h2>
+                  <p class="text-[11px] text-slate-400">Contribution & sync status</p>
+                </div>
+                <span class="text-xs text-slate-400">Share</span>
+              </div>
+
+              <!-- Channel Bars -->
+              <div class="space-y-4 text-xs">
+                <!-- Shopify -->
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="font-medium text-slate-700 flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-brand-600"></span> Shopify Web (D2C)
+                    </span>
+                    <span class="font-semibold text-slate-900">$225.6k <span class="text-slate-400 font-normal">(58%)</span></span>
+                  </div>
+                  <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-brand-600 rounded-full" style="width: 58%"></div>
+                  </div>
+                </div>
+
+                <!-- Amazon -->
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="font-medium text-slate-700 flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Amazon NA (Marketplace)
+                    </span>
+                    <span class="font-semibold text-slate-900">$97.2k <span class="text-slate-400 font-normal">(25%)</span></span>
+                  </div>
+                  <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-amber-500 rounded-full" style="width: 25%"></div>
+                  </div>
+                </div>
+
+                <!-- Retail Flagship -->
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="font-medium text-slate-700 flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Retail Flagship POS
+                    </span>
+                    <span class="font-semibold text-slate-900">$46.6k <span class="text-slate-400 font-normal">(12%)</span></span>
+                  </div>
+                  <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-500 rounded-full" style="width: 12%"></div>
+                  </div>
+                </div>
+
+                <!-- Wholesale B2B -->
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="font-medium text-slate-700 flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> Wholesale B2B Portal
+                    </span>
+                    <span class="font-semibold text-slate-900">$19.7k <span class="text-slate-400 font-normal">(5%)</span></span>
+                  </div>
+                  <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-purple-500 rounded-full" style="width: 5%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 4 of 4 Channels Active
+              </span>
+              <a href="../dashboard/store-pos.md" class="text-brand-600 hover:text-brand-700 font-semibold text-[11px]">Configure &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECOND SPLIT: LIVE ORDERS TABLE & TOP HERO SKUS -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+          <!-- Live Orders Table (8 cols) -->
+          <div class="lg:col-span-8 bg-white p-6 rounded-xl border border-slate-200/80 shadow-xs space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-sm font-bold text-slate-900">Recent Live Orders</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Click any row to inspect line items, ERP allocations, and tracking</p>
+              </div>
+              <a href="../dashboard/order-operations.md" class="text-xs text-brand-600 hover:text-brand-700 font-semibold">
+                View all 4,128 orders &rarr;
+              </a>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="text-slate-400 font-medium border-b border-slate-100">
+                  <tr>
+                    <th class="pb-2.5">Order ID</th>
+                    <th class="pb-2.5">Customer</th>
+                    <th class="pb-2.5">Channel</th>
+                    <th class="pb-2.5">Total</th>
+                    <th class="pb-2.5">Status</th>
+                    <th class="pb-2.5 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-slate-700">
+                  <!-- Row 1 -->
+                  <tr onclick="inspectOrder('ORD-9422', 'Sarah Jenkins', 'Shopify Web', '$189.50', 'Paid', 'Fulfillment Queue')" class="hover:bg-slate-50 cursor-pointer transition">
+                    <td class="py-3 font-semibold text-slate-900 font-mono">#ORD-9422</td>
+                    <td class="py-3">Sarah Jenkins</td>
+                    <td class="py-3 text-slate-500">Shopify Web</td>
+                    <td class="py-3 font-semibold">$189.50</td>
+                    <td class="py-3">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700">
+                        Paid &bull; Queued
+                      </span>
+                    </td>
+                    <td class="py-3 text-right">
+                      <button class="text-brand-600 hover:underline font-medium">Inspect</button>
+                    </td>
+                  </tr>
+
+                  <!-- Row 2 -->
+                  <tr onclick="inspectOrder('ORD-9421', 'David Miller', 'Amazon NA', '$89.50', 'Shipped', 'FBA Express')" class="hover:bg-slate-50 cursor-pointer transition">
+                    <td class="py-3 font-semibold text-slate-900 font-mono">#ORD-9421</td>
+                    <td class="py-3">David Miller</td>
+                    <td class="py-3 text-slate-500">Amazon NA</td>
+                    <td class="py-3 font-semibold">$89.50</td>
+                    <td class="py-3">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-700">
+                        Shipped (FBA)
+                      </span>
+                    </td>
+                    <td class="py-3 text-right">
+                      <button class="text-brand-600 hover:underline font-medium">Inspect</button>
+                    </td>
+                  </tr>
+
+                  <!-- Row 3 -->
+                  <tr onclick="inspectOrder('ORD-9420', 'Apex Athletics', 'B2B Wholesale', '$1,240.00', 'Invoiced', 'Net-30 Terms')" class="hover:bg-slate-50 cursor-pointer transition">
+                    <td class="py-3 font-semibold text-slate-900 font-mono">#ORD-9420</td>
+                    <td class="py-3">Apex Athletics</td>
+                    <td class="py-3 text-slate-500">B2B Wholesale</td>
+                    <td class="py-3 font-semibold">$1,240.00</td>
+                    <td class="py-3">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-50 text-purple-700">
+                        Net-30 Invoiced
+                      </span>
+                    </td>
+                    <td class="py-3 text-right">
+                      <button class="text-brand-600 hover:underline font-medium">Inspect</button>
+                    </td>
+                  </tr>
+
+                  <!-- Row 4 (Exception) -->
+                  <tr onclick="inspectOrder('ORD-9418', 'Marcus Thorne', 'Shopify Web', '$64.00', 'Delayed', 'Zone B Bottleneck')" class="hover:bg-rose-50/50 cursor-pointer transition">
+                    <td class="py-3 font-semibold text-rose-700 font-mono">#ORD-9418</td>
+                    <td class="py-3">Marcus Thorne</td>
+                    <td class="py-3 text-slate-500">Shopify Web</td>
+                    <td class="py-3 font-semibold">$64.00</td>
+                    <td class="py-3">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-100 text-rose-800">
+                        Delayed &gt;24h
+                      </span>
+                    </td>
+                    <td class="py-3 text-right">
+                      <span class="text-rose-600 font-semibold text-xs">Resolve &rarr;</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Hero SKUs & Runway Risk (4 cols) -->
+          <div class="lg:col-span-4 bg-white p-6 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h2 class="text-sm font-bold text-slate-900">Hero SKUs Runway</h2>
+                  <p class="text-[11px] text-slate-400">Stock vs Burn Rate</p>
+                </div>
+                <button onclick="switchTab('tab-runway', document.getElementById('navTabRunway'))" class="text-xs text-brand-600 hover:underline font-semibold">View All &rarr;</button>
+              </div>
+
+              <div class="space-y-3.5 text-xs">
+                <!-- SKU 1 -->
+                <div class="p-2.5 rounded-lg border border-rose-200 bg-rose-50/40 flex items-center justify-between">
+                  <div>
+                    <div class="font-bold text-slate-900">Classic Runner 10</div>
+                    <div class="text-[11px] text-slate-500 font-mono">SKU-8841 &bull; 18 sold/day</div>
+                    <div class="text-[11px] text-rose-700 font-bold mt-0.5">⚠️ 24 left (1.3 Days Runway)</div>
+                  </div>
+                  <button onclick="openPoModal('SKU-8841', 'Classic Runner 10')" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded text-[11px] shadow-2xs">
+                    PO Expedite
+                  </button>
+                </div>
+
+                <!-- SKU 2 -->
+                <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50/60 flex items-center justify-between">
+                  <div>
+                    <div class="font-bold text-slate-900">Active Earbuds Pro</div>
+                    <div class="text-[11px] text-slate-500 font-mono">SKU-4402 &bull; 12 sold/day</div>
+                    <div class="text-[11px] text-emerald-700 font-semibold mt-0.5">320 left (26 Days Runway)</div>
+                  </div>
+                  <span class="text-emerald-600 font-semibold text-[11px]">Healthy</span>
+                </div>
+
+                <!-- SKU 3 -->
+                <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50/60 flex items-center justify-between">
+                  <div>
+                    <div class="font-bold text-slate-900">Merino Wool Beanie</div>
+                    <div class="text-[11px] text-slate-500 font-mono">SKU-2190 &bull; 8 sold/day</div>
+                    <div class="text-[11px] text-emerald-700 font-semibold mt-0.5">180 left (22 Days Runway)</div>
+                  </div>
+                  <span class="text-emerald-600 font-semibold text-[11px]">Healthy</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+              <span>Weighted Lead Time: <strong>14 Days</strong></span>
+              <span class="text-rose-600 font-semibold">1 SKU Critical</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 2: UNIT ECONOMICS & MARGIN WATERFALL (UNIQUE FEATURE) -->
+      <!-- ======================================================== -->
+      <div id="tab-economics" class="tab-content hidden space-y-6">
+        <div class="bg-white p-6 rounded-xl border border-slate-200/80 shadow-xs space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">True Omnichannel Contribution Waterfall</h2>
+              <p class="text-xs text-slate-400 mt-0.5">Complete transparent unit economics from Gross Order Value down to Net Free Cashflow</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
+                True Margin: 41.2%
+              </span>
+            </div>
+          </div>
+
+          <!-- Unit Economics Waterfall Visual Steps -->
+          <div class="grid grid-cols-1 md:grid-cols-6 gap-3 text-xs">
+            <!-- Step 1: Gross Sales -->
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <span class="text-slate-500 font-medium">1. Gross Order Value</span>
+              <div class="text-lg font-extrabold text-slate-900 mt-1">$428,950</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">100.0% of Topline</div>
+            </div>
+
+            <!-- Step 2: Discounts -->
+            <div class="p-3.5 rounded-lg bg-amber-50/60 border border-amber-200/80">
+              <span class="text-amber-800 font-medium">2. Discounts & Promos</span>
+              <div class="text-lg font-extrabold text-amber-700 mt-1">-$24,310</div>
+              <div class="text-[10px] text-amber-700/80 mt-0.5">5.6% promotion burn</div>
+            </div>
+
+            <!-- Step 3: Product COGS -->
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <span class="text-slate-500 font-medium">3. Landed COGS (FIFO)</span>
+              <div class="text-lg font-extrabold text-slate-800 mt-1">-$172,500</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">Product supplier cost</div>
+            </div>
+
+            <!-- Step 4: Shipping & Fulfilment -->
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <span class="text-slate-500 font-medium">4. Freight & Carrier</span>
+              <div class="text-lg font-extrabold text-slate-800 mt-1">-$38,200</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">Outbound shipping</div>
+            </div>
+
+            <!-- Step 5: Merchant & Channel Fees -->
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <span class="text-slate-500 font-medium">5. Gateway & Take Rate</span>
+              <div class="text-lg font-extrabold text-slate-800 mt-1">-$33,620</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">Amazon FBA + Stripe</div>
+            </div>
+
+            <!-- Step 6: Net Contribution Profit -->
+            <div class="p-3.5 rounded-lg bg-emerald-50 border border-emerald-300">
+              <span class="text-emerald-800 font-bold">6. Net Contribution</span>
+              <div class="text-lg font-extrabold text-emerald-700 mt-1">$160,320</div>
+              <div class="text-[10px] text-emerald-700 font-semibold mt-0.5">41.2% Net Margin</div>
+            </div>
+          </div>
+
+          <!-- Channel-Level Margin Comparison Table -->
+          <div class="pt-4 border-t border-slate-100">
+            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Profitability by Channel</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="text-slate-400 border-b border-slate-100 pb-2">
+                  <tr>
+                    <th class="pb-2">Sales Channel</th>
+                    <th class="pb-2">Gross Sales</th>
+                    <th class="pb-2">Deductions</th>
+                    <th class="pb-2">COGS</th>
+                    <th class="pb-2">Channel Take Rate</th>
+                    <th class="pb-2 font-bold text-slate-800">Net Profit ($)</th>
+                    <th class="pb-2 font-bold text-slate-800">Margin (%)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-slate-700">
+                  <tr>
+                    <td class="py-2.5 font-bold text-slate-900">Shopify Online Store</td>
+                    <td class="py-2.5">$248,500</td>
+                    <td class="py-2.5 text-amber-700">-$14,200</td>
+                    <td class="py-2.5">-$98,000</td>
+                    <td class="py-2.5 text-slate-500">2.9% (Payment)</td>
+                    <td class="py-2.5 font-bold text-emerald-700">$108,100</td>
+                    <td class="py-2.5 font-bold text-emerald-700">46.1%</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 font-bold text-slate-900">Amazon Marketplace</td>
+                    <td class="py-2.5">$108,200</td>
+                    <td class="py-2.5 text-amber-700">-$6,400</td>
+                    <td class="py-2.5">-$44,500</td>
+                    <td class="py-2.5 text-rose-600">15.0% (FBA Fee)</td>
+                    <td class="py-2.5 font-bold text-emerald-700">$32,400</td>
+                    <td class="py-2.5 font-bold text-emerald-700">31.8%</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 font-bold text-slate-900">Retail Flagship POS</td>
+                    <td class="py-2.5">$19,850</td>
+                    <td class="py-2.5 text-amber-700">-$1,200</td>
+                    <td class="py-2.5">-$8,200</td>
+                    <td class="py-2.5 text-slate-500">1.8% (Interchange)</td>
+                    <td class="py-2.5 font-bold text-emerald-700">$9,400</td>
+                    <td class="py-2.5 font-bold text-emerald-700">50.4%</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 font-bold text-slate-900">Wholesale B2B Portal</td>
+                    <td class="py-2.5">$52,400</td>
+                    <td class="py-2.5 text-amber-700">-$2,510</td>
+                    <td class="py-2.5">-$21,800</td>
+                    <td class="py-2.5 text-slate-500">0.8% (ACH)</td>
+                    <td class="py-2.5 font-bold text-emerald-700">$10,420</td>
+                    <td class="py-2.5 font-bold text-emerald-700">20.8%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 3: INVENTORY RUNWAY & FORECASTING (UNIQUE FEATURE) -->
+      <!-- ======================================================== -->
+      <div id="tab-runway" class="tab-content hidden space-y-6">
+        <div class="bg-white p-6 rounded-xl border border-slate-200/80 shadow-xs space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">Omnichannel Inventory Runway Forecaster</h2>
+              <p class="text-xs text-slate-400 mt-0.5">Calculates exact stock exhaustion dates based on 30-day velocity against supplier lead times</p>
+            </div>
+            <button onclick="openPoModal()" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-semibold shadow-xs">
+              Generate Recommended POs
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="text-slate-400 border-b border-slate-100">
+                <tr>
+                  <th class="pb-2.5">SKU & Product</th>
+                  <th class="pb-2.5">Current Stock</th>
+                  <th class="pb-2.5">Burn Rate</th>
+                  <th class="pb-2.5">Supplier Lead Time</th>
+                  <th class="pb-2.5">Runway Left</th>
+                  <th class="pb-2.5">Risk Level</th>
+                  <th class="pb-2.5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                <!-- SKU 1: Critical -->
+                <tr class="hover:bg-rose-50/40 transition">
+                  <td class="py-3">
+                    <div class="font-bold text-slate-900">Classic Runner 10</div>
+                    <div class="text-[11px] text-slate-400 font-mono">SKU-8841 &bull; Warehouse Central-01</div>
+                  </td>
+                  <td class="py-3 font-semibold text-rose-700">24 units</td>
+                  <td class="py-3">18 units / day</td>
+                  <td class="py-3">14 days (Apex Mfg)</td>
+                  <td class="py-3">
+                    <span class="font-bold text-rose-700">1.3 Days</span>
+                    <span class="block text-[10px] text-slate-400">Stockout: Tomorrow 04:00 PM</span>
+                  </td>
+                  <td class="py-3">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">
+                      CRITICAL RISK
+                    </span>
+                  </td>
+                  <td class="py-3 text-right">
+                    <button onclick="openPoModal('SKU-8841', 'Classic Runner 10')" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded text-[11px]">
+                      Expedite PO
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- SKU 2: Attention -->
+                <tr class="hover:bg-amber-50/40 transition">
+                  <td class="py-3">
+                    <div class="font-bold text-slate-900">Winter Trail Parka (L)</div>
+                    <div class="text-[11px] text-slate-400 font-mono">SKU-3120 &bull; Amazon FBA NA</div>
+                  </td>
+                  <td class="py-3 font-semibold text-amber-800">42 units</td>
+                  <td class="py-3">6 units / day</td>
+                  <td class="py-3">10 days</td>
+                  <td class="py-3">
+                    <span class="font-bold text-amber-800">7.0 Days</span>
+                    <span class="block text-[10px] text-slate-400">Reorder trigger breached</span>
+                  </td>
+                  <td class="py-3">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
+                      REORDER NOW
+                    </span>
+                  </td>
+                  <td class="py-3 text-right">
+                    <button onclick="openPoModal('SKU-3120', 'Winter Trail Parka')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded text-[11px]">
+                      Create PO
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- SKU 3: Healthy -->
+                <tr class="hover:bg-slate-50 transition">
+                  <td class="py-3">
+                    <div class="font-bold text-slate-900">Active Earbuds Pro</div>
+                    <div class="text-[11px] text-slate-400 font-mono">SKU-4402 &bull; Hub Central-02</div>
+                  </td>
+                  <td class="py-3 font-semibold text-emerald-700">320 units</td>
+                  <td class="py-3">12 units / day</td>
+                  <td class="py-3">12 days</td>
+                  <td class="py-3">
+                    <span class="font-bold text-emerald-700">26.6 Days</span>
+                    <span class="block text-[10px] text-slate-400">Next reorder in 14 days</span>
+                  </td>
+                  <td class="py-3">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">
+                      HEALTHY
+                    </span>
+                  </td>
+                  <td class="py-3 text-right">
+                    <span class="text-slate-400 text-[11px]">Optimal</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 4: PROFIT LEAKAGE RADAR (UNIQUE FEATURE) -->
+      <!-- ======================================================== -->
+      <div id="tab-leakage" class="tab-content hidden space-y-6">
+        <div class="bg-white p-6 rounded-xl border border-slate-200/80 shadow-xs space-y-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-rose-500"></i>
+                <h2 class="text-sm font-bold text-slate-900">Automated Profit Leakage Diagnostics</h2>
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5">Identifies preventable operational expenses, surcharge spikes, and return margins</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 font-bold text-xs border border-rose-200">
+              Recoverable: -$21,490 / Month
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <!-- Leak 1: Return Surge -->
+            <div class="p-4 rounded-xl border border-rose-200 bg-rose-50/30 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500 text-white">Leakage: -$8,420</span>
+                  <span class="text-[10px] text-slate-400">Footwear Hub</span>
+                </div>
+                <h4 class="font-bold text-slate-900 mt-2.5">Sizing Mismatch Return Spike</h4>
+                <p class="text-[11px] text-slate-600 mt-1 leading-snug">
+                  Classic Runner 10 return rate surged to 14.8%. 62% of RMA notes cite "runs half a size small".
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-rose-200/80 flex items-center justify-between">
+                <span class="text-[10px] text-rose-800 font-medium">Fix: Update Size Guide</span>
+                <button onclick="alert('Triggered: Notification dispatched to Catalog Operations to publish adjusted sizing guide.')" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded text-[11px]">
+                  Apply Fix
+                </button>
+              </div>
+            </div>
+
+            <!-- Leak 2: Payment Gateway Creep -->
+            <div class="p-4 rounded-xl border border-amber-200 bg-amber-50/30 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500 text-white">Leakage: -$6,800</span>
+                  <span class="text-[10px] text-slate-400">Finance Gateway</span>
+                </div>
+                <h4 class="font-bold text-slate-900 mt-2.5">Non-Optimized Card Routing</h4>
+                <p class="text-[11px] text-slate-600 mt-1 leading-snug">
+                  EU cross-border cards routed through US acquiring merchant, inducing 1.5% international interchange surcharge.
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-amber-200/80 flex items-center justify-between">
+                <span class="text-[10px] text-amber-800 font-medium">Fix: Enable Local Acquirer</span>
+                <button onclick="alert('Triggered: Routing rule updated to route EUR transactions through Adyen Amsterdam.')" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded text-[11px]">
+                  Reroute Acquirer
+                </button>
+              </div>
+            </div>
+
+            <!-- Leak 3: Amazon Aged Storage Fee -->
+            <div class="p-4 rounded-xl border border-purple-200 bg-purple-50/30 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500 text-white">Leakage: -$6,270</span>
+                  <span class="text-[10px] text-slate-400">Amazon NA</span>
+                </div>
+                <h4 class="font-bold text-slate-900 mt-2.5">180-Day Aged Inventory Penalty</h4>
+                <p class="text-[11px] text-slate-600 mt-1 leading-snug">
+                  110 units of Summer Sandals approaching FBA long-term surcharge date on Dec 15th.
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-purple-200/80 flex items-center justify-between">
+                <span class="text-[10px] text-purple-800 font-medium">Fix: Flash Sale or Removal</span>
+                <button onclick="alert('Triggered: Created Automated Amazon Outlet promotion at 25% discount.')" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded text-[11px]">
+                  Liquidate
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 3. SLIDE-OVER: ORDER DETAIL INSPECTOR DRAWER -->
+  <!-- ======================================================== -->
+  <aside id="orderDrawer" class="fixed right-0 top-0 bottom-0 w-[420px] bg-white border-l border-slate-200 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+      <div>
+        <div class="flex items-center gap-2">
+          <h3 id="drawerOrderId" class="text-sm font-bold text-slate-900 font-mono">#ORD-9422</h3>
+          <span id="drawerOrderStatus" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700">Paid &bull; Queued</span>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-0.5">Order Operations & ERP Fulfillment Trace</p>
+      </div>
+      <button onclick="closeOrderDrawer()" class="p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-700">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Drawer Content -->
+    <div class="flex-1 overflow-y-auto p-5 space-y-5 text-xs">
+      <!-- Customer Info -->
+      <div class="p-3 rounded-lg bg-slate-50 border border-slate-200/80 space-y-1">
+        <div class="font-bold text-slate-900" id="drawerCustomer">Sarah Jenkins</div>
+        <div class="text-[11px] text-slate-500" id="drawerChannel">Channel: Shopify Online Store (D2C)</div>
+        <div class="text-[11px] text-slate-500">Shipping: FedEx Home Delivery &bull; Priority 2-Day</div>
+      </div>
+
+      <!-- Financial Reconciliation Snapshot -->
+      <div>
+        <h4 class="text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-2">Financial Accounting</h4>
+        <div class="space-y-1.5 text-[11px]">
+          <div class="flex justify-between text-slate-600">
+            <span>Subtotal (2 items)</span>
+            <span class="font-mono">$174.00</span>
+          </div>
+          <div class="flex justify-between text-slate-600">
+            <span>Shipping Charged</span>
+            <span class="font-mono">$9.50</span>
+          </div>
+          <div class="flex justify-between text-slate-600">
+            <span>Sales Tax Remittance</span>
+            <span class="font-mono">$6.00</span>
+          </div>
+          <div class="pt-1.5 border-t border-slate-200 flex justify-between font-bold text-slate-900">
+            <span>Captured Total</span>
+            <span id="drawerTotal" class="font-mono text-emerald-600">$189.50</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ERP Lifecycle Timeline -->
+      <div>
+        <h4 class="text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-3">Fulfillment Lifecycle</h4>
+        <ol class="relative border-l border-slate-200 ml-2 space-y-4 text-xs">
+          <li class="ml-4">
+            <span class="absolute -left-1.5 mt-0.5 w-3 h-3 rounded-full bg-emerald-500"></span>
+            <h5 class="font-bold text-slate-900">Order Captured & Paid</h5>
+            <p class="text-[10px] text-slate-400">Payment ID #ch_3N82x9 &bull; Auth complete</p>
+          </li>
+          <li class="ml-4">
+            <span class="absolute -left-1.5 mt-0.5 w-3 h-3 rounded-full bg-emerald-500"></span>
+            <h5 class="font-bold text-slate-900">Inventory Allocated</h5>
+            <p class="text-[10px] text-slate-400">Reserved from Warehouse Central-01 (Bin C-14)</p>
+          </li>
+          <li class="ml-4">
+            <span class="absolute -left-1.5 mt-0.5 w-3 h-3 rounded-full bg-brand-500 animate-pulse"></span>
+            <h5 class="font-bold text-brand-700">Released to Pick Wave #49</h5>
+            <p class="text-[10px] text-slate-500">Scheduled for packing station 3</p>
+          </li>
+          <li class="ml-4 text-slate-400">
+            <span class="absolute -left-1.5 mt-0.5 w-3 h-3 rounded-full bg-slate-200"></span>
+            <h5>Carrier Label Generated & Dispatched</h5>
+            <p class="text-[10px] text-slate-400">Pending barcode verification</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Drawer Footer Actions -->
+    <div class="p-4 border-t border-slate-100 bg-slate-50/80 flex items-center justify-between">
+      <a href="../dashboard/order-operations.md" class="text-xs text-brand-600 hover:underline font-semibold">Open in Order Ops &rarr;</a>
+      <button onclick="closeOrderDrawer()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-semibold">Close</button>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- 4. SLIDE-OVER: COMMERCE COPILOT AI CHAT -->
+  <!-- ======================================================== -->
+  <aside id="aiDrawer" class="fixed right-0 top-0 bottom-0 w-[420px] bg-white border-l border-slate-200 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-brand-50 to-purple-50">
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-brand-600 to-purple-600 flex items-center justify-center text-white">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <h3 class="text-xs font-bold text-slate-900">Apex Commerce Copilot</h3>
+          <p class="text-[10px] text-slate-400">RAG Context: Verified ERP Financials & SLAs</p>
+        </div>
+      </div>
+      <button onclick="closeAiDrawer()" class="p-1 rounded hover:bg-white text-slate-400 hover:text-slate-700">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Chat Messages Feed -->
+    <div id="aiChatFeed" class="flex-1 overflow-y-auto p-4 space-y-3 text-xs">
+      <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-slate-700 space-y-1.5">
+        <div class="font-bold text-brand-700 flex items-center gap-1.5 text-xs">
+          <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+          <span>ERP Business Intelligence Assistant</span>
+        </div>
+        <p class="text-[11px] leading-relaxed">
+          I am connected to all 6 core ERP modules. I can analyze profit leakage, supplier lead-time stockouts, carrier SLA delays, or customer AOV segments.
+        </p>
+      </div>
+    </div>
+
+    <!-- Chat Input Box -->
+    <div class="p-3 border-t border-slate-100 bg-white">
+      <form onsubmit="handleAiChatSubmit(event)" class="relative">
+        <input 
+          id="aiChatInput" 
+          type="text" 
+          placeholder="Ask Copilot about margins, stockout runway, or orders..." 
+          class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-10 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500"
+        >
+        <button type="submit" class="absolute right-1.5 top-1.5 p-1 rounded bg-brand-600 hover:bg-brand-500 text-white transition">
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        </button>
+      </form>
+      <div class="mt-1.5 flex justify-between text-[9px] text-slate-400">
+        <span>Deterministic retrieval only</span>
+        <span>Role: Executive Access</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- 5. MODAL: QUICK PURCHASE ORDER GENERATOR -->
+  <!-- ======================================================== -->
+  <div id="poModal" class="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="file-plus" class="w-4 h-4 text-brand-600"></i>
+          <h3 class="text-sm font-bold text-slate-900">Expedite Purchase Order (PO)</h3>
+        </div>
+        <button onclick="closePoModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-500 text-[11px] font-semibold mb-1">Target Product / SKU</label>
+          <input id="poSkuInput" type="text" value="SKU-8841 - Classic Runner 10" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-900">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-500 text-[11px] font-semibold mb-1">Order Quantity (Units)</label>
+            <input type="number" value="350" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-bold text-slate-900">
+            <span class="text-[10px] text-slate-400 mt-0.5">Restores 24 days runway</span>
+          </div>
+          <div>
+            <label class="block text-slate-500 text-[11px] font-semibold mb-1">Primary Supplier</label>
+            <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900">
+              <option>Apex Manufacturing (Lead: 14d)</option>
+              <option>FastTrack Express Vendor (Lead: 5d)</option>
+            </select>
+          </div>
+        </div>
+        <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-[11px]">
+          Estimated Total Cost: <strong>$15,750.00</strong> &bull; Requires Authorized Manager Sign-off.
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+        <button onclick="closePoModal()" class="px-3 py-1.5 text-slate-500 hover:text-slate-700 text-xs font-medium">Cancel</button>
+        <button onclick="submitPo()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-semibold shadow-xs">
+          Authorize & Route to Inventory
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT: INTERACTIVE REAL ERP LOGIC -->
+  <!-- ======================================================== -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Chart.js Revenue Line Chart
+    let salesChartInstance = null;
+
+    function initVelocityChart() {
+      const ctx = document.getElementById('salesVelocityChart').getContext('2d');
+      const dates = ['Nov 01', 'Nov 04', 'Nov 07', 'Nov 10', 'Nov 13', 'Nov 16', 'Nov 19', 'Nov 22', 'Nov 24'];
+      const sales = [12400, 14200, 11800, 16900, 15400, 18900, 14800, 21200, 19400];
+      const target = [14000, 14000, 14000, 14000, 14000, 14000, 14000, 14000, 14000];
+
+      salesChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: dates,
+          datasets: [
+            {
+              label: 'Actual Net Revenue',
+              data: sales,
+              borderColor: '#4f46e5',
+              backgroundColor: 'rgba(79, 70, 229, 0.04)',
+              borderWidth: 2.5,
+              fill: true,
+              tension: 0.35,
+              pointRadius: 3.5,
+              pointBackgroundColor: '#4f46e5',
+              pointHoverRadius: 6,
+            },
+            {
+              label: 'Pacing Target',
+              data: target,
+              borderColor: '#cbd5e1',
+              borderWidth: 1.5,
+              borderDash: [5, 5],
+              pointRadius: 0,
+              fill: false,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              titleColor: '#ffffff',
+              bodyColor: '#cbd5e1',
+              padding: 10,
+              displayColors: false,
+              callbacks: {
+                label: function(ctx) { return '$' + ctx.parsed.y.toLocaleString(); }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#94a3b8', font: { size: 10, family: 'Plus Jakarta Sans' } }
+            },
+            y: {
+              grid: { color: '#f1f5f9' },
+              ticks: {
+                color: '#94a3b8',
+                font: { size: 10, family: 'Plus Jakarta Sans' },
+                callback: function(v) { return '$' + (v / 1000) + 'k'; }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Tab Switching System
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.className = 'tab-btn px-3 py-1.5 rounded-md tab-inactive transition flex items-center gap-1';
+      });
+      btn.className = 'tab-btn px-3 py-1.5 rounded-md tab-active transition flex items-center gap-1';
+
+      document.querySelectorAll('.tab-content').forEach(c => {
+        c.classList.add('hidden');
+      });
+      const activeEl = document.getElementById(tabId);
+      if (activeEl) activeEl.classList.remove('hidden');
+    }
+
+    // Timeframe Switcher
+    function changeTimeframe(tf, btn) {
+      document.querySelectorAll('.tf-btn').forEach(b => {
+        b.className = 'tf-btn px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 font-medium transition';
+      });
+      btn.className = 'tf-btn px-2.5 py-1 rounded-md bg-white text-slate-900 font-semibold shadow-xs border border-slate-200/60 transition';
+
+      if (tf === 'today') {
+        document.getElementById('kpiNetSales').innerText = '$18,920';
+        document.getElementById('kpiTotalOrders').innerText = '184';
+        document.getElementById('kpiAov').innerText = '$102.80';
+      } else if (tf === '7d') {
+        document.getElementById('kpiNetSales').innerText = '$98,400';
+        document.getElementById('kpiTotalOrders').innerText = '1,042';
+        document.getElementById('kpiAov').innerText = '$94.40';
+      } else {
+        document.getElementById('kpiNetSales').innerText = '$389,120';
+        document.getElementById('kpiTotalOrders').innerText = '4,128';
+        document.getElementById('kpiAov').innerText = '$94.26';
+      }
+    }
+
+    // Order Inspector Slide-Over
+    function inspectOrder(id, customer, channel, total, status, note) {
+      document.getElementById('drawerOrderId').innerText = '#' + id;
+      document.getElementById('drawerCustomer').innerText = customer;
+      document.getElementById('drawerChannel').innerText = 'Channel: ' + channel;
+      document.getElementById('drawerTotal').innerText = total;
+      document.getElementById('drawerOrderStatus').innerText = status;
+      document.getElementById('orderDrawer').classList.remove('translate-x-full');
+    }
+
+    function closeOrderDrawer() {
+      document.getElementById('orderDrawer').classList.add('translate-x-full');
+    }
+
+    // AI Copilot Slide-Over
+    function openAiDrawer() {
+      document.getElementById('aiDrawer').classList.remove('translate-x-full');
+    }
+
+    function closeAiDrawer() {
+      document.getElementById('aiDrawer').classList.add('translate-x-full');
+    }
+
+    function askCopilot(question) {
+      openAiDrawer();
+      const input = document.getElementById('aiChatInput');
+      input.value = question;
+      handleAiChatSubmit(new Event('submit'));
+    }
+
+    function handleAiChatSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('aiChatInput');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const feed = document.getElementById('aiChatFeed');
+      
+      // User message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'bg-brand-50 border border-brand-200 p-2.5 rounded-lg text-brand-900 ml-6 text-right font-medium text-xs';
+      userMsg.innerText = val;
+      feed.appendChild(userMsg);
+      input.value = '';
+
+      // AI Response
+      setTimeout(() => {
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'bg-slate-50 p-3 rounded-lg border border-slate-200 text-slate-700 space-y-1.5 text-xs';
+        
+        if (val.toLowerCase().includes('margin')) {
+          aiMsg.innerHTML = `<div class="font-bold text-brand-700">Margin Contraction Diagnosis:</div>
+                             <p class="leading-relaxed">Contribution margin slipped from 42.0% to 41.2% due to:
+                             <br>&bull; <strong>-$8,420</strong> Footwear sizing returns (+12.4% return rate).
+                             <br>&bull; <strong>-$6,800</strong> International payment card routing surcharges.
+                             <br>&bull; Expedited freight to cover low stock on SKU-8841.</p>`;
+        } else if (val.toLowerCase().includes('stockout') || val.toLowerCase().includes('runway')) {
+          aiMsg.innerHTML = `<div class="font-bold text-rose-700">Stockout Runway Warning:</div>
+                             <p class="leading-relaxed"><strong>SKU-8841 (Classic Runner 10)</strong> has 24 units remaining against an 18 units/day burn rate. 
+                             Exhaustion date is tomorrow at 04:00 PM. Expedited PO to FastTrack vendor recommended.</p>`;
+        } else {
+          aiMsg.innerHTML = `<div class="font-bold text-brand-700">Synthesis & Recommendation:</div>
+                             <p class="leading-relaxed">Identified $21,490 in monthly profit leakage across sizing returns, payment gateway routing, and Amazon aged storage fees. Remediation steps are available in the <strong>Profit Leakage Radar</strong> tab.</p>`;
+        }
+        feed.appendChild(aiMsg);
+        feed.scrollTop = feed.scrollHeight;
+      }, 400);
+    }
+
+    // Purchase Order Modal Logic
+    function openPoModal(sku, name) {
+      if (sku) {
+        document.getElementById('poSkuInput').value = sku + ' - ' + name;
+      }
+      document.getElementById('poModal').classList.remove('hidden');
+    }
+
+    function closePoModal() {
+      document.getElementById('poModal').classList.add('hidden');
+    }
+
+    function submitPo() {
+      alert('[PO Created & Dispatched]\nPurchase Order successfully transmitted to Supplier EDI.\nInventory Replenishment module updated with incoming shipment.');
+      closePoModal();
+    }
+
+    // Role Persona Switcher
+    function toggleRoleSelector() {
+      const roles = ['Executive CEO', 'Operations Director', 'Commerce Admin', 'Financial Controller'];
+      const current = document.getElementById('roleBadge').innerText;
+      const nextIndex = (roles.indexOf(current) + 1) % roles.length;
+      document.getElementById('roleBadge').innerText = roles[nextIndex];
+      alert(`[Role Persona Switched to: ${roles[nextIndex]}]\nUI metrics and permissions automatically adapted.`);
+    }
+
+    function refreshData() {
+      alert('Refreshing real-time metrics across Shopify, Amazon FBA, and POS APIs...');
+    }
+
+    function handleSearch(q) {
+      if (!q) return;
+      alert(`[Global Search] Querying ERP records for: "${q}"`);
+    }
+
+    function toggleAlertsModal() {
+      switchTab('tab-leakage', document.getElementById('navTabLeakage'));
+    }
+
+    // Initialize on load
+    window.onload = function() {
+      initVelocityChart();
+    };
+  </script>
+</body>
+</html>
