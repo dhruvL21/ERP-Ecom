@@ -3,17 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Business Overview - E-Commerce ERP</title>
+  <title>OmniCommerce ERP - Business Overview Command Center</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Inter Font -->
+  <!-- Inter & JetBrains Mono Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -21,6 +19,7 @@
         extend: {
           fontFamily: {
             sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
           }
         }
       }
@@ -28,25 +27,10 @@
   </script>
   <style>
     body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-    
-    .view-tab-active {
-      border-color: #0f172a;
-      color: #0f172a;
-      font-weight: 600;
-    }
-    .view-tab-inactive {
-      border-color: transparent;
-      color: #64748b;
-      font-weight: 500;
-    }
-    .view-tab-inactive:hover {
-      color: #0f172a;
-      border-color: #cbd5e1;
-    }
   </style>
 </head>
 <body class="h-full flex overflow-hidden bg-slate-100 text-slate-900 text-sm antialiased">
@@ -57,27 +41,26 @@
   <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between flex-shrink-0 z-30 select-none">
     <div>
       <!-- Workspace Brand -->
-      <div class="h-14 px-5 flex items-center gap-3 border-b border-slate-800">
-        <div class="w-7 h-7 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-bold text-xs">
-          EP
-        </div>
-        <div>
-          <span class="font-semibold text-white text-sm tracking-tight">OmniCommerce ERP</span>
-          <span class="block text-[10px] text-slate-400">Enterprise Edition</span>
+      <div class="h-14 px-5 flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-bold text-xs">
+            EP
+          </div>
+          <div>
+            <span class="font-semibold text-white text-sm tracking-tight">OmniCommerce ERP</span>
+            <span class="block text-[10px] text-slate-400">Command Center v2</span>
+          </div>
         </div>
       </div>
 
       <!-- Store Scope Selector -->
       <div class="p-3 border-b border-slate-800/80">
-        <div class="flex items-center justify-between mb-1 px-1">
-          <label class="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Store Scope</label>
-          <span id="scopeBadge" class="text-[9px] font-mono text-emerald-400 bg-emerald-950/60 px-1.5 py-0.2 rounded border border-emerald-800">GLOBAL</span>
-        </div>
+        <label class="block text-[10px] uppercase font-semibold text-slate-400 tracking-wider mb-1 px-1">Active Store Scope</label>
         <select id="storeSelector" class="w-full bg-slate-800 border border-slate-700 text-xs text-white rounded px-2.5 py-1.5 focus:outline-none focus:border-slate-500 cursor-pointer">
           <option value="all">Global Omnichannel (All)</option>
           <option value="shopify_us">Shopify US Online Store</option>
-          <option value="amazon_fba">Amazon NA Seller Central</option>
-          <option value="retail_flagship">NYC Flagship Store (POS)</option>
+          <option value="amazon_na">Amazon NA Seller Central</option>
+          <option value="retail_flagship">NYC Flagship POS</option>
           <option value="b2b_portal">B2B Wholesale Portal</option>
         </select>
       </div>
@@ -87,9 +70,12 @@
         <div class="px-2 pt-2 pb-1 text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Operational Modules</div>
         
         <!-- 1. Active: Business Overview -->
-        <a href="#" class="flex items-center gap-2.5 px-2.5 py-2 rounded bg-slate-800 text-white font-medium text-xs">
-          <i data-lucide="layout-grid" class="w-4 h-4 text-white"></i>
-          <span>Business Overview</span>
+        <a href="#" class="flex items-center justify-between px-2.5 py-2 rounded bg-slate-800 text-white font-medium text-xs">
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="compass" class="w-4 h-4 text-white"></i>
+            <span>Business Overview</span>
+          </div>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
         </a>
 
         <!-- 2. Order Operations -->
@@ -98,7 +84,7 @@
             <i data-lucide="shopping-cart" class="w-4 h-4 text-slate-400"></i>
             <span>Order Operations</span>
           </div>
-          <span class="px-1.5 py-0.2 rounded text-[10px] bg-amber-900/60 text-amber-300 border border-amber-700 font-mono">14</span>
+          <span id="sidebarOrderCount" class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700 font-mono">14</span>
         </a>
 
         <!-- 3. Warehouse and Fulfillment -->
@@ -107,7 +93,7 @@
             <i data-lucide="truck" class="w-4 h-4 text-slate-400"></i>
             <span>Warehouse & Fulfilment</span>
           </div>
-          <span class="text-[10px] text-slate-400">Hub 1</span>
+          <span class="text-[10px] text-slate-400 font-mono">96.4%</span>
         </a>
 
         <!-- 4. Inventory and Replenishment -->
@@ -116,7 +102,7 @@
             <i data-lucide="package" class="w-4 h-4 text-slate-400"></i>
             <span>Inventory & Stock</span>
           </div>
-          <span class="px-1.5 py-0.2 rounded text-[10px] bg-rose-900/60 text-rose-300 border border-rose-700 font-mono">3 low</span>
+          <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700 font-mono">1 Risk</span>
         </a>
 
         <!-- 5. Finance and Reconciliation -->
@@ -125,7 +111,7 @@
             <i data-lucide="file-spreadsheet" class="w-4 h-4 text-slate-400"></i>
             <span>Finance & Accounts</span>
           </div>
-          <span id="navFinanceBadge" class="text-[10px] text-slate-400">T+2</span>
+          <span id="navFinanceBadge" class="text-[10px] text-slate-400 font-mono">T+2</span>
         </a>
 
         <!-- 6. Store / POS -->
@@ -139,19 +125,19 @@
       </nav>
     </div>
 
-    <!-- Active User & Role Details in Sidebar Footer -->
-    <div class="p-3 border-t border-slate-800 text-xs bg-slate-900/70">
+    <!-- User Profile & Status Footer -->
+    <div class="p-3 border-t border-slate-800 text-xs">
       <div class="flex items-center justify-between px-2 py-1 text-slate-400 text-[11px]">
-        <span>RBAC Policy:</span>
-        <span class="font-mono text-slate-300">v1.4 Enforced</span>
+        <span>Role Scope:</span>
+        <span id="sidebarScopeTag" class="font-mono text-slate-200 font-semibold">Global (Full)</span>
       </div>
       <div class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between px-2">
         <div class="min-w-0">
           <div id="sidebarUserName" class="font-semibold text-white text-xs truncate">Alexander Ross</div>
-          <div id="sidebarUserRole" class="text-[10px] text-emerald-400 font-medium truncate">Business Owner</div>
+          <div id="sidebarUserRole" class="text-[10px] text-slate-400 font-medium truncate">Business Owner</div>
         </div>
-        <button onclick="openRbacModal()" title="View Effective Permissions" class="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800">
-          <i data-lucide="shield-check" class="w-4 h-4"></i>
+        <button onclick="openChangeFeed()" title="Since You Last Looked" class="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="history" class="w-4 h-4"></i>
         </button>
       </div>
     </div>
@@ -162,1183 +148,1096 @@
   <!-- ========================================================= -->
   <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
 
-    <!-- GLOBAL HEADER BAR WITH PROMINENT ROLE SWITCHER -->
+    <!-- GLOBAL HEADER BAR -->
     <header class="h-14 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-20">
-      <!-- Search Input -->
-      <div class="w-80 relative">
-        <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5"></i>
-        <input 
-          type="text" 
-          placeholder="Search by Order #, SKU, or Customer..." 
-          class="w-full bg-slate-50 border border-slate-300 text-xs text-slate-900 rounded pl-8 pr-3 py-1.5 focus:bg-white focus:outline-none focus:border-slate-600 focus:ring-1 focus:ring-slate-600"
-        >
+      <div class="flex items-center gap-3">
+        <span class="font-bold text-slate-900 text-sm tracking-tight">Business Overview</span>
+        <span class="text-xs text-slate-400 font-mono">/</span>
+        <span class="text-xs text-slate-500">Command Center</span>
       </div>
 
-      <!-- Controls: Role Selector, Date Filter, Actions -->
       <div class="flex items-center gap-3 text-xs">
-
-        <!-- PROMINENT ROLE-BASED ACCESS CONTROL (RBAC) SELECTOR -->
+        <!-- Interactive Role Lens Selector -->
         <div class="flex items-center bg-slate-50 border border-slate-300 rounded px-2.5 py-1 text-xs">
           <i data-lucide="shield" class="w-3.5 h-3.5 text-slate-500 mr-1.5"></i>
-          <span class="text-slate-500 font-medium mr-1.5">Active Role:</span>
-          <select id="roleSelector" onchange="handleRoleChange(this.value)" class="bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer">
-            <option value="owner">Business Owner (Full Access)</option>
-            <option value="manager">E-Commerce Manager (Operations)</option>
-            <option value="admin">Commerce Admin (Integrations & Sync)</option>
-            <option value="viewer">Commerce Viewer (Read-Only)</option>
-          </select>
-          <button onclick="openRbacModal()" class="ml-2 text-slate-400 hover:text-slate-700" title="Inspect Permissions Matrix">
-            <i data-lucide="info" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
-
-        <div class="h-4 w-px bg-slate-200"></div>
-
-        <!-- Date Range Filter -->
-        <div class="flex items-center bg-white border border-slate-300 rounded divide-x divide-slate-200 text-xs">
-          <div class="px-2.5 py-1.5 flex items-center gap-1.5 text-slate-600">
-            <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
-            <span>Period:</span>
-          </div>
-          <select id="dateRangeSelect" class="bg-transparent px-2 py-1.5 font-medium text-slate-800 focus:outline-none cursor-pointer">
-            <option value="30d">Last 30 Days</option>
-            <option value="7d">Last 7 Days</option>
-            <option value="today">Today (Live)</option>
-            <option value="mtd">MTD</option>
+          <span class="text-slate-500 font-medium mr-1.5">Role Lens:</span>
+          <select id="roleLensSelect" onchange="switchRoleLens(this.value)" class="bg-transparent font-semibold text-slate-900 focus:outline-none cursor-pointer">
+            <option value="owner">Business Owner (Profit & Cash Risk)</option>
+            <option value="manager">E-Commerce Manager (Pace & Stock)</option>
+            <option value="admin">Commerce Admin (Sync & Tokens)</option>
+            <option value="viewer">Commerce Viewer (Read-Only Brief)</option>
           </select>
         </div>
 
-        <!-- Export Action (Controlled by Role) -->
-        <button id="btnExport" onclick="handleExportClick()" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium rounded transition">
-          <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
-          <span>Export</span>
+        <!-- Since You Last Looked -->
+        <button onclick="openChangeFeed()" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium rounded transition">
+          <i data-lucide="history" class="w-3.5 h-3.5 text-slate-500"></i>
+          <span>Since You Last Looked</span>
         </button>
 
-        <!-- New PO Action (Controlled by Role: Disabled for Viewer / Admin) -->
-        <button id="btnNewPo" onclick="handleNewPoClick()" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded transition">
-          <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-          <span>New PO</span>
+        <!-- Ask Palette Trigger -->
+        <button onclick="focusAskBar()" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded transition">
+          <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+          <span>Ask Bar</span>
+          <kbd class="text-[10px] font-mono text-slate-300 bg-slate-800 px-1 py-0.2 rounded border border-slate-700">Ctrl+K</kbd>
         </button>
       </div>
     </header>
 
-    <!-- DYNAMIC ROLE PERMISSION NOTIFICATION BANNER -->
-    <div id="roleAlertBanner" class="hidden bg-slate-100 border-b border-slate-200 px-6 py-2 flex items-center justify-between text-xs">
+    <!-- ROLE SPECIFIC CONTEXT STRIP -->
+    <div id="roleContextStrip" class="bg-slate-100 border-b border-slate-200 px-6 py-2 flex items-center justify-between text-xs text-slate-600">
       <div class="flex items-center gap-2">
-        <i id="roleAlertIcon" data-lucide="info" class="w-4 h-4 text-slate-600 flex-shrink-0"></i>
-        <span id="roleAlertText" class="text-slate-700 font-medium"></span>
+        <i data-lucide="info" class="w-3.5 h-3.5 text-slate-500"></i>
+        <span id="roleContextText">Viewing as <strong>Business Owner</strong>: Prioritizing net contribution margins, cashflow settlement, and capital allocation.</span>
       </div>
-      <button onclick="openRbacModal()" class="text-slate-900 font-semibold underline hover:text-slate-700 text-[11px]">
-        Review Permissions Matrix &rarr;
-      </button>
+      <span id="roleSecurityTag" class="text-[10px] font-mono font-semibold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
+        POLICY: FULL EXECUTIVE CLEARANCE
+      </span>
     </div>
 
-    <!-- MAIN SCROLLABLE CONTENT BODY -->
-    <main class="flex-1 overflow-y-auto px-6 py-5 space-y-5 max-w-7xl mx-auto w-full">
+    <!-- MAIN SCROLLABLE CONTENT BODY (VERTICAL FLOW) -->
+    <main class="flex-1 overflow-y-auto px-6 py-5 space-y-5 max-w-5xl mx-auto w-full">
 
-      <!-- BREADCRUMB & TITLE HEADER -->
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-200 pb-3">
-        <div>
-          <div class="text-[11px] text-slate-500 font-medium flex items-center gap-1 mb-0.5">
-            <span>Modules</span>
-            <i data-lucide="chevron-right" class="w-3 h-3 text-slate-400"></i>
-            <span class="text-slate-800">Business Overview</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <h1 class="text-xl font-bold text-slate-900 tracking-tight">Business Overview</h1>
-            <span id="roleHeaderTag" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
-              Role: Business Owner
-            </span>
+      <!-- ======================================================= -->
+      <!-- 1. THE VERDICT (ONE PLAIN-LANGUAGE SENTENCE + STATUS BADGE) -->
+      <!-- ======================================================= -->
+      <section id="verdictSection" class="bg-white border border-slate-200 rounded-lg p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3.5">
+          <span id="verdictBadge" class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-900 border border-slate-300 flex-shrink-0">
+            Action Required
+          </span>
+
+          <div>
+            <h2 id="verdictSentence" class="text-sm font-semibold text-slate-900 leading-snug">
+              Sales pace is ahead by ₹42,000; Amazon channel token expired and SKU-8841 needs a purchase order today.
+            </h2>
+            <p class="text-[11px] text-slate-500 mt-0.5">
+              Refreshed from ERP operational collections &bull; 2m ago
+            </p>
           </div>
         </div>
 
-        <div class="flex items-center gap-4 text-xs text-slate-500">
-          <span>Last automated sync: <strong class="text-slate-700">4 mins ago</strong></span>
-          <span class="text-slate-300">|</span>
-          <span class="flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 4 channels connected
+        <button onclick="openHealthDrilldown()" class="px-3 py-1.5 border border-slate-300 hover:bg-slate-50 text-slate-800 rounded text-xs font-medium flex items-center gap-1.5 flex-shrink-0 transition">
+          <span class="font-mono font-bold text-slate-900">84/100</span>
+          <span class="text-slate-500">Health Index &rarr;</span>
+        </button>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- ROLE-SPECIFIC SPECIALIZED SECTIONS -->
+      <!-- ======================================================= -->
+
+      <!-- [ROLE 1 SPECIALIZATION]: BUSINESS OWNER FINANCIAL & CAPITAL PULSE -->
+      <section id="ownerSpecializedSection" class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <div>
+            <h3 class="font-semibold text-slate-900 uppercase tracking-wider text-[11px]">Executive Financial Intelligence & Capital Position</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Confidential general ledger metrics, FIFO landed cost, and cashflow settlement</p>
+          </div>
+          <span class="text-[10px] font-mono font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+            SOX-404 GOVERNED
           </span>
         </div>
-      </div>
 
-      <!-- VIEW TABS (Clean Functional Underline Navigation) -->
-      <div class="border-b border-slate-200">
-        <nav class="flex gap-6 text-xs">
-          <button onclick="switchViewTab('tab-general', this)" class="view-tab-btn pb-2.5 border-b-2 view-tab-active transition">
-            General Overview
-          </button>
-          <button onclick="switchViewTab('tab-channels', this)" class="view-tab-btn pb-2.5 border-b-2 view-tab-inactive transition">
-            Channel Performance (4)
-          </button>
-          <button onclick="switchViewTab('tab-inventory', this)" class="view-tab-btn pb-2.5 border-b-2 view-tab-inactive transition">
-            Inventory Health & Runway
-          </button>
-          <button id="tabNavFinancialBtn" onclick="switchViewTab('tab-financial', this)" class="view-tab-btn pb-2.5 border-b-2 view-tab-inactive transition flex items-center gap-1.5">
-            <span>Financial & Cost Reconciliation</span>
-            <span id="tabFinancialLockBadge" class="hidden text-slate-400"><i data-lucide="lock" class="w-3 h-3"></i></span>
-          </button>
-        </nav>
-      </div>
-
-      <!-- ========================================================= -->
-      <!-- TAB 1: GENERAL OVERVIEW -->
-      <!-- ========================================================= -->
-      <div id="tab-general" class="tab-pane space-y-5">
-
-        <!-- 1. KEY PERFORMANCE METRICS ROW (WITH FIELD-LEVEL SECURITY RESTRICTIONS) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <!-- Metric 1: Net Sales -->
-          <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
-            <div class="flex items-center justify-between text-slate-500 text-xs">
-              <span>Net Sales (Recognized)</span>
-              <span class="text-[11px] font-mono text-slate-400">USD</span>
-            </div>
-            <div class="mt-2 text-2xl font-bold text-slate-900 tracking-tight" id="kpiNetSales">$389,120.00</div>
-            <div class="mt-1 flex items-center justify-between text-xs">
-              <span class="text-emerald-700 font-medium flex items-center gap-0.5">
-                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> +12.4%
-              </span>
-              <span class="text-slate-400 text-[11px]">vs $346.2k prior</span>
-            </div>
-            <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between">
-              <span>Gross Sales</span>
-              <span id="kpiGrossSales" class="font-medium text-slate-700">$428,950.00</span>
-            </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500">Net Contribution Profit</span>
+            <div class="text-lg font-bold font-mono text-slate-900 mt-0.5">₹1,60,320.00</div>
+            <span class="text-[11px] text-slate-600 font-semibold">41.2% True Margin</span>
           </div>
 
-          <!-- Metric 2: Total Orders -->
-          <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
-            <div class="flex items-center justify-between text-slate-500 text-xs">
-              <span>Total Orders Placed</span>
-              <span class="text-[11px] font-mono text-slate-400">Volume</span>
-            </div>
-            <div class="mt-2 text-2xl font-bold text-slate-900 tracking-tight" id="kpiOrders">4,128</div>
-            <div class="mt-1 flex items-center justify-between text-xs">
-              <span class="text-emerald-700 font-medium flex items-center gap-0.5">
-                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> +8.1%
-              </span>
-              <span class="text-slate-400 text-[11px]">137 orders / day</span>
-            </div>
-            <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between">
-              <span>Fulfilled / Shipped</span>
-              <span class="font-medium text-slate-700">3,986 (96.5%)</span>
-            </div>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500">Landed FIFO COGS</span>
+            <div class="text-lg font-bold font-mono text-slate-900 mt-0.5">₹2,28,800.00</div>
+            <span class="text-[11px] text-slate-500">Direct unit costs</span>
           </div>
 
-          <!-- Metric 3: Average Order Value -->
-          <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
-            <div class="flex items-center justify-between text-slate-500 text-xs">
-              <span>Average Order Value (AOV)</span>
-              <span class="text-[11px] font-mono text-slate-400">Basket</span>
-            </div>
-            <div class="mt-2 text-2xl font-bold text-slate-900 tracking-tight" id="kpiAov">$94.26</div>
-            <div class="mt-1 flex items-center justify-between text-xs">
-              <span class="text-emerald-700 font-medium flex items-center gap-0.5">
-                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> +3.2%
-              </span>
-              <span class="text-slate-400 text-[11px]">vs $91.30 prior</span>
-            </div>
-            <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between">
-              <span>Average Units / Basket</span>
-              <span class="font-medium text-slate-700">2.4 items</span>
-            </div>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500">Cash Received / Settled</span>
+            <div class="text-lg font-bold font-mono text-slate-900 mt-0.5">₹3,72,400.00</div>
+            <span class="text-[11px] text-slate-600">T+2 Stripe & Adyen</span>
           </div>
 
-          <!-- Metric 4: Gross Margin & Profit (SENSITIVE FINANCIAL DATA: RESTRICTED BY RBAC) -->
-          <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm relative">
-            <div class="flex items-center justify-between text-slate-500 text-xs">
-              <span>Gross Profit & Margin</span>
-              <span id="flsBadge" class="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">CONFIDENTIAL</span>
-            </div>
-            <div class="mt-2 text-2xl font-bold text-slate-900 tracking-tight" id="kpiMarginValue">41.2%</div>
-            <div class="mt-1 flex items-center justify-between text-xs">
-              <span id="kpiProfitSubtext" class="text-slate-700 font-medium">Profit: $160,320.00</span>
-              <span class="text-slate-400 text-[11px]">Target &ge; 40%</span>
-            </div>
-            <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between">
-              <span>Landed COGS</span>
-              <span id="kpiCogsValue" class="font-medium text-slate-700">$228,800.00</span>
-            </div>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500">Capital Locked in Dead Stock</span>
+            <div class="text-lg font-bold font-mono text-slate-900 mt-0.5">₹48,200.00</div>
+            <span class="text-[11px] text-slate-600">&gt;90d zero velocity</span>
           </div>
         </div>
+      </section>
 
-        <!-- 2. OPERATIONAL EXCEPTIONS BANNER -->
-        <div class="bg-amber-50 border border-amber-200 rounded-lg p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
-          <div class="flex items-start gap-3">
-            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0"></i>
-            <div>
-              <span class="font-semibold text-amber-900">Operational Exceptions Requiring Immediate Action (2):</span>
-              <div class="text-amber-800 mt-0.5 space-y-0.5">
-                <div>&bull; <strong>14 orders</strong> exceed 24-hour fulfillment threshold at Warehouse Central-01.</div>
-                <div>&bull; <strong>SKU-8841 (Classic Runner 10)</strong> has 24 units left against an 18 units/day burn rate.</div>
-              </div>
-            </div>
+      <!-- [ROLE 2 SPECIALIZATION]: E-COMMERCE MANAGER MARKETING & STOCK RUNWAYS -->
+      <section id="managerSpecializedSection" class="hidden bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <div>
+            <h3 class="font-semibold text-slate-900 uppercase tracking-wider text-[11px]">Operations & Marketing Conversion Signals</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Customer retention, basket units, and return rate anomalies</p>
           </div>
-          <div class="flex items-center gap-2 flex-shrink-0">
-            <a href="../dashboard/order-operations.md" class="px-3 py-1.5 bg-white border border-amber-300 hover:bg-amber-100 text-amber-900 font-medium rounded transition">
-              Open Order Queue (14) &rarr;
-            </a>
-            <button id="btnBannerExpedite" onclick="handleNewPoClick('SKU-8841')" class="px-3 py-1.5 bg-amber-800 hover:bg-amber-900 text-white font-medium rounded transition">
-              Expedite PO (SKU-8841)
-            </button>
-          </div>
+          <span class="text-xs text-slate-500">Operational Scope</span>
         </div>
 
-        <!-- 3. MAIN SECTION: SALES TREND & CHANNEL BREAKDOWN -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-
-          <!-- Left: Sales Trend Line Chart (8 Cols) -->
-          <div class="lg:col-span-8 bg-white p-5 rounded-lg border border-slate-200 shadow-sm space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-              <div>
-                <h2 class="text-xs font-semibold text-slate-900 uppercase tracking-wider">Net Sales Trend vs Target Benchmark</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Aggregated daily revenue across Shopify, Amazon, POS, and Wholesale</p>
-              </div>
-              <div class="flex items-center gap-4 text-xs">
-                <span class="flex items-center gap-1.5 text-slate-700 font-medium">
-                  <span class="w-3 h-1 bg-slate-900 inline-block"></span> Actual Sales
-                </span>
-                <span class="flex items-center gap-1.5 text-slate-500">
-                  <span class="w-3 h-1 bg-slate-400 border-t border-dashed border-slate-400 inline-block"></span> Target ($14,000/day)
-                </span>
-              </div>
-            </div>
-
-            <!-- Canvas Container -->
-            <div class="h-64 w-full">
-              <canvas id="salesChartCanvas"></canvas>
-            </div>
-
-            <!-- Chart Footer Metrics -->
-            <div class="pt-3 border-t border-slate-100 grid grid-cols-3 gap-2 text-center text-xs">
-              <div class="border-r border-slate-100 pr-2">
-                <span class="text-slate-500 text-[11px]">Highest Volume Day</span>
-                <div class="font-semibold text-slate-900 mt-0.5">Nov 22 &bull; $21,200.00</div>
-              </div>
-              <div class="border-r border-slate-100 pr-2">
-                <span class="text-slate-500 text-[11px]">Target Fulfillment</span>
-                <div class="font-semibold text-emerald-700 mt-0.5">104.2% of Monthly Pace</div>
-              </div>
-              <div>
-                <span class="text-slate-500 text-[11px]">Order Return Rate</span>
-                <div class="font-semibold text-slate-900 mt-0.5">2.4% (87 orders)</div>
-              </div>
-            </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500">Order Velocity</span>
+            <div class="text-lg font-bold font-mono text-slate-900 mt-0.5">137 orders/day</div>
+            <span class="text-[11px] text-slate-600">+9.6% vs monthly target</span>
           </div>
 
-          <!-- Right: Omnichannel Contribution Table (4 Cols) -->
-          <div class="lg:col-span-4 bg-white p-5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h2 class="text-xs font-semibold text-slate-900 uppercase tracking-wider">Sales by Channel</h2>
-                <span class="text-[11px] text-slate-400">30-Day Period</span>
-              </div>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500">Average Order Value (AOV)</span>
+            <div class="text-lg font-bold font-mono text-slate-900 mt-0.5">₹94.26</div>
+            <span class="text-[11px] text-slate-600">2.4 units per basket</span>
+          </div>
 
-              <!-- Channel rows -->
-              <div class="divide-y divide-slate-100 text-xs">
-                <div class="py-3 flex items-center justify-between">
-                  <div>
-                    <div class="font-medium text-slate-900">Shopify Online Store</div>
-                    <div class="text-[11px] text-slate-500">Direct to Consumer (D2C)</div>
-                  </div>
-                  <div class="text-right">
-                    <div class="font-semibold text-slate-900">$225,600.00</div>
-                    <div class="text-[11px] text-slate-500">58.0% share</div>
-                  </div>
-                </div>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500">Return Rate Anomaly</span>
+            <div class="text-lg font-bold font-mono text-slate-900 mt-0.5">14.8% (Footwear)</div>
+            <span class="text-[11px] text-slate-600">Sizing mismatch reported</span>
+          </div>
 
-                <div class="py-3 flex items-center justify-between">
-                  <div>
-                    <div class="font-medium text-slate-900">Amazon Marketplace</div>
-                    <div class="text-[11px] text-slate-500">FBA + FBM Fulfilled</div>
-                  </div>
-                  <div class="text-right">
-                    <div class="font-semibold text-slate-900">$97,200.00</div>
-                    <div class="text-[11px] text-slate-500">25.0% share</div>
-                  </div>
-                </div>
-
-                <div class="py-3 flex items-center justify-between">
-                  <div>
-                    <div class="font-medium text-slate-900">Retail Flagship Store</div>
-                    <div class="text-[11px] text-slate-500">Physical POS Terminal</div>
-                  </div>
-                  <div class="text-right">
-                    <div class="font-semibold text-slate-900">$46,600.00</div>
-                    <div class="text-[11px] text-slate-500">12.0% share</div>
-                  </div>
-                </div>
-
-                <div class="py-3 flex items-center justify-between">
-                  <div>
-                    <div class="font-medium text-slate-900">Wholesale B2B Portal</div>
-                    <div class="text-[11px] text-slate-500">Commercial Invoiced</div>
-                  </div>
-                  <div class="text-right">
-                    <div class="font-semibold text-slate-900">$19,720.00</div>
-                    <div class="text-[11px] text-slate-500">5.0% share</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-              <span>All sales channels synced</span>
-              <a href="../dashboard/store-pos.md" class="text-slate-900 hover:underline font-medium">Channel Settings &rarr;</a>
-            </div>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500">Repeat Customer Rate</span>
+            <div class="text-lg font-bold font-mono text-slate-900 mt-0.5">34.8%</div>
+            <span class="text-[11px] text-slate-600">+2.4% MoM retention</span>
           </div>
         </div>
+      </section>
 
-        <!-- 4. OPERATIONAL TABLES ROW -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <!-- [ROLE 3 SPECIALIZATION]: COMMERCE ADMIN DATA TRUST & INTEGRATION CONSOLE -->
+      <section id="adminSpecializedSection" class="hidden bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <div>
+            <h3 class="font-semibold text-slate-900 uppercase tracking-wider text-[11px]">System Integrations & API Data Trust Console</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Webhook latency, token validity, rate limits, and ingestion health</p>
+          </div>
+          <span class="text-[10px] font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+            ADMINISTRATIVE CONSOLE
+          </span>
+        </div>
 
-          <!-- Recent Orders (8 Cols) -->
-          <div class="lg:col-span-8 bg-white p-5 rounded-lg border border-slate-200 shadow-sm space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
             <div class="flex items-center justify-between">
-              <div>
-                <h2 class="text-xs font-semibold text-slate-900 uppercase tracking-wider">Recent Orders Snapshot</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Click any row to inspect line items and fulfillment allocations</p>
-              </div>
-              <a href="../dashboard/order-operations.md" class="text-xs text-slate-900 hover:underline font-medium">
-                View all in Order Operations &rarr;
-              </a>
+              <span class="font-semibold text-slate-900">Shopify Webhooks</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             </div>
-
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs border border-slate-100">
-                <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-                  <tr>
-                    <th class="py-2.5 px-3">Order Number</th>
-                    <th class="py-2.5 px-3">Date</th>
-                    <th class="py-2.5 px-3">Customer</th>
-                    <th class="py-2.5 px-3">Channel</th>
-                    <th class="py-2.5 px-3 text-right">Amount</th>
-                    <th class="py-2.5 px-3">Status</th>
-                    <th class="py-2.5 px-3 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 text-slate-800">
-                  <tr onclick="showOrderDetails('ORD-9422', 'Sarah Jenkins', 'Shopify US', '$189.50', 'Processing', '2 items')" class="hover:bg-slate-50 cursor-pointer transition">
-                    <td class="py-2.5 px-3 font-mono font-medium text-slate-900">#ORD-9422</td>
-                    <td class="py-2.5 px-3 text-slate-500">Today, 10:42 AM</td>
-                    <td class="py-2.5 px-3">Sarah Jenkins</td>
-                    <td class="py-2.5 px-3 text-slate-600">Shopify US</td>
-                    <td class="py-2.5 px-3 text-right font-mono font-medium">$189.50</td>
-                    <td class="py-2.5 px-3">
-                      <span class="inline-block px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        Paid &bull; In Wave
-                      </span>
-                    </td>
-                    <td class="py-2.5 px-3 text-right">
-                      <button class="text-slate-700 hover:underline">Details</button>
-                    </td>
-                  </tr>
-
-                  <tr onclick="showOrderDetails('ORD-9421', 'David Miller', 'Amazon NA', '$89.50', 'Shipped', '1 item')" class="hover:bg-slate-50 cursor-pointer transition">
-                    <td class="py-2.5 px-3 font-mono font-medium text-slate-900">#ORD-9421</td>
-                    <td class="py-2.5 px-3 text-slate-500">Today, 09:15 AM</td>
-                    <td class="py-2.5 px-3">David Miller</td>
-                    <td class="py-2.5 px-3 text-slate-600">Amazon NA</td>
-                    <td class="py-2.5 px-3 text-right font-mono font-medium">$89.50</td>
-                    <td class="py-2.5 px-3">
-                      <span class="inline-block px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                        Shipped (FBA)
-                      </span>
-                    </td>
-                    <td class="py-2.5 px-3 text-right">
-                      <button class="text-slate-700 hover:underline">Details</button>
-                    </td>
-                  </tr>
-
-                  <tr onclick="showOrderDetails('ORD-9420', 'Apex Athletics', 'B2B Portal', '$1,240.00', 'Invoiced', '12 items')" class="hover:bg-slate-50 cursor-pointer transition">
-                    <td class="py-2.5 px-3 font-mono font-medium text-slate-900">#ORD-9420</td>
-                    <td class="py-2.5 px-3 text-slate-500">Yesterday</td>
-                    <td class="py-2.5 px-3">Apex Athletics</td>
-                    <td class="py-2.5 px-3 text-slate-600">B2B Wholesale</td>
-                    <td class="py-2.5 px-3 text-right font-mono font-medium">$1,240.00</td>
-                    <td class="py-2.5 px-3">
-                      <span class="inline-block px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-800 border border-blue-200">
-                        Net-30 Invoiced
-                      </span>
-                    </td>
-                    <td class="py-2.5 px-3 text-right">
-                      <button class="text-slate-700 hover:underline">Details</button>
-                    </td>
-                  </tr>
-
-                  <tr onclick="showOrderDetails('ORD-9418', 'Marcus Thorne', 'Shopify US', '$64.00', 'Delayed', '1 item')" class="hover:bg-amber-50/50 cursor-pointer transition">
-                    <td class="py-2.5 px-3 font-mono font-medium text-amber-900">#ORD-9418</td>
-                    <td class="py-2.5 px-3 text-slate-500">Nov 22</td>
-                    <td class="py-2.5 px-3">Marcus Thorne</td>
-                    <td class="py-2.5 px-3 text-slate-600">Shopify US</td>
-                    <td class="py-2.5 px-3 text-right font-mono font-medium">$64.00</td>
-                    <td class="py-2.5 px-3">
-                      <span class="inline-block px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-800 border border-amber-300">
-                        Delayed (&gt;24h)
-                      </span>
-                    </td>
-                    <td class="py-2.5 px-3 text-right">
-                      <span class="text-amber-800 font-semibold hover:underline">Inspect &rarr;</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <div class="text-[11px] text-slate-500 mt-1">Latency: <strong>112ms</strong> &bull; 0 errors</div>
+            <span class="text-[10px] text-slate-400 font-mono block mt-0.5">REST/GraphQL v2024.10</span>
           </div>
 
-          <!-- Inventory Velocity Watch -->
-          <div class="lg:col-span-4 bg-white p-5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h2 class="text-xs font-semibold text-slate-900 uppercase tracking-wider">Inventory Runway Watch</h2>
-                <a href="../dashboard/inventory-and-replenishment.md" class="text-xs text-slate-900 hover:underline">Full Stock &rarr;</a>
-              </div>
-
-              <div class="divide-y divide-slate-100 text-xs mt-1">
-                <div class="py-2.5 flex items-center justify-between">
-                  <div>
-                    <div class="font-medium text-slate-900">Classic Runner 10</div>
-                    <div class="text-[11px] text-slate-500 font-mono">SKU-8841 &bull; 18 sold/day</div>
-                  </div>
-                  <div class="text-right">
-                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
-                      24 units (1.3d)
-                    </span>
-                    <button onclick="handleNewPoClick('SKU-8841')" class="btn-po-action block text-[11px] text-slate-900 hover:underline mt-0.5 font-medium">
-                      Create PO
-                    </button>
-                  </div>
-                </div>
-
-                <div class="py-2.5 flex items-center justify-between">
-                  <div>
-                    <div class="font-medium text-slate-900">Winter Trail Parka (L)</div>
-                    <div class="text-[11px] text-slate-500 font-mono">SKU-3120 &bull; 6 sold/day</div>
-                  </div>
-                  <div class="text-right">
-                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200">
-                      42 units (7.0d)
-                    </span>
-                    <button onclick="handleNewPoClick('SKU-3120')" class="btn-po-action block text-[11px] text-slate-900 hover:underline mt-0.5 font-medium">
-                      Reorder
-                    </button>
-                  </div>
-                </div>
-
-                <div class="py-2.5 flex items-center justify-between">
-                  <div>
-                    <div class="font-medium text-slate-900">Active Earbuds Pro</div>
-                    <div class="text-[11px] text-slate-500 font-mono">SKU-4402 &bull; 12 sold/day</div>
-                  </div>
-                  <div class="text-right">
-                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-slate-50 text-slate-700 border border-slate-200">
-                      320 units (26d)
-                    </span>
-                    <span class="block text-[11px] text-slate-400 mt-0.5">Healthy</span>
-                  </div>
-                </div>
-              </div>
+          <div class="p-3 bg-slate-50 border border-slate-300 rounded">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-900">Amazon SP-API</span>
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
             </div>
+            <div class="text-[11px] text-slate-700 font-medium mt-1">Auth Token Expired (18m)</div>
+            <span class="text-[10px] text-slate-500 font-mono block mt-0.5">142 pending ingest events</span>
+          </div>
 
-            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span>Total Inventory Value:</span>
-              <span id="kpiInventoryVal" class="font-mono font-semibold text-slate-900">$612,400.00</span>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-900">NYC POS Terminals</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             </div>
+            <div class="text-[11px] text-slate-500 mt-1">All 4 registers online</div>
+            <span class="text-[10px] text-slate-400 font-mono block mt-0.5">Heartbeat: 4s ago</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-900">B2B EDI Batch Pipeline</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            </div>
+            <div class="text-[11px] text-slate-500 mt-1">Batch #849 Success</div>
+            <span class="text-[10px] text-slate-400 font-mono block mt-0.5">06:00 AM Cron Run</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- 2. THE PACE LINE -->
+      <!-- ======================================================= -->
+      <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-4">
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold text-slate-900 uppercase tracking-wider text-[11px]">The Pace Line</span>
+            <span class="text-slate-300">|</span>
+            <span class="text-slate-500">Month-to-Date Net Sales Horizon (Nov 01 - Nov 24)</span>
+          </div>
+
+          <button onclick="togglePaceDrivers()" class="text-slate-800 hover:underline font-medium flex items-center gap-1 text-[11px]">
+            <span id="paceToggleText">Explain Gap (3 Drivers)</span>
+            <i id="paceToggleIcon" data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500"></i>
+          </button>
+        </div>
+
+        <!-- 3 Professional Neutral Metric Blocks -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500 block">Realized Net Sales</span>
+            <span id="paceRealizedVal" class="text-lg font-bold text-slate-900 font-mono mt-0.5 block">₹3,89,120.00</span>
+            <span class="text-[11px] text-slate-600 font-medium">+12.4% vs Prior Period</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500 block">Pacing Variance</span>
+            <span class="text-lg font-bold text-slate-900 font-mono mt-0.5 block">+₹42,000.00</span>
+            <span class="text-[11px] text-slate-600 font-medium">Ahead of Target (₹3,47,120.00)</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+            <span class="text-[11px] text-slate-500 block">Projected Period Landing</span>
+            <span class="text-lg font-bold text-slate-900 font-mono mt-0.5 block">₹4,28,000.00</span>
+            <span class="text-[11px] text-slate-600 font-medium">107.0% of Monthly Target</span>
           </div>
         </div>
 
-      </div>
+        <!-- Single Monochromatic Progress Bar -->
+        <div class="space-y-1.5 pt-1">
+          <div class="h-2 w-full bg-slate-200 rounded-full overflow-hidden relative">
+            <div class="h-full bg-slate-900 rounded-full" style="width: 91.5%;"></div>
+          </div>
+          <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+            <span>Day 1 (₹0)</span>
+            <span>Target Pace: ₹3.47L</span>
+            <span class="font-bold text-slate-900">Current: ₹3.89L</span>
+            <span>Month Goal: ₹4.00L</span>
+          </div>
+        </div>
 
-      <!-- ========================================================= -->
-      <!-- TAB 2: CHANNEL PERFORMANCE -->
-      <!-- ========================================================= -->
-      <div id="tab-channels" class="tab-pane hidden space-y-5">
-        <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm space-y-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <h2 class="text-sm font-semibold text-slate-900">Omnichannel Channel Economics & Sync Status</h2>
-              <p class="text-xs text-slate-500 mt-0.5">Channel fee structures, net returns, and gateway take rates</p>
-            </div>
-            <span class="text-xs text-slate-500">Observation window: Last 30 Days</span>
+        <!-- Explanatory Drivers Panel -->
+        <div id="paceDriversPanel" class="hidden pt-3 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <div class="p-3 rounded bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-900 block">1. Channel Mix Variance</span>
+            <div class="text-slate-700 mt-1">Shopify (58%) &bull; Amazon (25%)</div>
+            <p class="text-[11px] text-slate-500 mt-0.5">Amazon volume ran +18% above monthly projection.</p>
           </div>
 
-          <table class="w-full text-left text-xs border border-slate-100">
+          <div class="p-3 rounded bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-900 block">2. Promotional Discount Drag</span>
+            <div class="text-slate-700 mt-1">5.6% Realized (Target &le; 5.0%)</div>
+            <p class="text-[11px] text-slate-500 mt-0.5">Early promotion induced a 0.6% margin deduction.</p>
+          </div>
+
+          <div class="p-3 rounded bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-900 block">3. Order Volume</span>
+            <div class="text-slate-700 mt-1">137 orders/day (Baseline: 125/day)</div>
+            <p class="text-[11px] text-slate-500 mt-0.5">Driven by higher units per basket (2.4 items/order).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- 3. CHANNEL BREAKDOWN ON SALES (HIGH-SIGNAL TABLE) -->
+      <!-- ======================================================= -->
+      <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <div>
+            <h3 class="font-semibold text-slate-900 uppercase tracking-wider text-[11px]">Channel Breakdown on Sales</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Realized net revenue, order volume, and channel health across all endpoints</p>
+          </div>
+          <span class="text-xs text-slate-400 font-mono">4 Connected Channels</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-200">
             <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
               <tr>
-                <th class="py-2.5 px-3">Channel Name</th>
-                <th class="py-2.5 px-3">Order Count</th>
-                <th class="py-2.5 px-3 text-right">Gross Sales</th>
-                <th class="py-2.5 px-3 text-right">Channel Fee / Cut</th>
-                <th class="py-2.5 px-3 text-right">Refunds & Returns</th>
-                <th class="py-2.5 px-3 text-right font-bold text-slate-900">Net Realized</th>
+                <th class="py-2.5 px-3">Channel</th>
+                <th class="py-2.5 px-3 text-right">Net Sales</th>
+                <th class="py-2.5 px-3 text-right">Share (%)</th>
+                <th class="py-2.5 px-3 text-right">Orders</th>
+                <th class="py-2.5 px-3 text-right">AOV</th>
+                <th class="py-2.5 px-3">Take Rate / Fees</th>
                 <th class="py-2.5 px-3 text-right">Status</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-slate-800">
-              <tr>
-                <td class="py-3 px-3 font-medium text-slate-900">Shopify US Online Store</td>
-                <td class="py-3 px-3">2,610</td>
-                <td class="py-3 px-3 text-right font-mono">$248,500.00</td>
-                <td class="py-3 px-3 text-right font-mono text-slate-600">-$7,206.50 (2.9%)</td>
-                <td class="py-3 px-3 text-right font-mono text-rose-700">-$9,443.00 (3.8%)</td>
-                <td class="py-3 px-3 text-right font-mono font-bold text-slate-900">$231,850.50</td>
-                <td class="py-3 px-3 text-right"><span class="px-2 py-0.5 rounded text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">Real-time Sync</span></td>
+              <!-- Shopify -->
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>Shopify US Online Store</span>
+                </td>
+                <td class="py-2.5 px-3 text-right font-mono font-medium">₹2,25,600.00</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-600">58.0%</td>
+                <td class="py-2.5 px-3 text-right font-mono">2,610</td>
+                <td class="py-2.5 px-3 text-right font-mono">₹86.43</td>
+                <td class="py-2.5 px-3 text-slate-600">2.9% + ₹25 Gateway</td>
+                <td class="py-2.5 px-3 text-right">
+                  <span class="text-[11px] text-slate-600 font-medium">Real-time (0m)</span>
+                </td>
               </tr>
-              <tr>
-                <td class="py-3 px-3 font-medium text-slate-900">Amazon Marketplace (NA)</td>
-                <td class="py-3 px-3">1,120</td>
-                <td class="py-3 px-3 text-right font-mono">$108,200.00</td>
-                <td class="py-3 px-3 text-right font-mono text-rose-700">-$16,230.00 (15.0%)</td>
-                <td class="py-3 px-3 text-right font-mono text-rose-700">-$6,924.80 (6.4%)</td>
-                <td class="py-3 px-3 text-right font-mono font-bold text-slate-900">$85,045.20</td>
-                <td class="py-3 px-3 text-right"><span class="px-2 py-0.5 rounded text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">Synced (14m ago)</span></td>
+
+              <!-- Amazon -->
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  <span>Amazon Marketplace (NA)</span>
+                </td>
+                <td class="py-2.5 px-3 text-right font-mono font-medium">₹97,200.00</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-600">25.0%</td>
+                <td class="py-2.5 px-3 text-right font-mono">1,120</td>
+                <td class="py-2.5 px-3 text-right font-mono">₹86.78</td>
+                <td class="py-2.5 px-3 text-slate-600">15.0% FBA & Referral</td>
+                <td class="py-2.5 px-3 text-right">
+                  <button onclick="toggleChannelAnomaly()" class="text-[11px] text-slate-900 font-semibold underline hover:text-slate-700">
+                    Token Expired &darr;
+                  </button>
+                </td>
               </tr>
-              <tr>
-                <td class="py-3 px-3 font-medium text-slate-900">Retail Flagship POS (NYC)</td>
-                <td class="py-3 px-3">334</td>
-                <td class="py-3 px-3 text-right font-mono">$19,850.00</td>
-                <td class="py-3 px-3 text-right font-mono text-slate-600">-$357.30 (1.8%)</td>
-                <td class="py-3 px-3 text-right font-mono text-rose-700">-$238.20 (1.2%)</td>
-                <td class="py-3 px-3 text-right font-mono font-bold text-slate-900">$19,254.50</td>
-                <td class="py-3 px-3 text-right"><span class="px-2 py-0.5 rounded text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">Online POS</span></td>
+
+              <!-- Retail POS -->
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>Retail Flagship Store (NYC)</span>
+                </td>
+                <td class="py-2.5 px-3 text-right font-mono font-medium">₹46,600.00</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-600">12.0%</td>
+                <td class="py-2.5 px-3 text-right font-mono">334</td>
+                <td class="py-2.5 px-3 text-right font-mono">₹139.52</td>
+                <td class="py-2.5 px-3 text-slate-600">1.8% POS Interchange</td>
+                <td class="py-2.5 px-3 text-right">
+                  <span class="text-[11px] text-slate-600 font-medium">Terminal Online</span>
+                </td>
               </tr>
-              <tr>
-                <td class="py-3 px-3 font-medium text-slate-900">Wholesale B2B Portal</td>
-                <td class="py-3 px-3">64</td>
-                <td class="py-3 px-3 text-right font-mono">$52,400.00</td>
-                <td class="py-3 px-3 text-right font-mono text-slate-600">-$419.20 (0.8%)</td>
-                <td class="py-3 px-3 text-right font-mono text-rose-700">-$209.60 (0.4%)</td>
-                <td class="py-3 px-3 text-right font-mono font-bold text-slate-900">$51,771.20</td>
-                <td class="py-3 px-3 text-right"><span class="px-2 py-0.5 rounded text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">Batch Synced</span></td>
+
+              <!-- Wholesale B2B -->
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-3 font-semibold text-slate-900 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>Wholesale B2B Portal</span>
+                </td>
+                <td class="py-2.5 px-3 text-right font-mono font-medium">₹19,720.00</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-600">5.0%</td>
+                <td class="py-2.5 px-3 text-right font-mono">64</td>
+                <td class="py-2.5 px-3 text-right font-mono">₹308.12</td>
+                <td class="py-2.5 px-3 text-slate-600">0.8% ACH Invoiced</td>
+                <td class="py-2.5 px-3 text-right">
+                  <span class="text-[11px] text-slate-600 font-medium">Batch Synced</span>
+                </td>
               </tr>
             </tbody>
+            <tfoot class="bg-slate-50 font-semibold text-slate-900 border-t border-slate-200">
+              <tr>
+                <td class="py-2 px-3">Omnichannel Total</td>
+                <td class="py-2 px-3 text-right font-mono">₹3,89,120.00</td>
+                <td class="py-2 px-3 text-right font-mono">100.0%</td>
+                <td class="py-2 px-3 text-right font-mono">4,128</td>
+                <td class="py-2 px-3 text-right font-mono">₹94.26</td>
+                <td colspan="2"></td>
+              </tr>
+            </tfoot>
           </table>
         </div>
-      </div>
 
-      <!-- ========================================================= -->
-      <!-- TAB 3: INVENTORY HEALTH & RUNWAY -->
-      <!-- ========================================================= -->
-      <div id="tab-inventory" class="tab-pane hidden space-y-5">
-        <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm space-y-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <h2 class="text-sm font-semibold text-slate-900">Stock Depletion Forecaster & Runway</h2>
-              <p class="text-xs text-slate-500 mt-0.5">Calculated stockout dates based on 30-day velocity and supplier lead-times</p>
-            </div>
-            <button onclick="handleNewPoClick()" class="btn-po-action px-3 py-1.5 bg-slate-900 text-white font-medium text-xs rounded hover:bg-slate-800">
-              Generate Recommended POs
-            </button>
+        <!-- Anomaly Explanation Drawer -->
+        <div id="channelAnomalyBox" class="hidden p-3 bg-slate-50 border border-slate-300 rounded text-xs space-y-2">
+          <div class="flex justify-between items-start">
+            <span class="font-bold text-slate-900">Amazon Marketplace Sync Issue</span>
+            <button onclick="toggleChannelAnomaly()" class="text-slate-500 hover:text-slate-700 text-[11px]">Close</button>
           </div>
-
-          <table class="w-full text-left text-xs border border-slate-100">
-            <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-              <tr>
-                <th class="py-2.5 px-3">SKU & Item Name</th>
-                <th class="py-2.5 px-3">Current Stock</th>
-                <th class="py-2.5 px-3">Daily Burn</th>
-                <th class="py-2.5 px-3">Supplier Lead Time</th>
-                <th class="py-2.5 px-3">Runway Remaining</th>
-                <th class="py-2.5 px-3">Status</th>
-                <th class="py-2.5 px-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100 text-slate-800">
-              <tr>
-                <td class="py-3 px-3 font-medium text-slate-900">SKU-8841 &bull; Classic Runner 10</td>
-                <td class="py-3 px-3 font-semibold text-rose-700 font-mono">24 units</td>
-                <td class="py-3 px-3">18 units / day</td>
-                <td class="py-3 px-3">14 days (Apex Mfg)</td>
-                <td class="py-3 px-3 font-bold text-rose-700 font-mono">1.3 Days</td>
-                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300">STOCKOUT RISK</span></td>
-                <td class="py-3 px-3 text-right"><button onclick="handleNewPoClick('SKU-8841')" class="btn-po-action text-slate-900 font-medium hover:underline">Create PO &rarr;</button></td>
-              </tr>
-              <tr>
-                <td class="py-3 px-3 font-medium text-slate-900">SKU-3120 &bull; Winter Trail Parka (L)</td>
-                <td class="py-3 px-3 font-semibold text-amber-800 font-mono">42 units</td>
-                <td class="py-3 px-3">6 units / day</td>
-                <td class="py-3 px-3">10 days</td>
-                <td class="py-3 px-3 font-bold text-amber-800 font-mono">7.0 Days</td>
-                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-100 text-amber-900 border border-amber-300">REORDER TRIGGER</span></td>
-                <td class="py-3 px-3 text-right"><button onclick="handleNewPoClick('SKU-3120')" class="btn-po-action text-slate-900 font-medium hover:underline">Create PO &rarr;</button></td>
-              </tr>
-              <tr>
-                <td class="py-3 px-3 font-medium text-slate-900">SKU-4402 &bull; Active Earbuds Pro</td>
-                <td class="py-3 px-3 font-mono">320 units</td>
-                <td class="py-3 px-3">12 units / day</td>
-                <td class="py-3 px-3">12 days</td>
-                <td class="py-3 px-3 font-mono text-slate-700">26.6 Days</td>
-                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200">OPTIMAL</span></td>
-                <td class="py-3 px-3 text-right"><span class="text-slate-400">None</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ========================================================= -->
-      <!-- TAB 4: FINANCIAL & COST RECONCILIATION (ROLE PROTECTED) -->
-      <!-- ========================================================= -->
-      <div id="tab-financial" class="tab-pane hidden space-y-5">
-        <div id="financialRestrictedNotice" class="hidden p-8 bg-white border border-slate-200 rounded-lg text-center space-y-3">
-          <div class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center mx-auto">
-            <i data-lucide="lock" class="w-5 h-5"></i>
-          </div>
-          <h3 class="text-sm font-semibold text-slate-900">Financial Intelligence Restricted</h3>
-          <p class="text-xs text-slate-500 max-w-md mx-auto">
-            Your active role (<span class="active-role-name font-semibold text-slate-700"></span>) does not have sufficient permission to view general ledger profit margins, FIFO inventory valuation, or merchant fee reconciliation.
+          <p class="text-slate-600 leading-snug">
+            SP-API token expired at 11:42 AM. 142 orders pending sync. Re-authentication required to resume automated fulfillment feeds.
           </p>
-          <div class="text-[11px] font-mono text-slate-400">Policy: SOX-404 Corporate Data Segregation</div>
-        </div>
-
-        <div id="financialContentArea" class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm space-y-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <h2 class="text-sm font-semibold text-slate-900">Financial Recognition & Unit Cost Breakdown</h2>
-              <p class="text-xs text-slate-500 mt-0.5">Strict GAAP/IFRS separation between gross sales, landed FIFO COGS, and channel costs</p>
-            </div>
-            <a href="../dashboard/finance-and-reconciliation.md" class="text-xs text-slate-900 font-medium hover:underline">Open Finance Module &rarr;</a>
-          </div>
-
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-            <div class="p-3 border border-slate-200 rounded bg-slate-50">
-              <span class="text-slate-500">Gross Sales</span>
-              <div class="text-lg font-bold text-slate-900 mt-1 font-mono">$428,950.00</div>
-              <span class="text-[11px] text-slate-400">All customer invoice sums</span>
-            </div>
-            <div class="p-3 border border-slate-200 rounded bg-slate-50">
-              <span class="text-slate-500">Discounts & Refunds</span>
-              <div class="text-lg font-bold text-slate-900 mt-1 font-mono">-$39,830.00</div>
-              <span class="text-[11px] text-slate-400">Net deduction allowance</span>
-            </div>
-            <div class="p-3 border border-slate-200 rounded bg-slate-50">
-              <span class="text-slate-500">Landed FIFO COGS</span>
-              <div class="text-lg font-bold text-slate-900 mt-1 font-mono">-$228,800.00</div>
-              <span class="text-[11px] text-slate-400">Direct material/freight costs</span>
-            </div>
-            <div class="p-3 border border-slate-200 rounded bg-slate-50">
-              <span class="text-slate-500">Net Contribution Profit</span>
-              <div class="text-lg font-bold text-emerald-700 mt-1 font-mono">$160,320.00</div>
-              <span class="text-[11px] text-emerald-700 font-medium">41.2% Gross Margin</span>
-            </div>
+          <div class="pt-1 flex items-center gap-2">
+            <button onclick="resolveInPlace('queueItem1', 'Amazon Token Re-authenticated.'); toggleChannelAnomaly();" class="px-3 py-1 bg-slate-900 text-white font-medium rounded text-[11px] hover:bg-slate-800">
+              Re-authenticate Channel Now
+            </button>
+            <a href="../dashboard/store-pos.md" class="text-slate-700 hover:underline text-[11px]">Open Channel Settings &rarr;</a>
           </div>
         </div>
-      </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- 4. THE DECISION QUEUE -->
+      <!-- ======================================================= -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900">Decision Queue</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Ranked by Value at Risk &times; Urgency &divide; Effort. Act in place or delegate.</p>
+          </div>
+          <span id="queueCountLabel" class="text-xs font-mono font-medium text-slate-600 bg-white px-2 py-1 rounded border border-slate-200">
+            2 Decisions Required
+          </span>
+        </div>
+
+        <div id="decisionQueueContainer" class="space-y-3">
+
+          <!-- QUEUE ITEM 1: CRITICAL (AMAZON TOKEN EXPIRED) -->
+          <div id="queueItem1" class="bg-white border-l-4 border-l-slate-900 border border-slate-200 rounded-r-lg p-4 shadow-xs space-y-3 transition">
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-mono font-bold text-slate-900 text-xs">#1</span>
+                  <span class="font-semibold text-slate-900 text-xs">Amazon SP-API Authorization Token Expired</span>
+                  <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-100 text-slate-800 border border-slate-300 font-bold uppercase">Critical</span>
+                  <button onclick="explainRank('#1: Amazon Token', 'Value: ₹68,000 | Urgency: Immediate (<45m) | Effort: 1-click token renewal')" class="text-slate-400 hover:text-slate-600 text-[10px] underline">
+                    Why #1?
+                  </button>
+                </div>
+                <p class="text-xs text-slate-600 mt-1">
+                  142 marketplace orders awaiting ingestion. Amazon SLA breach penalty triggers in <strong>45 minutes</strong>.
+                </p>
+              </div>
+
+              <!-- Cost of Inaction -->
+              <div class="text-right flex-shrink-0">
+                <span class="text-[10px] uppercase font-semibold text-slate-400 block">Cost of Inaction</span>
+                <span class="text-xs font-bold font-mono text-slate-900">₹68,000.00 SLA Penalty</span>
+              </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div class="text-[11px] text-slate-500">
+                <span>Suggested Action: </span>
+                <strong class="text-slate-800">Re-authenticate Amazon Seller Central credentials in-place</strong>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="btnResolveToken" onclick="resolveInPlace('queueItem1', 'Amazon Token Re-authenticated. 142 orders queued for ingest.')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded text-xs transition">
+                  Resolve in Place
+                </button>
+                <button onclick="snoozeItem('queueItem1')" class="px-2.5 py-1.5 border border-slate-300 hover:bg-slate-50 text-slate-700 rounded text-xs font-medium">
+                  Snooze
+                </button>
+                <button onclick="delegateItem('queueItem1')" class="px-2.5 py-1.5 border border-slate-300 hover:bg-slate-50 text-slate-700 rounded text-xs font-medium">
+                  Delegate
+                </button>
+                <button onclick="dismissItem('queueItem1')" class="px-2 py-1.5 text-slate-400 hover:text-slate-600 text-xs">
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUEUE ITEM 2: ATTENTION (COLLISION COURSE - STOCKOUT RISK) -->
+          <div id="queueItem2" class="bg-white border-l-4 border-l-slate-400 border border-slate-200 rounded-r-lg p-4 shadow-xs space-y-3 transition">
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-mono font-bold text-slate-900 text-xs">#2</span>
+                  <span class="font-semibold text-slate-900 text-xs">Collision Course: Classic Runner 10 (SKU-8841)</span>
+                  <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-100 text-slate-700 border border-slate-300 font-bold uppercase">Attention</span>
+                  <button onclick="explainRank('#2: SKU-8841 Stockout', 'Value: ₹86,400 revenue | Urgency: 36h runway | Effort: Generate Draft PO')" class="text-slate-400 hover:text-slate-600 text-[10px] underline">
+                    Why #2?
+                  </button>
+                </div>
+                <p class="text-xs text-slate-600 mt-1">
+                  Available stock (24 units) will exhaust in <strong>1.3 days</strong> at 18 units/day burn. Supplier lead time is 14 days.
+                </p>
+              </div>
+
+              <!-- Cost of Inaction -->
+              <div class="text-right flex-shrink-0">
+                <span class="text-[10px] uppercase font-semibold text-slate-400 block">Cost of Inaction</span>
+                <span class="text-xs font-bold font-mono text-slate-900">₹86,400.00 Lost Revenue</span>
+              </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div class="text-[11px] text-slate-500">
+                <span>Suggested Action: </span>
+                <strong class="text-slate-800">Raise Draft PO for 350 units from Apex Manufacturing</strong>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="btnRaisePo" onclick="openDraftPoModal('SKU-8841', 'Classic Runner 10', 350, 'Apex Mfg')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded text-xs transition">
+                  Raise Draft PO
+                </button>
+                <button onclick="snoozeItem('queueItem2')" class="px-2.5 py-1.5 border border-slate-300 hover:bg-slate-50 text-slate-700 rounded text-xs font-medium">
+                  Snooze
+                </button>
+                <button onclick="delegateItem('queueItem2')" class="px-2.5 py-1.5 border border-slate-300 hover:bg-slate-50 text-slate-700 rounded text-xs font-medium">
+                  Delegate
+                </button>
+                <button onclick="dismissItem('queueItem2')" class="px-2 py-1.5 text-slate-400 hover:text-slate-600 text-xs">
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUCCESS STATE (WHEN QUEUE IS CLEARED) -->
+          <div id="queueEmptySuccess" class="hidden bg-white border border-slate-200 rounded-lg p-8 text-center space-y-2">
+            <div class="w-10 h-10 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center mx-auto">
+              <i data-lucide="check" class="w-5 h-5"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm">Decision Queue Clear</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto">
+              All operational bottlenecks and threshold exceptions have been acted on or snoozed.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- 5. THE ASK BAR (ON-DEMAND GOVERNED KPI RETRIEVAL) -->
+      <!-- ======================================================= -->
+      <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-semibold text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+            <i data-lucide="terminal" class="w-3.5 h-3.5 text-slate-600"></i>
+            Ask Bar & Command Palette (Governed KPI Query)
+          </span>
+          <span class="text-[11px] text-slate-400 font-mono">Ctrl + K</span>
+        </div>
+
+        <form onsubmit="handleAskSubmit(event)" class="relative">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+          <input 
+            id="askBarInput"
+            type="text" 
+            placeholder="Ask a question (e.g., 'What is our Gross Margin?', 'What did Amazon returns cost us?', 'Show Rupee Walk breakdown')..." 
+            class="w-full bg-slate-50 border border-slate-300 text-xs text-slate-900 rounded pl-9 pr-24 py-2 focus:bg-white focus:outline-none focus:border-slate-600"
+          >
+          <button type="submit" class="absolute right-1.5 top-1.5 px-3 py-1 bg-slate-900 text-white text-[11px] font-medium rounded hover:bg-slate-800 transition">
+            Query
+          </button>
+        </form>
+
+        <div class="flex flex-wrap gap-2 text-xs">
+          <span class="text-slate-400 text-[11px] self-center">Frequent Queries:</span>
+          <button onclick="askPreset('What is our Gross Margin for the last 30 days?')" class="px-2.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] transition">
+            Gross Margin
+          </button>
+          <button onclick="askPreset('What did Amazon returns cost us this week?')" class="px-2.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] transition">
+            Amazon Returns Cost
+          </button>
+          <button onclick="askPreset('Show Rupee Walk breakdown of gross sales')" class="px-2.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] transition">
+            The Rupee Walk (Waterfall)
+          </button>
+        </div>
+
+        <div id="askAnswerContainer" class="hidden pt-3 border-t border-slate-100 space-y-2">
+          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded text-xs space-y-2">
+            <div class="flex items-center justify-between">
+              <span id="askAnswerQuery" class="font-semibold text-slate-900"></span>
+              <button onclick="document.getElementById('askAnswerContainer').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+            
+            <div id="askAnswerValue" class="text-base font-bold text-slate-900 font-mono"></div>
+            <div id="askAnswerVisual" class="hidden p-3 bg-white border border-slate-200 rounded space-y-1.5 font-mono text-[11px]"></div>
+            <p id="askAnswerDetails" class="text-slate-600 text-[11px] leading-relaxed"></p>
+
+            <div class="pt-2 border-t border-slate-200 flex justify-between text-[10px] text-slate-400 font-mono">
+              <span id="askAnswerFormula"></span>
+              <span id="askAnswerSource"></span>
+            </div>
+          </div>
+        </div>
+      </section>
 
     </main>
   </div>
 
   <!-- ========================================================= -->
-  <!-- 3. SLIDE-OVER DRAWER: ORDER INSPECTION -->
+  <!-- MODAL: DRAFT PURCHASE ORDER (RESOLVE IN PLACE) -->
   <!-- ========================================================= -->
-  <aside id="orderDrawer" class="fixed right-0 top-0 bottom-0 w-[420px] bg-white border-l border-slate-300 shadow-xl z-50 transform translate-x-full transition-transform duration-200 flex flex-col">
-    <div class="h-14 px-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-      <div>
-        <div class="flex items-center gap-2">
-          <span id="drawerOrderId" class="font-mono font-bold text-slate-900 text-sm">#ORD-9422</span>
-          <span id="drawerOrderStatus" class="px-2 py-0.2 rounded text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">Paid</span>
-        </div>
-        <p class="text-[11px] text-slate-500">Order Record Details</p>
-      </div>
-      <button onclick="closeOrderDrawer()" class="p-1 text-slate-400 hover:text-slate-700">
-        <i data-lucide="x" class="w-4 h-4"></i>
-      </button>
-    </div>
-
-    <div class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
-      <div class="p-3 bg-slate-50 border border-slate-200 rounded space-y-1">
-        <div class="font-semibold text-slate-900" id="drawerCustomer">Sarah Jenkins</div>
-        <div class="text-slate-600" id="drawerChannel">Shopify US Online Store</div>
-        <div class="text-slate-500 text-[11px]">Carrier: FedEx Home Delivery &bull; Standard Ground</div>
-      </div>
-
-      <div>
-        <h4 class="font-semibold text-slate-800 uppercase tracking-wider text-[11px] mb-2">Order Line Items</h4>
-        <div class="border border-slate-200 rounded divide-y divide-slate-100">
-          <div class="p-2.5 flex justify-between items-center">
-            <div>
-              <div class="font-medium text-slate-900">Classic Runner 10 (Size 9.5)</div>
-              <div class="text-[11px] text-slate-500 font-mono">SKU-8841 &bull; Qty: 1</div>
-            </div>
-            <span class="font-mono font-medium text-slate-900">$120.00</span>
-          </div>
-          <div class="p-2.5 flex justify-between items-center">
-            <div>
-              <div class="font-medium text-slate-900">Merino Wool Beanie (Grey)</div>
-              <div class="text-[11px] text-slate-500 font-mono">SKU-2190 &bull; Qty: 1</div>
-            </div>
-            <span class="font-mono font-medium text-slate-900">$54.00</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h4 class="font-semibold text-slate-800 uppercase tracking-wider text-[11px] mb-2">Financial Breakdown</h4>
-        <div class="space-y-1.5 text-slate-600">
-          <div class="flex justify-between">
-            <span>Subtotal</span>
-            <span class="font-mono text-slate-800">$174.00</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Shipping</span>
-            <span class="font-mono text-slate-800">$9.50</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Sales Tax</span>
-            <span class="font-mono text-slate-800">$6.00</span>
-          </div>
-          <div class="pt-2 border-t border-slate-200 flex justify-between font-bold text-slate-900">
-            <span>Total Captured</span>
-            <span id="drawerTotal" class="font-mono">$189.50</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h4 class="font-semibold text-slate-800 uppercase tracking-wider text-[11px] mb-2">Warehouse Allocation</h4>
-        <p class="text-slate-600 leading-relaxed">
-          Assigned to <strong>Warehouse Central-01</strong>. Inventory reserved from Bin C-14. Ready for pick wave release.
-        </p>
-      </div>
-    </div>
-
-    <div class="p-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-      <a href="../dashboard/order-operations.md" class="text-xs text-slate-900 font-medium hover:underline">Go to Order Operations &rarr;</a>
-      <button onclick="closeOrderDrawer()" class="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-medium rounded text-xs">Close</button>
-    </div>
-  </aside>
-
-  <!-- ========================================================= -->
-  <!-- 4. MODAL: PURCHASE ORDER CREATION -->
-  <!-- ========================================================= -->
-  <div id="newPoModal" class="fixed inset-0 bg-slate-950/40 z-50 hidden flex items-center justify-center p-4">
+  <div id="draftPoModal" class="fixed inset-0 bg-slate-950/40 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white border border-slate-300 rounded-lg max-w-md w-full p-5 shadow-lg space-y-4">
       <div class="flex items-center justify-between border-b border-slate-200 pb-2.5">
-        <h3 class="font-semibold text-slate-900 text-sm">Create Supplier Purchase Order (PO)</h3>
-        <button onclick="closeNewPoModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+        <div>
+          <h3 class="font-bold text-slate-900 text-sm">Raise Draft Purchase Order</h3>
+          <p class="text-[11px] text-slate-500">Resolve in place from Decision Queue #2</p>
+        </div>
+        <button onclick="closeDraftPoModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
 
       <div class="space-y-3 text-xs">
         <div>
-          <label class="block text-slate-600 font-medium mb-1">Target Product / SKU</label>
-          <input id="poTargetSku" type="text" value="SKU-8841 - Classic Runner 10" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-900 font-medium">
+          <label class="block text-slate-600 font-medium mb-1">SKU / Item</label>
+          <input id="modalPoSku" type="text" readonly class="w-full bg-slate-100 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 font-medium font-mono">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-slate-600 font-medium mb-1">Order Quantity (Units)</label>
-            <input type="number" value="300" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs font-mono font-medium text-slate-900">
+            <label class="block text-slate-600 font-medium mb-1">Recommended Units</label>
+            <input id="modalPoUnits" type="number" value="350" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-900 font-bold font-mono">
           </div>
           <div>
             <label class="block text-slate-600 font-medium mb-1">Supplier</label>
-            <select class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-900 cursor-pointer">
-              <option>Apex Manufacturing (14d)</option>
-              <option>Expedited Vendor (5d)</option>
-            </select>
+            <input id="modalPoSupplier" type="text" value="Apex Manufacturing" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-900">
           </div>
         </div>
-        <div>
-          <label class="block text-slate-600 font-medium mb-1">Destination Warehouse</label>
-          <select class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-900 cursor-pointer">
-            <option>Warehouse Central-01 (Primary)</option>
-            <option>EU Hub Central (Rotterdam)</option>
-          </select>
+        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded text-slate-600 text-[11px]">
+          Lead Time: <strong>14 Days</strong> &bull; Estimated Cost: <strong>₹1,57,500.00</strong>
         </div>
       </div>
 
       <div class="pt-3 border-t border-slate-200 flex items-center justify-between">
-        <button onclick="closeNewPoModal()" class="px-3 py-1.5 text-slate-600 hover:text-slate-900 text-xs font-medium">Cancel</button>
-        <button onclick="submitNewPo()" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded text-xs">
-          Submit Purchase Order
+        <button onclick="closeDraftPoModal()" class="px-3 py-1.5 text-slate-600 hover:text-slate-900 text-xs font-medium">Cancel</button>
+        <button onclick="confirmDraftPo()" class="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded text-xs">
+          Confirm & Create PO in Inventory
         </button>
       </div>
     </div>
   </div>
 
   <!-- ========================================================= -->
-  <!-- 5. MODAL: RBAC PERMISSIONS INSPECTOR -->
+  <!-- SLIDE-OVER: CHANGE FEED ("SINCE YOU LAST LOOKED") -->
   <!-- ========================================================= -->
-  <div id="rbacModal" class="fixed inset-0 bg-slate-950/40 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-300 rounded-lg max-w-2xl w-full p-6 shadow-xl space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-        <div class="flex items-center gap-2">
-          <i data-lucide="shield-check" class="w-5 h-5 text-slate-900"></i>
+  <aside id="changeFeedDrawer" class="fixed right-0 top-0 bottom-0 w-[380px] bg-white border-l border-slate-300 shadow-xl z-50 transform translate-x-full transition-transform duration-200 flex flex-col">
+    <div class="h-14 px-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+      <div>
+        <h3 class="font-bold text-slate-900 text-sm">Since You Last Looked</h3>
+        <p class="text-[11px] text-slate-500">Verified changes since last session</p>
+      </div>
+      <button onclick="closeChangeFeed()" class="p-1 text-slate-400 hover:text-slate-700">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-5 space-y-3 text-xs">
+      <div class="p-3 bg-slate-50 border border-slate-200 rounded space-y-1">
+        <div class="flex justify-between items-center text-slate-900 font-semibold">
+          <span>PO #1041 Acknowledged</span>
+          <span class="text-[10px] text-slate-500">2h ago</span>
+        </div>
+        <p class="text-[11px] text-slate-600">
+          Supplier Apex Mfg confirmed order for 400 units of Active Earbuds. Expected ship: Nov 28.
+        </p>
+      </div>
+
+      <div class="p-3 bg-slate-50 border border-slate-200 rounded space-y-1">
+        <div class="flex justify-between items-center text-slate-900 font-semibold">
+          <span>Snooze Expired</span>
+          <span class="text-[10px] text-slate-500">4h ago</span>
+        </div>
+        <p class="text-[11px] text-slate-600">
+          Wholesale bulk return review snoozed by Marcus Vance has expired and returned to the queue.
+        </p>
+      </div>
+    </div>
+
+    <div class="p-3 border-t border-slate-200 bg-slate-50 flex justify-end">
+      <button onclick="closeChangeFeed()" class="px-3.5 py-1.5 bg-slate-900 text-white rounded text-xs font-medium hover:bg-slate-800">
+        Dismiss Feed
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========================================================= -->
+  <!-- MODAL: HEALTH INDEX DRILLDOWN -->
+  <!-- ========================================================= -->
+  <div id="healthDrillModal" class="fixed inset-0 bg-slate-950/40 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-300 rounded-lg max-w-lg w-full p-5 shadow-lg space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-2.5">
+        <div>
+          <h3 class="font-bold text-slate-900 text-sm">Business Health Index (84/100)</h3>
+          <p class="text-[11px] text-slate-500">Deterministic 5-Factor Weighted Calculation</p>
+        </div>
+        <button onclick="closeHealthDrilldown()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="space-y-2.5">
           <div>
-            <h3 class="font-bold text-slate-900 text-sm">Role-Based Access Control (RBAC) Policy</h3>
-            <p class="text-xs text-slate-500">Effective permissions matrix and data governance for <strong id="rbacModalCurrentRole" class="text-slate-800">Business Owner</strong></p>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium text-slate-700">Financial Health (25% weight)</span>
+              <span class="font-mono font-bold text-slate-900">88/100</span>
+            </div>
+            <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-900 rounded-full" style="width: 88%"></div></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium text-slate-700">Sales Performance (20% weight)</span>
+              <span class="font-mono font-bold text-slate-900">91/100</span>
+            </div>
+            <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-900 rounded-full" style="width: 91%"></div></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium text-slate-700">Order Operations & Fulfillment (20% weight)</span>
+              <span class="font-mono font-bold text-slate-900">74/100</span>
+            </div>
+            <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-900 rounded-full" style="width: 74%"></div></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium text-slate-700">Inventory Efficiency (20% weight)</span>
+              <span class="font-mono font-bold text-slate-900">79/100</span>
+            </div>
+            <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-900 rounded-full" style="width: 79%"></div></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="font-medium text-slate-700">Customer Performance (15% weight)</span>
+              <span class="font-mono font-bold text-slate-900">86/100</span>
+            </div>
+            <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-900 rounded-full" style="width: 86%"></div></div>
           </div>
         </div>
-        <button onclick="closeRbacModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+
+        <div class="pt-2 border-t border-slate-100 flex justify-between text-[11px] text-slate-500">
+          <span>Comparative Pace: <strong>+3.8 pts vs Prior Period</strong></span>
+          <span>Target Threshold: &ge; 80</span>
+        </div>
       </div>
 
-      <div class="overflow-x-auto text-xs">
-        <table class="w-full text-left border border-slate-200">
-          <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-            <tr>
-              <th class="py-2 px-3">ERP Functional Scope</th>
-              <th class="py-2 px-3 text-center">Business Owner</th>
-              <th class="py-2 px-3 text-center">E-com Manager</th>
-              <th class="py-2 px-3 text-center">Commerce Admin</th>
-              <th class="py-2 px-3 text-center">Commerce Viewer</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100 text-slate-700">
-            <tr>
-              <td class="py-2 px-3 font-medium text-slate-900">Gross Sales & Order Volume</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
-              <td class="py-2 px-3 text-center text-slate-500">Limited (L)</td>
-              <td class="py-2 px-3 text-center text-slate-500">View (V)</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-3 font-medium text-slate-900">Profit Margins & FIFO COGS</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
-              <td class="py-2 px-3 text-center font-mono text-amber-700 bg-amber-50/40">Masked (L)</td>
-              <td class="py-2 px-3 text-center font-mono text-rose-700 bg-rose-50/40">No Access (N)</td>
-              <td class="py-2 px-3 text-center font-mono text-rose-700 bg-rose-50/40">Masked (V)</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-3 font-medium text-slate-900">Order & Exceptions Queue</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
-              <td class="py-2 px-3 text-center text-slate-500">Limited (L)</td>
-              <td class="py-2 px-3 text-center text-slate-500">View (V)</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-3 font-medium text-slate-900">Channel & API Sync Monitor</td>
-              <td class="py-2 px-3 text-center text-slate-500">View (V)</td>
-              <td class="py-2 px-3 text-center text-slate-500">View (V)</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Full (F)</td>
-              <td class="py-2 px-3 text-center text-slate-400">None (N)</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-3 font-medium text-slate-900">Write Actions (POs, Expedites)</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Authorized</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Authorized</td>
-              <td class="py-2 px-3 text-center font-mono text-rose-700 bg-rose-50/40">Disabled</td>
-              <td class="py-2 px-3 text-center font-mono text-rose-700 bg-rose-50/40">Disabled</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-3 font-medium text-slate-900">Report & CSV Export</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Authorized</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Authorized</td>
-              <td class="py-2 px-3 text-center font-bold text-emerald-700 bg-emerald-50/40">Authorized</td>
-              <td class="py-2 px-3 text-center font-mono text-rose-700 bg-rose-50/40">Restricted</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs">
-        <span class="text-slate-500">Policy enforced at API boundary (OAuth 2.0 Scopes & ABAC)</span>
-        <button onclick="closeRbacModal()" class="px-3.5 py-1.5 bg-slate-900 text-white rounded font-medium hover:bg-slate-800">
-          Close Inspector
+      <div class="pt-3 border-t border-slate-200 flex justify-end">
+        <button onclick="closeHealthDrilldown()" class="px-3.5 py-1.5 bg-slate-900 text-white rounded text-xs font-medium hover:bg-slate-800">
+          Close Drilldown
         </button>
       </div>
     </div>
   </div>
 
   <!-- ========================================================= -->
-  <!-- JAVASCRIPT: COMPREHENSIVE ROLE-BASED ACCESS CONTROL (RBAC) -->
+  <!-- JAVASCRIPT: ADVANCED DYNAMIC ROLE ENGINE -->
   <!-- ========================================================= -->
   <script>
-    // Initialize icons
     lucide.createIcons();
 
-    // Chart instance
-    let salesChart = null;
+    let activeRole = 'owner';
+    let queueItemsCount = 2;
 
-    function initSalesChart() {
-      const ctx = document.getElementById('salesChartCanvas').getContext('2d');
-      const dates = ['Nov 01', 'Nov 04', 'Nov 07', 'Nov 10', 'Nov 13', 'Nov 16', 'Nov 19', 'Nov 22', 'Nov 24'];
-      const sales = [12400, 14200, 11800, 16900, 15400, 18900, 14800, 21200, 19400];
-      const target = [14000, 14000, 14000, 14000, 14000, 14000, 14000, 14000, 14000];
-
-      salesChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: dates,
-          datasets: [
-            {
-              label: 'Actual Sales',
-              data: sales,
-              borderColor: '#0f172a',
-              backgroundColor: 'rgba(15, 23, 42, 0.03)',
-              borderWidth: 2,
-              pointRadius: 3,
-              pointBackgroundColor: '#0f172a',
-              tension: 0.2,
-              fill: true,
-            },
-            {
-              label: 'Daily Target',
-              data: target,
-              borderColor: '#94a3b8',
-              borderWidth: 1.5,
-              borderDash: [4, 4],
-              pointRadius: 0,
-              fill: false,
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#0f172a',
-              titleColor: '#ffffff',
-              bodyColor: '#e2e8f0',
-              padding: 8,
-              cornerRadius: 4,
-              displayColors: false,
-              callbacks: {
-                label: function(ctx) { return '$' + ctx.parsed.y.toLocaleString() + '.00'; }
-              }
-            }
-          },
-          scales: {
-            x: {
-              grid: { display: false },
-              ticks: { color: '#64748b', font: { size: 11, family: 'Inter' } }
-            },
-            y: {
-              grid: { color: '#f1f5f9' },
-              ticks: {
-                color: '#64748b',
-                font: { size: 11, family: 'Inter' },
-                callback: function(v) { return '$' + (v / 1000) + 'k'; }
-              }
-            }
-          }
-        }
-      });
-    }
-
-    // =========================================================
-    // DYNAMIC ROLE-BASED ACCESS CONTROL (RBAC) ENGINE
-    // =========================================================
-    let currentRole = 'owner';
-
-    const roleDefinitions = {
+    const roleConfigs = {
       owner: {
-        title: 'Business Owner (Full Access)',
-        userName: 'Alexander Ross',
-        headerBadge: 'Role: Business Owner',
-        headerBadgeClass: 'px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200',
-        canViewProfit: true,
-        canViewFinanceTab: true,
-        canWriteActions: true,
-        canExport: true,
-        bannerText: null
+        title: 'Business Owner',
+        user: 'Alexander Ross',
+        scopeTag: 'Global (Full)',
+        contextText: 'Viewing as <strong>Business Owner</strong>: Prioritizing net contribution margins, cashflow settlement, and capital allocation.',
+        securityTag: 'POLICY: FULL EXECUTIVE CLEARANCE',
+        verdictText: 'Sales pace is ahead by ₹42,000; Amazon channel token expired and SKU-8841 needs a purchase order today.',
+        verdictBadge: 'Action Required',
+        realizedText: '₹3,89,120.00',
+        showOwnerSec: true,
+        showManagerSec: false,
+        showAdminSec: false,
+        canActInPlace: true,
+        financeAccessible: true
       },
       manager: {
         title: 'E-Commerce Manager',
-        userName: 'Elena Rostova',
-        headerBadge: 'Role: E-Commerce Manager',
-        headerBadgeClass: 'px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200',
-        canViewProfit: false,
-        canViewFinanceTab: true,
-        canWriteActions: true,
-        canExport: true,
-        bannerText: 'Operational Management View: Order and channel metrics are active. Sensitive financial margins and supplier cost bases are masked.'
+        user: 'Elena Rostova',
+        scopeTag: 'Assigned Channels (US & NA)',
+        contextText: 'Viewing as <strong>E-Commerce Manager</strong>: Prioritizing order volume, basket size, returns anomaly, and stock collision courses.',
+        securityTag: 'POLICY: OPERATIONAL SEGREGATION (FINANCE MASKED)',
+        verdictText: 'Channel sales pace is healthy (+12.4%), but 14 orders in Hub-1 have exceeded the 24h SLA threshold.',
+        verdictBadge: 'Watch Needed',
+        realizedText: '₹3,89,120.00',
+        showOwnerSec: false,
+        showManagerSec: true,
+        showAdminSec: false,
+        canActInPlace: true,
+        financeAccessible: false
       },
       admin: {
-        title: 'Commerce Admin (Integrations & Sync)',
-        userName: 'Marcus Vance',
-        headerBadge: 'Role: Commerce Admin',
-        headerBadgeClass: 'px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-50 text-purple-800 border border-purple-200',
-        canViewProfit: false,
-        canViewFinanceTab: false,
-        canWriteActions: false,
-        canExport: true,
-        bannerText: 'Technical Administration View: Prioritizing channel connectivity and sync latency. Financial margins and operational PO actions are restricted.'
+        title: 'Commerce Admin',
+        user: 'Marcus Vance',
+        scopeTag: 'Infrastructure & APIs',
+        contextText: 'Viewing as <strong>Commerce Admin</strong>: Prioritizing API integration health, sync latencies, rate limits, and token validity.',
+        securityTag: 'POLICY: TECHNICAL ADMIN (READ-ONLY BUSINESS DATA)',
+        verdictText: 'Amazon SP-API token expired 18m ago; 142 orders pending sync acknowledgment.',
+        verdictBadge: 'Action Required',
+        realizedText: '4,128 Events Ingested',
+        showOwnerSec: false,
+        showManagerSec: false,
+        showAdminSec: true,
+        canActInPlace: true,
+        financeAccessible: false
       },
       viewer: {
-        title: 'Commerce Viewer (Read-Only)',
-        userName: 'Auditor Session',
-        headerBadge: 'Role: Commerce Viewer (Read-Only)',
-        headerBadgeClass: 'px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-300',
-        canViewProfit: false,
-        canViewFinanceTab: false,
-        canWriteActions: false,
-        canExport: false,
-        bannerText: 'Strict Read-Only Mode: You are viewing an unprivileged audit session. All write actions, PO creation, and financial figures are restricted.'
+        title: 'Commerce Viewer',
+        user: 'Auditor Session',
+        scopeTag: 'Read-Only Audit',
+        contextText: 'Viewing as <strong>Commerce Viewer</strong>: Read-only summary brief. Operational modifications and PO actions are locked.',
+        securityTag: 'POLICY: AUDIT CLEARANCE (READ-ONLY)',
+        verdictText: 'Omnichannel operations running smoothly; 2 routine decision items queued for management.',
+        verdictBadge: 'Steady State',
+        realizedText: '₹3,89,120.00',
+        showOwnerSec: false,
+        showManagerSec: false,
+        showAdminSec: false,
+        canActInPlace: false,
+        financeAccessible: false
       }
     };
 
-    function handleRoleChange(selectedRole) {
-      currentRole = selectedRole;
-      const config = roleDefinitions[selectedRole];
-      if (!config) return;
+    function switchRoleLens(role) {
+      activeRole = role;
+      const conf = roleConfigs[role];
+      if (!conf) return;
 
-      // 1. Update User Details in Sidebar & Header
-      document.getElementById('sidebarUserName').innerText = config.userName;
-      document.getElementById('sidebarUserRole').innerText = config.title;
-      const headerTag = document.getElementById('roleHeaderTag');
-      headerTag.innerText = config.headerBadge;
-      headerTag.className = config.headerBadgeClass;
+      // Sidebar & Header Updates
+      document.getElementById('sidebarUserName').innerText = conf.user;
+      document.getElementById('sidebarUserRole').innerText = conf.title;
+      document.getElementById('sidebarScopeTag').innerText = conf.scopeTag;
+      document.getElementById('roleContextText').innerHTML = conf.contextText;
+      document.getElementById('roleSecurityTag').innerText = conf.securityTag;
+      document.getElementById('verdictSentence').innerText = conf.verdictText;
+      document.getElementById('verdictBadge').innerText = conf.verdictBadge;
+      document.getElementById('paceRealizedVal').innerText = conf.realizedText;
 
-      // 2. Banner Feedback
-      const banner = document.getElementById('roleAlertBanner');
-      const bannerText = document.getElementById('roleAlertText');
-      if (config.bannerText) {
-        banner.classList.remove('hidden');
-        bannerText.innerText = config.bannerText;
+      // Toggle Role Specialized Sections
+      const ownerSec = document.getElementById('ownerSpecializedSection');
+      const managerSec = document.getElementById('managerSpecializedSection');
+      const adminSec = document.getElementById('adminSpecializedSection');
+
+      if (conf.showOwnerSec) ownerSec.classList.remove('hidden'); else ownerSec.classList.add('hidden');
+      if (conf.showManagerSec) managerSec.classList.remove('hidden'); else managerSec.classList.add('hidden');
+      if (conf.showAdminSec) adminSec.classList.remove('hidden'); else adminSec.classList.add('hidden');
+
+      // Adjust Action Permissions
+      const btnResolveToken = document.getElementById('btnResolveToken');
+      const btnRaisePo = document.getElementById('btnRaisePo');
+
+      if (conf.canActInPlace) {
+        btnResolveToken.classList.remove('opacity-40', 'cursor-not-allowed');
+        btnRaisePo.classList.remove('opacity-40', 'cursor-not-allowed');
       } else {
-        banner.classList.add('hidden');
+        btnResolveToken.classList.add('opacity-40', 'cursor-not-allowed');
+        btnRaisePo.classList.add('opacity-40', 'cursor-not-allowed');
       }
 
-      // 3. Field-Level Security: Sensitive Financial Data Masking
-      const marginVal = document.getElementById('kpiMarginValue');
-      const profitSub = document.getElementById('kpiProfitSubtext');
-      const cogsVal = document.getElementById('kpiCogsValue');
-      const flsBadge = document.getElementById('flsBadge');
-
-      if (config.canViewProfit) {
-        marginVal.innerText = '41.2%';
-        marginVal.classList.remove('text-slate-400', 'font-normal');
-        marginVal.classList.add('text-slate-900', 'font-bold');
-        profitSub.innerHTML = 'Profit: $160,320.00';
-        cogsVal.innerText = '$228,800.00';
-        flsBadge.innerText = 'CONFIDENTIAL';
-        flsBadge.className = 'text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200';
+      // Finance Nav Item Lock
+      const finBadge = document.getElementById('navFinanceBadge');
+      if (conf.financeAccessible) {
+        finBadge.innerText = 'T+2';
       } else {
-        marginVal.innerHTML = '<span class="text-sm font-normal text-slate-400 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 inline-flex items-center gap-1"><i data-lucide="lock" class="w-3 h-3"></i> Restricted</span>';
-        profitSub.innerHTML = '<span class="text-slate-400 text-[11px] font-normal">Restricted by Role</span>';
-        cogsVal.innerHTML = '<span class="text-slate-400 font-normal">Restricted</span>';
-        flsBadge.innerText = 'RESTRICTED';
-        flsBadge.className = 'text-[10px] font-mono text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200';
-      }
-
-      // 4. Action Buttons (New PO, Expedite PO) Disabled for Admin & Viewer
-      const btnNewPo = document.getElementById('btnNewPo');
-      const btnBannerExpedite = document.getElementById('btnBannerExpedite');
-      const poActionButtons = document.querySelectorAll('.btn-po-action');
-
-      if (config.canWriteActions) {
-        btnNewPo.className = 'flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded transition cursor-pointer';
-        btnNewPo.title = 'Create new Purchase Order';
-        btnBannerExpedite.className = 'px-3 py-1.5 bg-amber-800 hover:bg-amber-900 text-white font-medium rounded transition cursor-pointer';
-        btnBannerExpedite.title = 'Expedite PO';
-        poActionButtons.forEach(btn => {
-          btn.classList.remove('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
-        });
-      } else {
-        btnNewPo.className = 'flex items-center gap-1.5 px-3 py-1.5 bg-slate-200 text-slate-400 font-medium rounded cursor-not-allowed';
-        btnNewPo.title = 'Action restricted: insufficient write permission';
-        btnBannerExpedite.className = 'px-3 py-1.5 bg-slate-200 text-slate-400 font-medium rounded cursor-not-allowed';
-        btnBannerExpedite.title = 'Action restricted: insufficient write permission';
-        poActionButtons.forEach(btn => {
-          btn.classList.add('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
-        });
-      }
-
-      // 5. Export Action Permission
-      const btnExport = document.getElementById('btnExport');
-      if (config.canExport) {
-        btnExport.className = 'flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium rounded transition cursor-pointer';
-        btnExport.title = 'Export CSV summary';
-      } else {
-        btnExport.className = 'flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 border border-slate-200 text-slate-400 font-medium rounded cursor-not-allowed';
-        btnExport.title = 'Export restricted for viewer role';
-      }
-
-      // 6. Financial Tab Access Enforcement
-      const finNotice = document.getElementById('financialRestrictedNotice');
-      const finContent = document.getElementById('financialContentArea');
-      const finLockBadge = document.getElementById('tabFinancialLockBadge');
-      document.querySelectorAll('.active-role-name').forEach(el => el.innerText = config.title);
-
-      if (config.canViewFinanceTab) {
-        finNotice.classList.add('hidden');
-        finContent.classList.remove('hidden');
-        finLockBadge.classList.add('hidden');
-      } else {
-        finNotice.classList.remove('hidden');
-        finContent.classList.add('hidden');
-        finLockBadge.classList.remove('hidden');
+        finBadge.innerText = 'Restricted';
       }
 
       lucide.createIcons();
     }
 
-    // Action button intercepts
-    function handleNewPoClick(sku) {
-      const config = roleDefinitions[currentRole];
-      if (!config.canWriteActions) {
-        alert(`[Access Denied]\nYour active role (${config.title}) has read-only or administrative permissions. PO creation requires Business Owner or Operations Manager privileges.`);
+    function togglePaceDrivers() {
+      const panel = document.getElementById('paceDriversPanel');
+      const text = document.getElementById('paceToggleText');
+      const icon = document.getElementById('paceToggleIcon');
+
+      if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+        text.innerText = 'Hide Drivers';
+        icon.setAttribute('data-lucide', 'chevron-up');
+      } else {
+        panel.classList.add('hidden');
+        text.innerText = 'Explain Gap (3 Drivers)';
+        icon.setAttribute('data-lucide', 'chevron-down');
+      }
+      lucide.createIcons();
+    }
+
+    function resolveInPlace(itemId, successMsg) {
+      const conf = roleConfigs[activeRole];
+      if (!conf.canActInPlace) {
+        alert(`[Action Restricted]\nYour active profile (${conf.title}) has read-only permissions. Modifying operational queues requires authorized credentials.`);
         return;
       }
-      openNewPoModal(sku);
+
+      const el = document.getElementById(itemId);
+      if (!el) return;
+
+      el.classList.add('opacity-40', 'pointer-events-none');
+      setTimeout(() => {
+        el.remove();
+        queueItemsCount--;
+        updateQueueDisplay();
+        alert('[Resolved in Place]\n' + successMsg);
+      }, 300);
     }
 
-    function handleExportClick() {
-      const config = roleDefinitions[currentRole];
-      if (!config.canExport) {
-        alert(`[Export Restricted]\nRole "${config.title}" is not authorized to export proprietary dataset tables.`);
+    function snoozeItem(itemId) {
+      const conf = roleConfigs[activeRole];
+      if (!conf.canActInPlace) {
+        alert(`[Action Restricted]\nRead-only session cannot snooze active operational items.`);
         return;
       }
-      alert(`[Export Initiated]\nGenerating verified CSV digest for: ${config.title}`);
+      const reason = prompt('Snooze Reason (Required by Policy):', 'Awaiting supplier confirmation on morning call');
+      if (!reason) return;
+
+      const el = document.getElementById(itemId);
+      el.remove();
+      queueItemsCount--;
+      updateQueueDisplay();
+      alert(`[Item Snoozed for 24h]\nReason logged to audit trail: "${reason}"`);
     }
 
-    // Navigation Tabs
-    function switchViewTab(targetId, btn) {
-      document.querySelectorAll('.view-tab-btn').forEach(b => {
-        b.className = 'view-tab-btn pb-2.5 border-b-2 view-tab-inactive transition';
-      });
-      btn.className = 'view-tab-btn pb-2.5 border-b-2 view-tab-active transition';
-
-      document.querySelectorAll('.tab-pane').forEach(p => {
-        p.classList.add('hidden');
-      });
-      const activePane = document.getElementById(targetId);
-      if (activePane) activePane.classList.remove('hidden');
-    }
-
-    // Modals & Drawers
-    function showOrderDetails(orderId, customer, channel, total, status, items) {
-      document.getElementById('drawerOrderId').innerText = '#' + orderId;
-      document.getElementById('drawerCustomer').innerText = customer;
-      document.getElementById('drawerChannel').innerText = channel;
-      document.getElementById('drawerTotal').innerText = total;
-      document.getElementById('drawerOrderStatus').innerText = status;
-      document.getElementById('orderDrawer').classList.remove('translate-x-full');
-    }
-
-    function closeOrderDrawer() {
-      document.getElementById('orderDrawer').classList.add('translate-x-full');
-    }
-
-    function openNewPoModal(sku) {
-      if (sku) {
-        document.getElementById('poTargetSku').value = sku + ' - Classic Runner 10';
+    function delegateItem(itemId) {
+      const conf = roleConfigs[activeRole];
+      if (!conf.canActInPlace) {
+        alert(`[Action Restricted]\nRead-only session cannot delegate operational tasks.`);
+        return;
       }
-      document.getElementById('newPoModal').classList.remove('hidden');
+      const assignee = prompt('Delegate to Role or Team Member:', 'Logistics Lead (Warehouse Central)');
+      if (!assignee) return;
+
+      const el = document.getElementById(itemId);
+      el.remove();
+      queueItemsCount--;
+      updateQueueDisplay();
+      alert(`[Decision Delegated]\nAssigned to: ${assignee}`);
     }
 
-    function closeNewPoModal() {
-      document.getElementById('newPoModal').classList.add('hidden');
+    function dismissItem(itemId) {
+      const conf = roleConfigs[activeRole];
+      if (!conf.canActInPlace) {
+        alert(`[Action Restricted]\nRead-only session cannot dismiss items.`);
+        return;
+      }
+      const reason = prompt('Dismissal Reason (Will be logged for threshold review):', 'Known anomaly; already handled offline');
+      if (!reason) return;
+
+      const el = document.getElementById(itemId);
+      el.remove();
+      queueItemsCount--;
+      updateQueueDisplay();
+      alert(`[Dismissed]\nLogged to audit trail: "${reason}"`);
     }
 
-    function submitNewPo() {
-      alert('Purchase Order successfully approved and transmitted to supplier EDI.');
-      closeNewPoModal();
+    function updateQueueDisplay() {
+      document.getElementById('queueCountLabel').innerText = `${queueItemsCount} Decisions Required`;
+      document.getElementById('sidebarQueueBadge').innerText = `${queueItemsCount} Decisions`;
+      if (queueItemsCount <= 0) {
+        document.getElementById('queueEmptySuccess').classList.remove('hidden');
+        document.getElementById('verdictSentence').innerText = 'All operational decisions resolved; store running smoothly.';
+        document.getElementById('verdictBadge').innerText = 'Steady State';
+      }
     }
 
-    function openRbacModal() {
-      document.getElementById('rbacModalCurrentRole').innerText = roleDefinitions[currentRole].title;
-      document.getElementById('rbacModal').classList.remove('hidden');
+    function explainRank(item, formula) {
+      alert(`[Decision Ranking Transparency]\n${item}\nRanking Formula: Priority = Value at Risk × Urgency ÷ Effort\nCalculation: ${formula}`);
     }
 
-    function closeRbacModal() {
-      document.getElementById('rbacModal').classList.add('hidden');
+    function toggleChannelAnomaly() {
+      const box = document.getElementById('channelAnomalyBox');
+      box.classList.toggle('hidden');
     }
 
-    // Page Load
+    function openDraftPoModal(sku, name, units, supplier) {
+      const conf = roleConfigs[activeRole];
+      if (!conf.canActInPlace) {
+        alert(`[Action Restricted]\nCreating Purchase Orders requires Business Owner or Operations Manager privileges.`);
+        return;
+      }
+      document.getElementById('modalPoSku').value = sku + ' - ' + name;
+      document.getElementById('modalPoUnits').value = units;
+      document.getElementById('modalPoSupplier').value = supplier;
+      document.getElementById('draftPoModal').classList.remove('hidden');
+    }
+
+    function closeDraftPoModal() {
+      document.getElementById('draftPoModal').classList.add('hidden');
+    }
+
+    function confirmDraftPo() {
+      resolveInPlace('queueItem2', 'Draft PO #1043 created for 350 units. Routed to supplier EDI.');
+      closeDraftPoModal();
+    }
+
+    function openHealthDrilldown() {
+      document.getElementById('healthDrillModal').classList.remove('hidden');
+    }
+
+    function closeHealthDrilldown() {
+      document.getElementById('healthDrillModal').classList.add('hidden');
+    }
+
+    function openChangeFeed() {
+      document.getElementById('changeFeedDrawer').classList.remove('translate-x-full');
+    }
+
+    function closeChangeFeed() {
+      document.getElementById('changeFeedDrawer').classList.add('translate-x-full');
+    }
+
+    function focusAskBar() {
+      const input = document.getElementById('askBarInput');
+      input.focus();
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function askPreset(q) {
+      document.getElementById('askBarInput').value = q;
+      handleAskSubmit(new Event('submit'));
+    }
+
+    function handleAskSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('askBarInput');
+      const q = input.value.trim();
+      if (!q) return;
+
+      const container = document.getElementById('askAnswerContainer');
+      const titleEl = document.getElementById('askAnswerQuery');
+      const valEl = document.getElementById('askAnswerValue');
+      const detailsEl = document.getElementById('askAnswerDetails');
+      const formulaEl = document.getElementById('askAnswerFormula');
+      const sourceEl = document.getElementById('askAnswerSource');
+      const visualEl = document.getElementById('askAnswerVisual');
+
+      titleEl.innerText = `Q: "${q}"`;
+      visualEl.classList.add('hidden');
+      visualEl.innerHTML = '';
+      
+      const qLower = q.toLowerCase();
+      if (qLower.includes('margin')) {
+        if (activeRole === 'owner') {
+          valEl.innerText = '41.2% Realized Net Margin (₹1,60,320.00)';
+          detailsEl.innerText = 'Net sales ₹3,89,120.00 minus FIFO Landed COGS ₹2,28,800.00. Channel margins: Retail POS (50.4%), Shopify (46.1%), Amazon (31.8%), B2B (20.8%).';
+        } else {
+          valEl.innerText = '[Restricted by Role Lens]';
+          detailsEl.innerText = 'Net profit and FIFO landed margins are restricted for your current role profile under corporate segregation policy.';
+        }
+        formulaEl.innerText = 'Formula: ((Net Sales - Landed FIFO COGS) / Net Sales) * 100';
+        sourceEl.innerText = 'Source: Finance & Reconciliation Module';
+      } else if (qLower.includes('return') || qLower.includes('amazon')) {
+        valEl.innerText = '₹6,924.80 Total Cost of Amazon Returns';
+        detailsEl.innerText = '148 returns processed in last 30 days (6.4% return rate). Footwear accounted for 62% of returned value due to sizing mismatch.';
+        formulaEl.innerText = 'Formula: SUM(RMA_items * unit_cogs) + reverse_shipping';
+        sourceEl.innerText = 'Source: Returns Engine + Amazon SP-API';
+      } else if (qLower.includes('rupee walk') || qLower.includes('walk')) {
+        if (activeRole === 'owner') {
+          valEl.innerText = 'The Rupee Walk: Destination of ₹100 Gross Sales';
+          visualEl.classList.remove('hidden');
+          visualEl.innerHTML = `
+            <div class="space-y-1 text-xs">
+              <div class="flex justify-between font-bold"><span>Gross Sales</span><span>₹100.00</span></div>
+              <div class="flex justify-between text-slate-600"><span>- Discounts & Promos</span><span>-₹5.60</span></div>
+              <div class="flex justify-between text-slate-600"><span>- Returns Allowance</span><span>-₹3.80</span></div>
+              <div class="flex justify-between text-slate-600"><span>- Landed FIFO COGS</span><span>-₹53.30</span></div>
+              <div class="flex justify-between text-slate-600"><span>- Carrier Freight</span><span>-₹8.90</span></div>
+              <div class="flex justify-between text-slate-600"><span>- Gateway & Channel Fees</span><span>-₹7.80</span></div>
+              <div class="pt-1 border-t border-slate-200 flex justify-between font-bold text-slate-900"><span>= Net Contribution Profit</span><span>₹20.60 (20.6%)</span></div>
+            </div>
+          `;
+          detailsEl.innerText = 'Waterfall accounting step showing net realization from gross checkout to free operating margin.';
+        } else {
+          valEl.innerText = '[Restricted by Role Lens]';
+          detailsEl.innerText = 'Waterfall contribution margins require Executive clearance.';
+        }
+        formulaEl.innerText = 'Formula: Gross Sales - (Deductions + COGS + Fees)';
+        sourceEl.innerText = 'Source: Finance Ledger Waterfall';
+      } else {
+        valEl.innerText = 'Classic Runner 10 (SKU-8841): 1.3 Days Runway';
+        detailsEl.innerText = 'Available stock: 24 units. Daily burn rate: 18 units/day. Lead time is 14 days. Immediate stockout risk.';
+        formulaEl.innerText = 'Formula: Available Units / Average Daily Burn Rate';
+        sourceEl.innerText = 'Source: Inventory & Replenishment';
+      }
+
+      container.classList.remove('hidden');
+      container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      lucide.createIcons();
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        focusAskBar();
+      }
+    });
+
     window.onload = function() {
-      initSalesChart();
-      handleRoleChange('owner');
+      switchRoleLens('owner');
     };
   </script>
 </body>
