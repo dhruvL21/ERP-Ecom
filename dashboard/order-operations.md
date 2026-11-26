@@ -9,492 +9,30 @@
 
 ---
 
-## 1. Purpose
-
-Order Operations is the operational command centre for every order entering the commerce business. It helps teams understand **what is happening to each order, what needs attention, why it is blocked, who owns the next step, and how to resolve it**.
-
-It is not intended to be a conventional dashboard made of KPI cards, charts, and a large order table. It behaves like a live work environment:
-
-- Show the order journey and its current stage.
-- Bring exceptions and time-sensitive work to the top.
-- Let an operator move from a problem to the relevant order and action without navigating through many screens.
-- Preserve a complete, understandable history of every order.
-- Present the right work and controls to the right role.
-- Use AI to explain, summarize, and assist — while deterministic rules and authorized users control business actions.
-
-### Product Outcome
-
-A user should be able to open Order Operations and answer five questions quickly:
-
-1. Which orders are moving normally?
-2. Which orders are stuck, at risk, or need a decision?
-3. What is the business impact of leaving them unresolved?
-4. What is the next best action, and who should take it?
-5. Can I resolve it here, or does it belong to another ERP service?
-
----
-
-## 2. Product Principles
-
-| Principle | What It Means in the Product |
-| :--- | :--- |
-| **Work, not metrics** | Prioritize orders and exceptions rather than filling the screen with KPI cards. |
-| **Journey-first** | Make the order lifecycle visible as a connected flow, not a collection of disconnected status labels. |
-| **Exceptions before volume** | Normal orders stay quiet; blocked, delayed, risky, and unusual orders surface. |
-| **Resolve in context** | Open an order in a side panel or focused workspace and act without losing the queue. |
-| **One order, one history** | Combine events from channels and internal services into one chronological order timeline. |
-| **Role-aware by design** | The same system presents different queues, details, and actions according to permissions. |
-| **Explainable automation** | Every flag, priority, and recommendation shows the reason and relevant source data. |
-| **Safe actions** | Validate permissions, dependencies, and state transitions before executing an action. |
-| **Progressive detail** | Start with a clear summary; reveal operational, customer, payment, and audit details when needed. |
-| **Clear ownership** | Every unresolved exception has an owner, a due time, or an explicit unassigned state. |
-
----
-
-## 3. Scope and Service Boundaries
-
-Order Operations coordinates the **order lifecycle** across B2B, B2C, and D2C commerce. It receives orders from connected sales channels and coordinates work with other ERP services.
-
-### 3.1 In Scope
-
-- Unified order inbox across connected channels.
-- Order lifecycle and status tracking.
-- Order prioritization and exception management.
-- Order search, filtering, segmentation, and saved views.
-- Order detail workspace and event timeline.
-- Payment and order-verification status visibility.
-- Customer-service actions related to an order, subject to permissions.
-- Order edits, cancellation, and split/merge workflows where supported by policy.
-- Returns, exchanges, and refund-request coordination.
-- SLA monitoring, escalation, and assignment.
-- Bulk operations with validation and audit logs.
-- Order notes, internal handoffs, and collaboration.
-- AI-assisted search, summaries, explanations, and suggested next steps.
-- Operational reports and configurable alerts.
-
-### 3.2 Connected Services — Do Not Duplicate Ownership
-
-Order Operations coordinates with these services and must not become a second implementation of them.
-
-| Service | Owns | Order Operations Interaction |
-| :--- | :--- | :--- |
-| **Inventory & Replenishment** | Available stock, reservations, replenishment, stock valuation | Request/check reservation; show reservation outcome and stock-related blockers. |
-| **Warehouse / Fulfilment** | Picking, packing, warehouse tasks, dispatch handover | Create or receive fulfilment tasks; show progress and blockers. |
-| **Shipping / Logistics Integration** | Carrier booking, tracking events, delivery updates | Display shipment and delivery status; request permitted shipping actions. |
-| **Finance & Reconciliation** | Invoices, ledger, settlement, accounting, tax records | Show payment/invoice/refund state; initiate approved requests through finance APIs. |
-| **Customer / CRM** | Customer profile, consent, communication preferences | Display relevant customer context and link to the customer record. |
-| **Business Overview** | Business-level health, trends, and top risks | Send summarized order signals; detailed order work stays here. |
-
-> **Boundary Rule:** Order Operations owns the order record's operational orchestration and lifecycle view. It must not independently calculate inventory availability, post financial ledger entries, or replace warehouse execution.
-
----
-
-## 4. Supported Commerce Models and Order Sources
-
-The module normalizes different order sources into a common order model while retaining channel-specific information.
-
-### Commerce Models
-
-- **B2C:** A business sells directly to an individual consumer, usually with a standard checkout and payment flow.
-- **D2C:** A brand sells directly to its customer through its own website, app, or owned channel.
-- **B2B:** A business sells to another business. Orders may involve negotiated pricing, purchase orders, credit terms, minimum quantities, approval chains, partial fulfilment, and repeat ordering.
-
-### Potential Order Sources
-
-- Brand website / online store
-- Mobile application
-- Marketplaces (e.g., Amazon, Flipkart)
-- POS / physical retail
-- B2B customer portal
-- Sales representative entry
-- EDI, API, or partner integrations
-- Manually created back-office orders
-
-Each order retains its original source, external order reference, channel, business model, store/brand, legal entity, and source timestamps.
-
----
-
-## 5. Roles and Role-Based Access Control (RBAC)
-
-The supplied role mapping identifies three Order Operations roles:
-
-1. **Order Manager**
-2. **Order Ops Specialist**
-3. **Customer Service**
-
-These are module-level roles mapped to the organization's central identity, user, and permission system rather than treated as isolated login accounts.
-
-### 5.1 Role Intent
-
-| Role | Primary Responsibility | Default Experience |
-| :--- | :--- | :--- |
-| **Order Manager** | Own overall order performance, workload, escalations, policies, and operational outcomes. | **Operations Command Centre:** flow health, risk, workload, SLA breaches, and team control. |
-| **Order Ops Specialist** | Process orders, investigate exceptions, coordinate fulfilment, and execute permitted operational actions. | **Action Queue:** assigned work, blocked orders, next steps, and order workspace. |
-| **Customer Service** | Resolve customer questions and order-related service cases. | **Customer/Order Lookup:** clear status, customer-safe timeline, communication, and service actions. |
-
-### 5.2 Permission Matrix
-
-*Legend: **Full** = perform within assigned business scope; **Limited** = only specified actions or fields; **View** = read-only; **No** = unavailable.*
-
-| Capability | Order Manager | Order Ops Specialist | Customer Service |
-| :--- | :---: | :---: | :---: |
-| View operational command centre | Full | Personal/team work view | Service-focused view |
-| View all orders in permitted scope | Full | Limited by team/assignment/scope | Limited by service scope |
-| Search orders | Full | Full within scope | Full within service scope |
-| View order lifecycle and timeline | Full | Full | Customer-safe view |
-| View customer contact details | Limited by policy | Limited by policy | Full for service purpose |
-| View payment state | Full status; financial detail by separate finance permission | Status only or limited | Status only; no sensitive payment credentials |
-| View internal notes | Full | Full | Service notes; restricted operational notes |
-| Add internal notes | Yes | Yes | Yes, service-scoped |
-| Assign/reassign work | Yes | Only if delegated | No by default |
-| Change order details | Policy-controlled | Allowed fields only | No by default; request correction workflow |
-| Hold/release an order | Yes | If permitted by reason and policy | Request/escalate only |
-| Cancel an order | Approve or execute by policy | Execute within policy | Request cancellation; execute only if explicitly authorized |
-| Split/merge orders | Approve or execute | If permitted | No |
-| Create fulfilment/warehouse task | Approve or initiate | Initiate within policy | No |
-| Initiate return/exchange request | Yes | Yes | Yes, customer-service policy |
-| Approve refund | According to finance permission/policy | No by default | No |
-| Execute refund / post financial transaction | No by default; finance permission required | No | No |
-| Bulk actions | Yes, with safeguards | Limited approved actions | No by default |
-| Configure SLA / priority rules | Yes | No | No |
-| View team workload and performance | Full | Own/team view as allowed | Own service workload |
-| Export order data | Permission + field-level controls | Limited | Restricted |
-| View audit history | Full | Relevant order history | Customer-service relevant history |
-| Use AI assistant | Full, within data scope | Operational assistant | Customer-safe assistant |
-
-### 5.3 Important RBAC Rules
-
-- Enforce access **server-side** on every read, search, export, and action. Hiding a button in the UI is not security.
-- Apply business, brand, store, legal-entity, region, and team scopes to every query.
-- Use field-level permissions for customer PII, addresses, payment details, internal notes, and commercial terms.
-- Customer Service must not see internal margin, supplier cost, confidential B2B pricing rules, or internal risk commentary unless separately granted.
-- Payment credentials and full card data must never be exposed in this module.
-- A user may hold more than one role; resolve effective permissions through the central authorization policy.
-- Sensitive actions require a reason and are written to an immutable audit trail.
-- Support configurable approval thresholds (e.g., high-value cancellation, order release, or exceptional adjustment requiring manager approval).
-- AI responses must respect the same row-level and field-level access as the user.
-
----
-
-## 6. Information Architecture
-
-Avoid a traditional sidebar with dozens of pages. Use a compact navigation structure that follows the operator's work:
-
-### Primary Workspaces
-
-1. **Command Centre** — current flow, attention queue, and workload.
-2. **Order Journey** — visual lifecycle and stage-level bottlenecks.
-3. **Work Queue** — assigned, unassigned, and escalated work.
-4. **Order Explorer** — search and investigate any order.
-5. **Returns & Exceptions** — cancellations, returns, exchanges, delivery failures, and other exception workflows.
-6. **Rules & SLAs** — manager-only operational policies and thresholds.
-7. **Insights** — operational patterns, service levels, and bottleneck analysis.
-
-*Some workspaces may be tabs or contextual views rather than separate pages so users do not navigate away from their current task unnecessarily.*
-
----
-
-## 7. Main Dashboard: Order Operations Command Centre
-
-### 7.1 Dashboard Design Concept
-
-The dashboard should feel like a **live control room**, not an analytics report.
-
-It answers: **“Where is the order flow breaking, and what should I work on now?”**
-
-The default screen contains six core components:
-
-1. Flow Pulse
-2. Journey Map
-3. Attention Queue
-4. Workload & Ownership
-5. Channel Signals
-6. Ask Order Operations
-
-### 7.2 Flow Pulse — One Operational Sentence
-
-At the top, show a concise, generated operational statement based on governed data:
-
-- *“Order flow is healthy. 12 orders need attention; 3 are close to their dispatch SLA.”*
-- *“Dispatch is the current bottleneck. 18 paid orders have not entered picking.”*
-- *“Marketplace orders are syncing late. 7 orders may miss their promised dispatch time.”*
-
-The statement must link directly to the exact orders and data behind it. Avoid vague AI-generated claims.
-
-### 7.3 Journey Map — Visualize the Live Order Flow
-
-Show the lifecycle as a connected horizontal or vertical path. Each stage displays its active order count, ageing, and exception count. Selecting a stage opens the corresponding filtered order queue.
-
-**Primary Stages:**
-1. Received
-2. Verification
-3. Payment Confirmed / Payment Pending
-4. Stock Reservation
-5. Ready for Fulfilment
-6. Picking
-7. Packing
-8. Ready to Dispatch
-9. Dispatched / In Transit
-10. Delivered
-11. Closed
-
-**Side Paths:**
-- On Hold
-- Verification Failed
-- Payment Failed
-- Stock Unavailable
-- Fulfilment Exception
-- Delivery Exception
-- Cancellation Requested / Cancelled
-- Return Requested / Return in Progress
-- Exchange in Progress
-- Refund Pending / Refunded
-
-> **Important:** This is a configurable operational lifecycle. Not every channel or B2B order follows every stage. Preserve the original channel status and map it to a normalized internal state without forcing a false universal sequence.
-
-### 7.4 Attention Queue — The Centre of the Dashboard
-
-A prioritized list of work (not a list of all orders). Each item displays:
-
-- Order number and channel
-- Current stage
-- Exception / reason
-- Time waiting and SLA deadline
-- Impact indicator (customer, revenue exposure, operational delay, or compliance)
-- Assigned owner
-- Recommended next step
-- Available action(s)
-
-**Example Items:**
-- `#ORD-10482` — Payment verified, stock reservation failed — waiting 42 min — assign to inventory coordination.
-- `#ORD-10491` — Packed, carrier pickup not confirmed — dispatch SLA in 18 min — retry carrier handover.
-- `#B2B-2081` — Customer PO requires approval — awaiting manager — review terms.
-- `#ORD-10510` — Delivery attempt failed — customer contact needed — open service case.
-
-#### Priority Model
-
-Calculate a transparent priority score using deterministic, configurable rules based on:
-- SLA urgency / time remaining
-- Customer promise impact
-- Order value or business exposure (where the role may see it)
-- Downstream dependency / number of blocked tasks
-- Exception severity
-- Age of the issue
-
-*Do not allow an LLM to invent the priority score. Explain the top reasons for every high-priority item.*
-
-**Queue Actions:**
-- Open workspace
-- Assign / reassign
-- Add note
-- Resolve / retry where safe
-- Request approval
-- Escalate
-- Snooze with reason and due time
-- Dismiss only when the signal is demonstrably irrelevant, with audit reason
-
-### 7.5 Workload & Ownership
-
-Show work distribution rather than vanity performance cards:
-- Unassigned exceptions
-- Work by owner/team
-- Overdue tasks
-- Work nearing SLA
-- Average age of open exceptions
-- Capacity / workload imbalance
-
-Managers can reassign or escalate. Specialists see their own queue and permitted team queues. Customer Service sees service cases and customer follow-ups.
-
-### 7.6 Channel Signals
-
-Represent channels as a compact rail:
-- Website / D2C
-- Marketplace
-- POS
-- B2B Portal
-- Sales Rep
-- EDI / API
-
-Show only actionable signals (sync delay, order import failure, channel status mapping issue, payment confirmation mismatch, unusual cancellation spike). Clicking a channel filters the journey and queue. Avoid displaying a row of channel KPI cards.
-
-### 7.7 Ask Order Operations
-
-A natural-language command/search bar for questions such as:
-- *“Show orders at risk of missing dispatch today.”*
-- *“Find the last 10 orders from this customer.”*
-- *“Why is order ORD-10482 on hold?”*
-- *“Which channel has the most unassigned exceptions?”*
-- *“Summarize the history of this order.”*
-- *“Find B2B orders waiting for approval.”*
-
-The assistant returns concise answers with links to source orders, filters, or events, respecting the user's scope.
-
-**Action Confirmation Flow:**
-1. Interpret the request.
-2. Identify exact order(s) and intended action.
-3. Check permissions, current state, and business rules.
-4. Show the proposed change and consequences.
-5. Obtain confirmation when required.
-6. Execute through the owning service API.
-7. Show the result and audit reference.
-
----
-
-## 8. Complete Feature Catalogue
-
-### A. Unified Order Inbox
-- Consolidate orders from all connected channels.
-- Normalize channel-specific statuses while preserving external order ID, source, channel, and original timestamps.
-- Detect duplicate imports using deterministic external references and idempotency keys.
-- Show sync/import errors separately from order-processing errors.
-- Support manual order creation for authorized roles.
-- Support channel-specific metadata without breaking the common order model.
-- Provide saved views by channel, business model, store, region, status, and owner.
-
-### B. Order Search & Discovery
-- **Search by:** Internal order ID, external channel order ID, customer name/email/phone (permission-controlled), SKU/product reference, tracking number, invoice or PO reference, channel, store, date range, and status.
-- **Behaviours:** Typo-tolerant search for non-sensitive identifiers and names, recent searches, saved filters, natural-language search, quick customer-to-order and tracking-to-order lookup, and exact-match priority for order IDs.
-
-### C. Order Lifecycle Tracking
-- Normalized lifecycle with configurable states, current/previous stage, and transition timestamps.
-- Expected next event / next owner, stage ageing, and SLA clock.
-- Reason for holds or failed transitions, plus channel-specific state mapping.
-- Partial fulfilment, multiple shipments, multiple packages, and tracking references.
-- Delivery proof or carrier event reference where available.
-- Reopen/reprocess workflow with permission and audit controls.
-
-### D. Order Detail Workspace
-A focused workspace (right-side contextual panel or expandable sections so the operator keeps the queue visible):
-
-1. **Order Header:** order ID, customer, channel, date, current state, owner, and SLA.
-2. **Journey Strip:** current lifecycle stage and completed/upcoming stages.
-3. **Next Best Action:** immediate action, reason, and responsible role.
-4. **Timeline:** chronological order, payment, reservation, fulfilment, shipment, service, and return events.
-5. **Items:** products, quantities, variants, fulfilment status, and item-level exceptions.
-6. **Customer Context:** permitted contact details, address, prior orders, and service cases.
-7. **Payment Snapshot:** payment method type, authorization/capture/refund state, and finance reference (never expose credentials).
-8. **Fulfilment & Shipment:** warehouse task, packages, carrier, tracking, and delivery events.
-9. **Documents:** invoice reference, packing slip, purchase order, delivery proof, and permitted attachments.
-10. **Notes & Handoffs:** internal notes, customer-service notes, and assignment history with visibility labels.
-11. **Related Records:** return, exchange, cancellation, support case, and linked orders.
-12. **Audit History:** who changed what, when, why, and through which source.
-
-### E. Exception Intelligence
-Detect and route exceptions such as:
-- Payment pending beyond configured threshold, or payment succeeded while order remains unconfirmed.
-- Duplicate order or suspected duplicate payment.
-- Incomplete or invalid address.
-- Fraud/risk review required (integrates with approved risk service; does not invent a fraud score).
-- Stock reservation failed or partial fulfilment awaiting remaining items.
-- Order stuck between lifecycle stages, or picking/packing overdue.
-- Carrier booking/pickup failure, stagnant tracking, delivery attempt failed, or delivery SLA at risk.
-- Cancellation requested after fulfilment started, or return/exchange outside policy.
-- Refund pending beyond expected window.
-- Channel sync failure or status mismatch.
-- B2B purchase-order or credit approval pending.
-
-Every exception contains: `reason code`, `severity`, `source`, `detected time`, `impacted order(s)`, `owner`, `SLA`, `recommended route`, `status`, and `resolution history`.
-
-### F. Prioritization & SLA Management
-- Configurable SLA by channel, order type, shipping service, region, customer tier, and fulfilment mode.
-- Separate clocks for order confirmation, dispatch, delivery, and service response.
-- Warning and breach thresholds, plus pause/resume rules for legitimate holds.
-- Business hours, holidays, and timezone handling.
-- Escalation ladder and manager override with reason.
-- Customer promise date versus internal processing target, and SLA breach analysis by stage, channel, and reason.
-
-### G. Order Actions & Amendments
-State-aware and policy-controlled actions:
-- Confirm / reject order, or put on hold / release hold.
-- Update permitted order fields, correct address before dispatch, or change permitted delivery instructions.
-- Cancel order or request cancellation.
-- Split order by items/fulfilment location, or combine orders when policy and downstream systems allow.
-- Change fulfilment priority or reassign operational owner.
-- Retry failed integration/processing step, add internal note, or request manager approval.
-
-*Validation rules:* Validate current state and dependencies, check permission and approval threshold, preview impact, require a reason for sensitive changes, execute idempotently, record before/after values and actor in audit history, and notify downstream services. Never permit edits that silently desynchronize payment, tax, inventory, or warehouse records.
-
-### H. B2B-Specific Order Workflows
-- Purchase-order number, attached PO document, buyer organization, and authorized contact.
-- Contract/negotiated price reference, customer-specific terms, and tax details.
-- Credit-limit or payment-term approval status (finance-owned decision).
-- Minimum order quantity / pack-size validation (catalogue or policy-owned rules).
-- Multi-level approval workflow, requested delivery date, and delivery windows.
-- Partial fulfilment, backorder visibility, repeat order/reorder, and multi-location delivery.
-- Sales-representative attribution, order confirmation document, EDI acknowledgement/error tracking, and dispute/short-shipment handling.
-
-*Role access to negotiated prices, credit data, and commercial terms must be separately permissioned.*
-
-### I. Returns, Exchanges & Cancellations
-- Return request linked to original order and line items with reason and evidence.
-- Eligibility check against configurable return policy and exchange availability request to inventory.
-- Pickup/return shipment tracking, warehouse inspection status, and finance-owned refund request/status.
-- Partial return, partial refund, and linked exchange order support.
-- Cancellation request, cutoff enforcement, and approval where needed, with full event history across original and replacement orders.
-
-### J. Customer Service Workspace
-- Fast lookup by order ID, tracking number, or customer identifier.
-- Customer-safe order timeline explaining current status, delivery/fulfilment updates, and expected next step.
-- Service case/conversation reference, contact history, communication log, and service notes.
-- Request address correction, cancellation, return, or escalation with context attached.
-- Approved response templates and AI-generated response drafts grounded in verified order events.
-
-### K. Bulk Operations
-For authorized operational roles: bulk assign, hold/release, masked export, retry recoverable integration failures, tag/categorize, print/download permitted documents, and strict bulk cancellation. Before execution, show selected count, eligible count, rejected count, and exclusion reasons. Process large batches asynchronously and provide a result report.
-
-### L. Collaboration & Handoffs
-- Assign owner and team, internal comments with mentions, and CS-to-Ops handoffs.
-- Escalation reason, due time, shared resolution checklist, activity log, duplicate-work prevention, and state-change notifications.
-
-### M. Operational Insights
-Prefer bottleneck and root-cause views over generic charts: time spent per stage, ageing stages, top hold reasons, exceptions by channel/order type, SLA risk/breach causes, repeated integration failures, cancellation/return reasons, workload distribution, B2B approval ageing, and delivery failure patterns — each drilling directly into affected orders.
-
-### N. Notifications & Escalations
-- In-app, assignment, mention, SLA warning/breach, critical integration failure, and manager escalation digest notifications.
-- Configurable preferences, deduplication/alert grouping, quiet periods, and deep links to the exact order or filtered queue.
-
-### O. AI Assistance
-- **Capabilities:** Natural-language order search, order history summarization, block/exception explanations, verified customer reply drafts, policy-grounded next-step suggestions, recurring pattern detection, plain-language translation of integration errors, and governed operational Q&A.
-- **Guardrails:** Enforce user data scope, cite underlying events/records, rely on deterministic services for status/SLA/priority/calculations, never claim unconfirmed completion, require confirmation for mutations, log suggestions/decisions, clearly label estimates, and never override policy or approval rules.
-
----
-
-## 9. Non-Traditional Differentiating Features
-
-1. **Order Journey Map:** Live flow map where bottlenecks visually expand; selecting a stage opens affected orders and explains accumulation.
-2. **Exception-First “Attention Queue”:** Ranked queue combining urgency, promise, downstream impact, and age to prescribe the next action.
-3. **Order Stagnation Detector:** Flags orders stuck beyond expected stage duration, showing time since last event, missing next event, likely owner, and escalation route (explicitly labelling statistical estimates).
-4. **Promise Risk Radar:** Surfaces orders likely to miss promised dispatch/delivery dates with confidence and evidence.
-5. **Order Dependency View:** Exposes root blockers rather than symptoms (e.g., `Order confirmed → stock reservation pending → warehouse task not created → dispatch clock at risk`).
-6. **One-Click Handoff:** Transfers an order between Customer Service, Warehouse coordination, or managers with full timeline, reason, and evidence attached.
-7. **Customer Promise View:** Tracks what was promised, what happened, achievability, next expected update, and whether customer communication is needed.
-8. **Safe Action Preview:** Human-readable impact preview before sensitive actions (affected items, downstream notifications, in-progress warnings, approval checks, and irreversibility).
-9. **Order Replay:** Chronological event timeline from creation to current state for dispute and integration-failure investigation.
-10. **Quiet Normal Flow:** Healthy orders stay out of the way so teams focus strictly on meaningful exceptions.
-
----
-
-## 10. Suggested Dashboard Layouts by Role
-
-The underlying module and data model remain shared; the default landing view adapts to effective permissions.
-
-### 10.1 Order Manager — Operations Command Centre
-- **Emphasis:** Overall flow health, stage bottlenecks, critical/ageing exceptions, team workload, SLA exposure, escalations/approvals, and channel/integration health.
-- **Actions:** Assign/reassign, escalate, approve permitted exceptions, configure thresholds and SLA policies, review audit history, and open any order within assigned scope.
-
-### 10.2 Order Ops Specialist — My Workbench
-- **Emphasis:** Personal priority queue, assigned orders, dependency-blocked orders, upcoming SLA deadlines, quick order lookup, and next best action/handoff.
-- **Actions:** Process permitted order steps, add operational notes, request approvals, retry approved recoverable steps, handoff/escalate, and update allowed fields.
-
-### 10.3 Customer Service — Customer Resolution Desk
-- **Emphasis:** Search-first interface, recent lookups, open service follow-ups, customer-visible delays, delivery/return status, and customer-safe timeline/communication.
-- **Actions:** Explain verified order status, draft/send approved communications, add service notes, request cancellation/address correction/return, and escalate with context (no direct refund posting or warehouse execution).
-
----
-
-## 11. Example Dashboard Wireframe
-
-*Illustrative layout only; counts and labels are examples.*
+## 1. Dashboard Overview
+
+**Order Operations** is the live operational command centre for every order entering the business across D2C, B2C, and B2B channels. Instead of a traditional wall of KPI cards, charts, and giant tables, it behaves like a **live control room** focused on moving orders forward.
+
+### What It Helps Teams Answer in Seconds
+1. Which orders are moving normally? *(Quiet by default)*
+2. Which orders are stuck, delayed, or need a decision right now?
+3. What happens to the customer or business if we don't act?
+4. What is the next best action, and who owns it?
+5. Can we resolve it right here, or does it belong to Warehouse, Inventory, or Finance?
+
+### Core Design Approach
+- **Work, not metrics:** Prioritize actionable exceptions over vanity charts.
+- **Journey-first:** Show the live order lifecycle as a connected flow, not isolated status labels.
+- **Resolve in context:** Click an order to open its side workspace and act without losing your place in the queue.
+- **Role-aware by design:** Order Managers, Ops Specialists, and Customer Service each see the layout, data, and actions suited to their role.
+
+### Main Workspaces
+1. **Command Centre (Default):** Flow Pulse, Live Order Journey, Attention Queue, Workload & Ownership, Channel Signals, and Ask Order Operations.
+2. **Order Explorer:** Searchable unified inbox for deep order investigation.
+3. **Returns & Exceptions:** Dedicated coordination for cancellations, returns, exchanges, and delivery failures.
+4. **Rules & SLAs *(Manager Only)*:** Configurable dispatch clocks, priority weights, and approval thresholds.
+
+### Command Centre Layout at a Glance
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -512,7 +50,6 @@ The underlying module and data model remain shared; the default landing view ada
 │                2 risk       3       18 risk    4         2          5         │
 │                                                                              │
 │ Delivered: 214       On Hold: 7       Delivery Exception: 6       Returns: 9 │
-│ [Select a stage to open its orders]                                          │
 ├───────────────────────────────────────────────┬──────────────────────────────┤
 │ ATTENTION QUEUE                                │ WORKLOAD & OWNERSHIP         │
 │                                               │                              │
@@ -525,10 +62,6 @@ The underlying module and data model remain shared; the default landing view ada
 │       [Open] [Retry] [Escalate]                │ R. Mehta      5 open         │
 │                                               │ S. Khan       9 open         │
 │ MED   #B2B-2081   PO approval pending          │ [Balance workload]           │
-│       Waiting for manager                     │                              │
-│       [Review] [Assign]                        │                              │
-│                                               │                              │
-│ [View all attention items]                    │                              │
 ├───────────────────────────────────────────────┴──────────────────────────────┤
 │ CHANNEL SIGNALS                                                               │
 │ Website  ● Healthy   Marketplace  ! 3 sync issues   POS  ● Healthy            │
@@ -539,210 +72,185 @@ The underlying module and data model remain shared; the default landing view ada
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Order Workspace Opened from the Queue
-
-```text
-┌──────────────────────────────────────────────────────────────────────────────┐
-│ #ORD-10482   Website / D2C     HIGH PRIORITY       Owner: Unassigned         │
-│ Payment confirmed · Reservation failed · Created 10:42                       │
-├──────────────────────────────────────────────────────────────────────────────┤
-│ NEXT ACTION                                                                   │
-│ Stock reservation failed for 1 line item. Dispatch promise is at risk.       │
-│ [Assign to inventory coordination] [Place on hold] [Escalate]                │
-├──────────────────────────────────────────────────────────────────────────────┤
-│ JOURNEY                                                                        │
-│ Received ✓ → Verified ✓ → Paid ✓ → Reservation ! → Picking ○ → Dispatch ○   │
-├──────────────────────────────────────────────────────────────────────────────┤
-│ ITEMS                     CUSTOMER / SERVICE             PAYMENT             │
-│ Product A   x2             Customer details*              Payment confirmed  │
-│ Product B   x1             Prior service cases*            Finance reference  │
-│ Reservation failed         Customer promise: date/time     [Open finance]    │
-├──────────────────────────────────────────────────────────────────────────────┤
-│ EVENT TIMELINE                                                                 │
-│ 10:42 Order received                                                         │
-│ 10:43 Payment confirmed                                                      │
-│ 10:44 Reservation request sent                                               │
-│ 10:45 Reservation failed — insufficient available quantity                  │
-│                                                                              │
-│ NOTES & HANDOFFS                      RELATED RECORDS                         │
-│ [Add internal note...]                Inventory request · Service case       │
-│                                                                              │
-│ *Visible only where the user's permissions allow it.                         │
-└──────────────────────────────────────────────────────────────────────────────┘
-```
-
 ---
 
-## 12. Key Workflows
+## 2. Overall Features at a Glance
 
-### Workflow 1: Normal D2C Order
-1. Order arrives from website, is normalized, and deduplicated.
-2. Verification and payment state are checked.
-3. Inventory service receives reservation request.
-4. Warehouse/fulfilment service receives eligible fulfilment task.
-5. Picking, packing, shipment, and carrier events update the order timeline.
-6. Delivery confirmation closes the operational journey; Business Overview receives summarized signals.
-
-### Workflow 2: Stock Reservation Failure
-1. Order enters reservation stage and Inventory returns a failure with a reason code.
-2. Order Operations records the event, opens an exception, and calculates priority.
-3. Attention Queue routes it to the appropriate team; specialist coordinates with Inventory.
-4. Once Inventory confirms reservation or an alternative, Order Operations resumes the lifecycle with full history retained.
-
-### Workflow 3: Customer Asks “Where Is My Order?”
-1. Customer Service searches by order ID, tracking number, or permitted customer identifier.
-2. Customer-safe workspace opens; timeline explains the last verified event.
-3. Assistant drafts a response grounded in verified order facts for review and sending.
-4. If delayed, CS creates/links an operational handoff retaining context and ownership.
-
-### Workflow 4: B2B Purchase Order Awaiting Approval
-1. B2B order arrives with PO reference and documents; validation checks required fields and rules.
-2. Missing or inconsistent data creates an exception routed to the authorized manager.
-3. Manager reviews permitted commercial details and approves/rejects; event is recorded and order proceeds.
-
-### Workflow 5: Cancellation Request After Picking Starts
-1. Customer Service records the cancellation request and Order Operations checks fulfilment state.
-2. If allowed, route to owner; if picking/packing started, request a warehouse stop/cancel decision; if shipped, route to return/refusal policy.
-3. Finance handles any refund posting and CS communicates the confirmed outcome.
-
----
-
-## 13. Core Data Model
-
-Aligned with the shared ERP data model, the module requires these logical entities:
-
-| Entity | Purpose |
-| :--- | :--- |
-| **Order** | Canonical internal order record. |
-| **Order Line** | Product, variant, quantity, price reference, and line state. |
-| **Order Source** | Channel, external ID, store, and source metadata. |
-| **Order Event** | Immutable lifecycle event with timestamp and source. |
-| **Order Status Mapping** | Maps external channel states to normalized states. |
-| **Order Exception** | Reason, severity, status, owner, and SLA. |
-| **Work Item** | Actionable task linked to an order or exception. |
-| **Assignment** | User/team ownership and handoff history. |
-| **Order Note** | Internal/service note with visibility scope. |
-| **Shipment** | Shipment/package and carrier references. |
-| **Return / Exchange** | Linked reverse-logistics workflow record. |
-| **Approval** | Requested decision, approver, outcome, and reason. |
-| **SLA Policy** | Configurable targets and escalation rules. |
-| **Audit Record** | Actor, action, before/after, timestamp, and source. |
-| **Integration Message** | Inbound/outbound message, idempotency key, and processing result. |
-
-### Event Model Requirements
-- Store event time and ingestion time separately, preserving source system and source event ID.
-- Use idempotency to prevent duplicate processing and handle out-of-order channel events safely.
-- Never overwrite history on state change; record corrections as new events referencing the corrected event.
-- Derive current status as a projection of validated events and state-transition rules.
-
----
-
-## 14. Operational Rules and Safeguards
-
-- Define valid state transitions; reject invalid transitions with a readable reason.
-- Use idempotent APIs and optimistic concurrency (or equivalent) against conflicting edits.
-- Execute long-running bulk operations asynchronously.
-- Separate order status from payment, reservation, fulfilment, shipment, and return statuses.
-- Support partial fulfilment and partial cancellation/return.
-- Store timestamps in a consistent standard and render in the user's configured timezone.
-- Never treat “API request sent” as “downstream action completed”; wait for confirmation.
-- Use retry policies and dead-letter handling for integration failures.
-- Keep a complete audit trail for sensitive actions and provide a graceful degraded mode with clear data-freshness labels when connected services are unavailable.
-
----
-
-## 15. Integrations and APIs
-
-### Inbound Events (Examples)
-- `OrderCreated` / `OrderUpdated`
-- `PaymentAuthorized` / `PaymentCaptured` / `PaymentFailed`
-- `ReservationSucceeded` / `ReservationFailed`
-- `FulfilmentTaskCreated` / `PickingStarted` / `Packed`
-- `ShipmentCreated` / `Dispatched` / `TrackingUpdated` / `Delivered`
-- `CancellationRequested` / `CancellationConfirmed`
-- `ReturnRequested` / `ReturnReceived`
-- `RefundRequested` / `RefundCompleted`
-- `ChannelSyncFailed`
-
-### Outbound Commands (Examples)
-- `CreateOrder`
-- `RequestReservation`
-- `CreateFulfilmentTask`
-- `RequestOrderHold` / `ReleaseOrderHold`
-- `RequestCancellation`
-- `RequestAddressCorrection`
-- `RequestShipmentAction`
-- `CreateReturnRequest`
-- `RequestRefund` *(finance-owned approval and execution)*
-- `RetryIntegrationMessage`
-
-Every command must include: `Correlation ID`, `Idempotency key`, `Actor and permission context`, `Order ID and relevant line IDs`, `Requested action and reason`, `Expected version/state`, and `Response status and downstream reference`.
-
----
-
-## 16. Non-Functional Requirements
-
-- **Security:** Server-side RBAC, scoped queries, field masking, secure secrets, and auditability.
-- **Performance:** Immediate-feeling queue and lookup interactions using pagination, indexes, and precomputed operational projections.
-- **Reliability:** Resilient event processing, retries, idempotency, and dead-letter visibility.
-- **Scalability:** Multi-store, multi-brand, multi-legal-entity, multi-channel, and high-volume order imports.
-- **Usability:** Keyboard-friendly navigation, clear status language, responsive layouts, and accessible contrast.
-- **Observability:** End-to-end event and command tracing via correlation IDs.
-- **Data Quality:** Surface stale, estimated, missing, or conflicting data transparently.
-- **Configurability:** Admin-configurable lifecycle mappings, SLAs, thresholds, approval limits, and reason codes.
-- **Auditability:** Immutable logging for sensitive changes, approvals, exports, and automated actions.
-
----
-
-## 17. Suggested Implementation Phases
-
-| Phase | Focus | Key Deliverables |
+| Area | Feature | What It Does |
 | :--- | :--- | :--- |
-| **Phase 1** | **Reliable Order Foundation** | Unified order model, idempotent channel ingestion/deduplication, normalized lifecycle & mapping, search, detail workspace, event timeline, audit foundation, and basic RBAC/scoping. |
-| **Phase 2** | **Operational Command Centre** | Journey Map, Attention Queue, exception reason codes, assignment & handoff, SLA clocks & escalation, role-specific landing views, and channel sync signals. |
-| **Phase 3** | **Operational Actions** | Hold/release, permitted amendments, cancellation workflow, warehouse & inventory coordination, shipment tracking, returns/exchange coordination, and approval/bulk safeguards. |
-| **Phase 4** | **Intelligence & Optimization** | Order Stagnation Detector, Promise Risk Radar, bottleneck/root-cause insights, natural-language search & summaries, AI reply drafts, and what-if simulations. |
-
-*Build the event model, permission model, and audit trail early — they are foundations, not later enhancements.*
-
----
-
-## 18. Success Measures
-
-Measure operational outcomes rather than dashboard visits:
-
-- Time from order receipt to confirmation, and time spent in each lifecycle stage.
-- Percentage of orders meeting dispatch SLA and delivery promise.
-- Number and age of unassigned exceptions, mean time to resolve, and % resolved before SLA breach.
-- Order cancellation rate/reason distribution and return/exchange processing time.
-- Integration failure rate and recovery time.
-- Customer-service first-response and resolution time.
-- Manual touches per order, duplicate order/import rate, and % of actions with complete audit context.
+| **Live Monitoring** | **Flow Pulse** | Summarizes current bottlenecks in one plain-language sentence linked to affected orders. |
+| | **Live Order Journey Map** | Shows real-time order counts and bottlenecks across every stage from *Received* to *Delivered*. |
+| | **Order Stagnation Detector** | Flags orders stuck in a stage longer than expected. |
+| | **Channel Signals Rail** | Compact health strip for Website, Marketplace, POS, B2B, and EDI/API — surfaces sync issues only. |
+| **Prioritization & Action** | **Attention Queue** | Ranked list of blocked or at-risk orders with SLA countdowns and direct action buttons. |
+| | **Exception Intelligence & Promise Risk Radar** | Automatically detects stock failures, payment mismatches, carrier timeouts, and delivery risks. |
+| | **Order Detail Workspace** | Slide-over panel showing dependency blockers, customer promise, items, timeline, and notes. |
+| | **Safe Action Preview** | Shows impact, downstream notifications, and requires an audit reason before risky changes. |
+| | **Bulk Operations** | Safely assign, hold/release, retry, or export multiple orders with eligibility previews. |
+| **Collaboration & Service** | **Workload & One-Click Handoff** | Tracks unassigned/overdue work and transfers orders across teams with full context attached. |
+| | **Customer Service Resolution Desk** | Search-first lookup with a customer-safe timeline and verified reply drafting. |
+| **Specialized Workflows** | **Unified Order Inbox & Explorer** | Consolidates, deduplicates, and searches orders across B2C, D2C, B2B, and POS. |
+| | **B2B Order & PO Workflows** | Handles PO documents, credit checks, MOQ validation, and multi-level approvals. |
+| | **Returns, Exchanges & Cancellations** | Coordinates reverse logistics, warehouse pickup/QC, cancellation cutoffs, and finance refunds. |
+| **Governance & Intelligence** | **Rules, SLAs & Notifications** | Configurable SLA clocks, escalation ladders, and deduplicated alerts. |
+| | **Ask Order Operations (AI)** | Natural-language search, order summaries, and reply drafts strictly bounded by RBAC. |
+| | **Operational Insights** | Root-cause bottleneck analysis (ageing stages, hold reasons, delivery failures). |
 
 ---
 
-## 19. Decisions to Validate Before Development
+## 3. Feature-by-Feature Guide (Simple Explanations)
 
-1. Which channels and marketplaces are in the first release?
-2. Which lifecycle states are mandatory vs. channel- or business-model-specific?
-3. Which system is the source of truth for each order, payment, reservation, fulfilment, and shipment event?
-4. Which team owns each exception category?
-5. What are the SLA targets by channel, shipping mode, and order type?
-6. Which actions can specialists execute without approval?
-7. Which cancellation, address-edit, split, and merge rules apply after fulfilment begins?
-8. How are B2B credit terms, PO approvals, and negotiated pricing permissioned?
-9. Which customer fields may Customer Service access?
-10. Which notification channels are required?
-11. What data retention and audit policies apply?
-12. Which events and fields are available from each external integration?
+### 3.1 Flow Pulse
+- **What it is:** A single sentence at the very top of the dashboard telling you the health of your order flow right now (e.g., *"Dispatch is the current bottleneck. 18 paid orders have not entered picking"*).
+- **Why it helps:** You don't have to scan 10 charts to know what's wrong. Clicking the link in the sentence filters straight to those affected orders.
+
+### 3.2 Live Order Journey Map & Stagnation Detector
+- **What it is:** A visual pipeline of your order stages (*Received → Verification → Paid → Reserved → Picking → Packing → Dispatched → Delivered*) plus side paths (*On Hold*, *Stock Unavailable*, *Delivery Exception*, *Returns*).
+- **Why it helps:** Normal orders stay quiet, while stages with bottlenecks visually stand out. The **Stagnation Detector** flags orders sitting in one stage longer than normal (e.g., >2x expected time) so nothing silently gets forgotten.
+
+### 3.3 Attention Queue
+- **What it is:** The main to-do list of Order Operations. Instead of showing all 600+ orders, it shows only the orders that need a human decision, ranked automatically by **SLA urgency, customer promise impact, order value, and downstream blockers**.
+- **Why it helps:** Operators always know what to work on first, why it's urgent, and what button to click next (*Open Workspace, Assign, Retry, Approve, Escalate,* or *Snooze*).
+
+### 3.4 Order Detail Workspace (Dependency Chain, Promise View & Order Replay)
+- **What it is:** A slide-over panel that opens when you click any order, keeping the main queue visible behind it. Inside, you get:
+  - **Dependency Chain:** Shows the exact blocker (e.g., `Order Confirmed → Payment Paid → Stock Reservation FAILED → Warehouse Blocked`).
+  - **Customer Promise View:** Shows what delivery/dispatch date was promised and whether it is still achievable.
+  - **Order Replay (Event Timeline):** A step-by-step chronological history of every event from checkout to delivery, great for resolving disputes or integration errors.
+  - **Items, Payment Snapshot, Documents & Notes:** Everything needed to understand the order in one place.
+
+### 3.5 Unified Order Inbox & Search (Order Explorer)
+- **What it is:** A single normalized inbox that collects orders from your website, mobile app, Amazon/Flipkart, POS stores, B2B portal, and EDI/API.
+- **Why it helps:** Duplicate imports are automatically caught, original channel IDs are preserved, and teams can search instantly by Order ID, tracking number, SKU, PO number, or customer details.
+
+### 3.6 Exception Intelligence & Promise Risk Radar
+- **What it is:** Background monitoring that catches problems early—such as payment captured without confirmation, failed stock reservations, overdue picking, carrier API timeouts, or failed delivery attempts.
+- **Why it helps:** Every exception gets a clear reason code, severity, owner, and SLA clock, while the **Promise Risk Radar** warns you before a customer's promised delivery date is missed.
+
+### 3.7 Order Actions, Amendments & Safe Action Preview
+- **What it is:** Controlled actions to hold/release orders, fix addresses before dispatch, split/merge orders, cancel orders, or retry failed syncs.
+- **Why it helps:** Before any sensitive change runs, **Safe Action Preview** shows what will change, which systems (Warehouse, Inventory, Finance) will be notified, and requires a reason for the permanent audit log.
+
+### 3.8 B2B Order & PO Workflows
+- **What it is:** Dedicated support for wholesale/B2B orders—handling attached Purchase Orders (POs), negotiated contract pricing, minimum order quantities (MOQ), Net-30/45 credit term checks, and multi-level manager approvals.
+- **Why it helps:** B2B orders have different rules than consumer orders. Managers can review terms and approve POs cleanly without mixing them into standard B2C flows.
+
+### 3.9 Returns, Exchanges & Cancellations
+- **What it is:** A coordinated workflow for reverse logistics. It checks return eligibility, enforces cancellation cutoffs (e.g., asking Warehouse to stop picking if packing hasn't finished), tracks return pickups, and sends approved refund requests to Finance.
+- **Why it helps:** Keeps Order Ops, Warehouse (inspection), and Finance (refund posting) synchronized without duplicating each other's jobs.
+
+### 3.10 Customer Service Resolution Desk
+- **What it is:** A specialized, search-first view for Customer Service agents. It hides internal profit margins and B2B cost rules, showing a **customer-safe timeline** and plain-language status updates.
+- **Why it helps:** Agents can answer *"Where is my order?"* in seconds, send verified status replies, and escalate issues to Ops without needing to decode warehouse codes.
+
+### 3.11 Workload, Ownership & One-Click Handoffs
+- **What it is:** A live view of unassigned exceptions, overdue tasks, and how many open items each team member has.
+- **Why it helps:** Managers can rebalance overloaded queues in one click. Specialists can use **One-Click Handoff** to pass an order to Inventory, Warehouse, or Customer Service with the full timeline and reason already attached.
+
+### 3.12 Channel Signals Rail
+- **What it is:** A compact status bar for all sales channels (Website/D2C, Marketplace, POS, B2B Portal, EDI/API).
+- **Why it helps:** Instead of cluttering the screen with channel scorecards, channels stay quiet unless there is an issue (like an Amazon sync delay or pending B2B approvals). Clicking a channel filters the dashboard to it.
+
+### 3.13 Bulk Operations
+- **What it is:** Tools for authorized roles to assign, hold/release, retry integration errors, tag, export (with sensitive fields masked), or cancel multiple orders at once.
+- **Why it helps:** Shows exactly how many selected orders are eligible vs. excluded (and why) before running large batches safely in the background.
+
+### 3.14 Rules, SLAs & Notifications
+- **What it is:** Configurable SLA timers per channel and shipping tier (e.g., 4h Marketplace dispatch vs. 24h B2B), escalation ladders, and grouped alerts.
+- **Why it helps:** Prevents alert fatigue while ensuring critical SLA warnings always reach the right owner on time.
+
+### 3.15 Ask Order Operations (AI Assistance)
+- **What it is:** A `Ctrl+K` command bar where you can ask plain-English questions like *"Why is #ORD-10482 on hold?"* or *"Draft a customer reply for #ORD-10510"*.
+- **Why it helps:** Answers are strictly grounded in verified order events and respect user permissions. If you ask AI to take an action, it always shows a confirmation preview first.
+
+### 3.16 Operational Insights
+- **What it is:** Root-cause reporting focused on operational bottlenecks—where orders spend the most time, top hold reasons, repeated integration failures, and delivery failure patterns.
+- **Why it helps:** Every insight links straight back to the underlying orders so teams can fix systemic problems.
 
 ---
 
-## 20. Final Product Direction
+## 4. Roles & Role-Based Access Control (RBAC)
 
-Order Operations is where the business **moves orders forward**.
+Order Operations shares one unified engine, while adapting the landing view, visible fields, and allowed actions per role.
 
-- **Business Overview** answers: *“How is the business doing, and where should leadership pay attention?”*
-- **Order Operations** answers: *“Which orders need action, why are they blocked, who owns the next step, and how do we safely move them forward?”*
+### 4.1 Role Intent
 
-Keep the experience focused on the journey, exceptions, ownership, and resolution. Use tables for detailed investigation when needed, never as the default home screen. Keep AI grounded in verified events and governed data, and keep inventory, warehouse, logistics, and finance execution in their owning services via clear APIs and event flows.
+| Role | Primary Responsibility | Default Experience |
+| :--- | :--- | :--- |
+| **Order Manager** | Own overall order performance, workload, escalations, policies, and operational outcomes. | **Operations Command Centre:** flow health, risk, workload rebalancing, SLA config, and approvals. |
+| **Order Ops Specialist** | Process orders, investigate exceptions, coordinate fulfilment, and execute permitted operational actions. | **Action Workbench:** assigned work, dependency-blocked orders, next steps, and handoffs. |
+| **Customer Service** | Resolve customer questions and order-related service cases. | **Customer Resolution Desk:** search-first lookup, customer-safe timeline, and verified communications. |
+
+### 4.2 Permission Matrix
+
+*Legend: **Full** = within assigned scope; **Limited** = specified actions/fields only; **View** = read-only; **No** = unavailable.*
+
+| Capability | Order Manager | Order Ops Specialist | Customer Service |
+| :--- | :---: | :---: | :---: |
+| View Command Centre & all orders in scope | Full | Team/assigned scope | Service scope |
+| View order lifecycle & timeline | Full | Full | Customer-safe view |
+| View customer contact details | Limited by policy | Limited by policy | Full for service |
+| View payment state | Full status | Status only / limited | Status only (no card data) |
+| View & add internal notes | Full | Full | Service-scoped notes |
+| Assign / reassign work | Yes | Only if delegated | No |
+| Hold / release / amend / split / merge | Policy-controlled | Allowed actions/fields | Request / escalate only |
+| Cancel an order | Approve or execute | Within policy | Request; execute if authorized |
+| Initiate return / exchange | Yes | Yes | Yes (CS policy) |
+| Approve or execute refund | Approve by finance policy; Finance executes | No | No |
+| Bulk actions | Yes (with safeguards) | Limited approved actions | No |
+| Configure SLA & priority rules | Yes | No | No |
+| Export data & view audit history | Full (field-masked) | Limited / relevant orders | Restricted / service history |
+
+### 4.3 Security Guardrails
+- Enforce RBAC **server-side** on every read, search, export, and action.
+- Mask internal margins, supplier costs, confidential B2B pricing, and card credentials from unauthorized roles.
+- Log all sensitive actions (holds, cancellations, overrides, approvals) in an immutable audit trail with actor and reason.
+
+---
+
+## 5. End-to-End Key Workflows
+
+1. **Normal D2C Order:** Order arrives → normalized & deduplicated → payment verified → stock reserved → warehouse picks & packs → carrier dispatches & delivers → closed quietly.
+2. **Stock Reservation Failure:** Inventory returns a shortfall code → Attention Queue surfaces it with SLA countdown → Specialist coordinates stock transfer or substitution → lifecycle resumes once Inventory confirms.
+3. **Customer Asks “Where Is My Order?”:** CS looks up order → reads customer-safe timeline → sends AI-drafted reply grounded in verified carrier events → creates Ops handoff if delayed.
+4. **B2B PO Awaiting Approval:** B2B order arrives with PO & credit terms → validation routes high-value/Net-term PO to Order Manager → Manager reviews & approves → proceeds to reservation and fulfilment.
+5. **Cancellation After Picking Starts:** CS logs cancellation request → Order Ops checks fulfilment stage → sends warehouse stop request if picking started, or routes to return/refusal policy if already shipped → Finance handles refund posting.
+
+---
+
+## 6. Scope & Boundaries with Other ERP Modules
+
+Order Operations owns **order lifecycle orchestration**. It coordinates with—but never replaces—the other ERP services:
+
+| Service | Owns | Order Operations Interaction |
+| :--- | :--- | :--- |
+| **Inventory & Replenishment** | Stock levels, reservations, replenishment | Requests/checks stock reservation; displays stock blockers. |
+| **Warehouse & Fulfilment** | Picking, packing, dispatch handover | Creates fulfilment tasks; displays progress and warehouse delays. |
+| **Shipping / Logistics** | Carrier booking, tracking, delivery | Displays tracking & delivery events; retries carrier handovers. |
+| **Finance & Reconciliation** | Invoices, ledger, settlements, refunds | Displays payment/refund status; sends approved refund requests. |
+| **Customer / CRM** | Customer profile & communication consent | Displays relevant customer context and links to CRM record. |
+| **Business Overview** | Executive health, P&L, and top risks | Receives summarized order & SLA risk signals. |
+
+---
+
+## 7. Technical & Implementation Reference
+
+### 7.1 Core Data Model Entities
+- **Core Records:** `Order`, `Order Line`, `Order Source`, `Order Status Mapping`
+- **Events & Exceptions:** `Order Event` *(immutable, separate event vs. ingestion time, idempotent)*, `Order Exception`, `Work Item`, `Assignment`, `Order Note`
+- **Fulfilment & Finance Links:** `Shipment`, `Return / Exchange`, `Approval`, `SLA Policy`, `Audit Record`, `Integration Message`
+
+### 7.2 Integrations & Safeguards
+- **Inbound Events:** `OrderCreated`, `PaymentCaptured/Failed`, `ReservationSucceeded/Failed`, `PickingStarted`, `Packed`, `Dispatched`, `DeliveryAttemptFailed`, `ReturnRequested`, `RefundCompleted`, `ChannelSyncFailed`.
+- **Outbound Commands:** `CreateOrder`, `RequestReservation`, `CreateFulfilmentTask`, `RequestOrderHold/Release`, `RequestCancellation`, `RequestAddressCorrection`, `CreateReturnRequest`, `RequestRefund` *(Finance-executed)*.
+- **Safeguards:** Idempotent APIs with correlation IDs, optimistic concurrency, strict state-transition validation, async bulk processing, dead-letter queues for failed syncs, and graceful degraded mode if a downstream service is unreachable.
+
+### 7.3 Phased Delivery Roadmap
+1. **Phase 1 — Order Foundation:** Unified order model, idempotent channel ingestion, normalized lifecycle, Order Explorer search, Detail Workspace, timeline, and core RBAC.
+2. **Phase 2 — Command Centre:** Flow Pulse, Live Order Journey, Attention Queue, Workload & Handoffs, SLA clocks, Channel Signals, and role-specific views.
+3. **Phase 3 — Operational Actions:** Safe Action Preview, holds/amendments, cancellations, warehouse/inventory coordination, returns/exchanges, and bulk operations.
+4. **Phase 4 — Intelligence:** Stagnation Detector, Promise Risk Radar, root-cause insights, and Ask Order Operations AI assistant.
+
+### 7.4 Success Measures & Open Decisions
+- **Measure Outcomes:** Dispatch SLA %, delivery promise %, mean time to resolve exceptions, unassigned exception age, manual touches per order, and duplicate import rate.
+- **Validate Before Build:** First-release channels, mandatory vs. channel-specific lifecycle stages, SLA targets per tier, specialist auto-approval limits, B2B credit/pricing permissions, and retention policies.
