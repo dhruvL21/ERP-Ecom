@@ -36,109 +36,135 @@
 <body class="h-full flex overflow-hidden bg-slate-100 text-slate-900 text-sm antialiased">
 
   <!-- ========================================================= -->
-  <!-- 1. LEFT NAVIGATION SIDEBAR -->
+  <!-- 1. LEFT NAVIGATION SIDEBAR (LIGHT ENTERPRISE STYLE) -->
   <!-- ========================================================= -->
-  <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between flex-shrink-0 z-30 select-none">
-    <div>
+  <aside class="w-64 bg-white border-r border-slate-200 text-slate-600 flex flex-col justify-between flex-shrink-0 z-30 select-none">
+    <div class="flex-1 overflow-y-auto">
       <!-- Workspace Brand -->
-      <div class="h-14 px-5 flex items-center justify-between border-b border-slate-800">
+      <div class="h-14 px-4 flex items-center justify-between border-b border-slate-100">
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-bold text-xs">
-            EP
+          <div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold text-xs tracking-tight shadow-xs">
+            OC
           </div>
           <div>
-            <span class="font-semibold text-white text-sm tracking-tight">OmniCommerce ERP</span>
-            <span class="block text-[10px] text-slate-400">Command Center v2</span>
+            <span class="font-bold text-slate-900 text-sm tracking-tight block leading-tight">OmniCommerce</span>
+            <span class="block text-[10px] text-slate-400 font-medium">ERP Solution</span>
           </div>
         </div>
+        <button onclick="openChangeFeed()" title="Since You Last Looked" class="w-6 h-6 rounded border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition">
+          <i data-lucide="panel-left-close" class="w-3.5 h-3.5"></i>
+        </button>
       </div>
 
-      <!-- Store Scope Selector -->
-      <div class="p-3 border-b border-slate-800/80">
-        <label class="block text-[10px] uppercase font-semibold text-slate-400 tracking-wider mb-1 px-1">Active Store Scope</label>
-        <select id="storeSelector" class="w-full bg-slate-800 border border-slate-700 text-xs text-white rounded px-2.5 py-1.5 focus:outline-none focus:border-slate-500 cursor-pointer">
-          <option value="all">Global Omnichannel (All)</option>
-          <option value="shopify_us">Shopify US Online Store</option>
-          <option value="amazon_na">Amazon NA Seller Central</option>
-          <option value="retail_flagship">NYC Flagship POS</option>
-          <option value="b2b_portal">B2B Wholesale Portal</option>
-        </select>
-      </div>
+      <!-- MAIN NAVIGATION -->
+      <nav class="px-3 py-4 space-y-1">
+        <div class="px-3 pb-1.5 text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Main</div>
 
-      <!-- Core ERP Modules -->
-      <nav class="p-3 space-y-0.5">
-        <div class="px-2 pt-2 pb-1 text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Operational Modules</div>
-        
         <!-- 1. Active: Business Overview -->
-        <a href="#" class="flex items-center justify-between px-2.5 py-2 rounded bg-slate-800 text-white font-medium text-xs">
-          <div class="flex items-center gap-2.5">
-            <i data-lucide="compass" class="w-4 h-4 text-white"></i>
-            <span>Business Overview</span>
+        <div class="relative">
+          <span class="absolute -left-3 top-1.5 w-1 rounded-r bg-sky-500 h-6"></span>
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg bg-sky-500 text-white font-semibold text-xs shadow-xs">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="layout-grid" class="w-4 h-4 text-white"></i>
+              <span>Business Overview</span>
+            </div>
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-white"></i>
+          </a>
+          <div class="mt-1 ml-5 pl-3 border-l border-slate-200 space-y-0.5 text-xs">
+            <a href="#" class="block px-2.5 py-1.5 rounded-md font-semibold text-sky-600 bg-sky-50/70">Command Center</a>
+            <button onclick="openHealthDrilldown()" class="w-full text-left px-2.5 py-1.5 rounded-md font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition">Health Index</button>
           </div>
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-        </a>
+        </div>
 
         <!-- 2. Order Operations -->
-        <a href="order-operations.html" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a href="order-operations.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
           <div class="flex items-center gap-2.5">
             <i data-lucide="shopping-cart" class="w-4 h-4 text-slate-400"></i>
             <span>Order Operations</span>
           </div>
-          <span id="sidebarOrderCount" class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700 font-mono">14</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
         </a>
 
         <!-- 3. Warehouse and Fulfillment -->
-        <a href="../dashboard/warehouse-and-fulfillment.md" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a href="../dashboard/warehouse-and-fulfillment.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
           <div class="flex items-center gap-2.5">
             <i data-lucide="truck" class="w-4 h-4 text-slate-400"></i>
-            <span>Warehouse & Fulfilment</span>
+            <span>Warehouse &amp; Fulfilment</span>
           </div>
-          <span class="text-[10px] text-slate-400 font-mono">96.4%</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
         </a>
 
         <!-- 4. Inventory and Replenishment -->
-        <a href="../dashboard/inventory-and-replenishment.md" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a href="../dashboard/inventory-and-replenishment.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
           <div class="flex items-center gap-2.5">
             <i data-lucide="package" class="w-4 h-4 text-slate-400"></i>
-            <span>Inventory & Stock</span>
+            <span>Inventory &amp; Stock</span>
           </div>
-          <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700 font-mono">1 Risk</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
         </a>
 
         <!-- 5. Finance and Reconciliation -->
-        <a id="navFinanceLink" href="../dashboard/finance-and-reconciliation.md" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a id="navFinanceLink" href="../dashboard/finance-and-reconciliation.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
           <div class="flex items-center gap-2.5">
             <i data-lucide="file-spreadsheet" class="w-4 h-4 text-slate-400"></i>
-            <span>Finance & Accounts</span>
+            <span>Finance &amp; Accounts</span>
           </div>
           <span id="navFinanceBadge" class="text-[10px] text-slate-400 font-mono">T+2</span>
         </a>
 
         <!-- 6. Store / POS -->
-        <a href="../dashboard/store-pos.md" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a href="../dashboard/store-pos.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
           <div class="flex items-center gap-2.5">
             <i data-lucide="store" class="w-4 h-4 text-slate-400"></i>
             <span>Store / POS</span>
           </div>
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
         </a>
       </nav>
+
+      <!-- OTHERS SECTION -->
+      <div class="px-3 pt-2 pb-4 space-y-1.5 border-t border-slate-100">
+        <div class="px-3 pt-2 pb-1 text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Others</div>
+
+        <div class="px-3 py-1">
+          <label class="block text-[10px] font-medium text-slate-400 mb-1">Active Store Scope</label>
+          <select id="storeSelector" class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-700 rounded-md px-2.5 py-1.5 focus:outline-none focus:border-sky-500 cursor-pointer">
+            <option value="all">Global Omnichannel (All)</option>
+            <option value="shopify_us">Shopify US Online Store</option>
+            <option value="amazon_na">Amazon NA Seller Central</option>
+            <option value="retail_flagship">NYC Flagship POS</option>
+            <option value="b2b_portal">B2B Wholesale Portal</option>
+          </select>
+        </div>
+
+        <button onclick="openChangeFeed()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="history" class="w-4 h-4 text-slate-400"></i>
+            <span>Change Feed</span>
+          </div>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
+        </button>
+      </div>
     </div>
 
-    <!-- User Profile & Status Footer -->
-    <div class="p-3 border-t border-slate-800 text-xs">
-      <div class="flex items-center justify-between px-2 py-1 text-slate-400 text-[11px]">
-        <span>Role Scope:</span>
-        <span id="sidebarScopeTag" class="font-mono text-slate-200 font-semibold">Global (Full)</span>
-      </div>
-      <div class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between px-2">
-        <div class="min-w-0">
-          <div id="sidebarUserName" class="font-semibold text-white text-xs truncate">Alexander Ross</div>
-          <div id="sidebarUserRole" class="text-[10px] text-slate-400 font-medium truncate">Business Owner</div>
+    <!-- User Profile Footer -->
+    <div class="p-3 border-t border-slate-100">
+      <div class="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-slate-50 transition cursor-pointer" onclick="document.getElementById('roleLensSelect').focus()">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-semibold text-xs flex-shrink-0">
+            AR
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1">
+              <span id="sidebarUserName" class="font-semibold text-slate-900 text-xs truncate">Alexander Ross</span>
+              <i data-lucide="badge-check" class="w-3.5 h-3.5 text-sky-500 flex-shrink-0"></i>
+            </div>
+            <div class="text-[10px] text-slate-400 truncate">
+              <span id="sidebarUserRole">Business Owner</span> &bull; <span id="sidebarScopeTag">Global (Full)</span>
+            </div>
+          </div>
         </div>
-        <button onclick="openChangeFeed()" title="Since You Last Looked" class="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800">
-          <i data-lucide="history" class="w-4 h-4"></i>
-        </button>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
       </div>
     </div>
   </aside>

@@ -4,11 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OmniCommerce ERP - Order Operations Command Centre</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Inter & JetBrains Mono Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -36,110 +33,151 @@
 <body class="h-full flex overflow-hidden bg-slate-100 text-slate-900 text-sm antialiased">
 
   <!-- ========================================================= -->
-  <!-- 1. LEFT NAVIGATION SIDEBAR -->
+  <!-- 1. LEFT NAVIGATION SIDEBAR (LIGHT ENTERPRISE STYLE) -->
   <!-- ========================================================= -->
-  <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between flex-shrink-0 z-30 select-none">
-    <div>
+  <aside id="erpSidebar" class="w-64 bg-white border-r border-slate-200 text-slate-600 flex flex-col justify-between flex-shrink-0 z-30 select-none">
+    <div class="flex-1 overflow-y-auto">
       <!-- Workspace Brand -->
-      <div class="h-14 px-5 flex items-center justify-between border-b border-slate-800">
+      <div class="h-14 px-4 flex items-center justify-between border-b border-slate-100">
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-bold text-xs">
-            EP
+          <div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold text-xs tracking-tight shadow-xs">
+            OC
           </div>
           <div>
-            <span class="font-semibold text-white text-sm tracking-tight">OmniCommerce ERP</span>
-            <span class="block text-[10px] text-slate-400">Unified OMS &bull; Live</span>
+            <span class="font-bold text-slate-900 text-sm tracking-tight block leading-tight">OmniCommerce</span>
+            <span class="block text-[10px] text-slate-400 font-medium">ERP Solution</span>
           </div>
         </div>
+        <button onclick="openAuditLogModal()" title="Sidebar & Audit" class="w-6 h-6 rounded border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition">
+          <i data-lucide="panel-left-close" class="w-3.5 h-3.5"></i>
+        </button>
       </div>
 
-      <!-- Store / Channel Scope Selector -->
-      <div class="p-3 border-b border-slate-800/80">
-        <label class="block text-[10px] uppercase font-semibold text-slate-400 tracking-wider mb-1 px-1">Channel &amp; Store Scope</label>
-        <select id="channelScopeSelect" onchange="filterByChannel(this.value)" class="w-full bg-slate-800 border border-slate-700 text-xs text-white rounded px-2.5 py-1.5 focus:outline-none focus:border-slate-500 cursor-pointer">
-          <option value="all">All Channels &amp; Stores</option>
-          <option value="Website / D2C">Website / D2C</option>
-          <option value="Marketplace">Amazon / Marketplace</option>
-          <option value="B2B Portal">B2B Wholesale Portal</option>
-          <option value="POS">Retail Flagship POS</option>
-          <option value="EDI / API">EDI / Partner API</option>
-        </select>
-      </div>
-
-      <!-- Core ERP Modules -->
-      <nav class="p-3 space-y-0.5">
-        <div class="px-2 pt-2 pb-1 text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Operational Modules</div>
+      <!-- MAIN NAVIGATION -->
+      <nav class="px-3 py-4 space-y-1">
+        <div class="px-3 pb-1.5 text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Main</div>
 
         <!-- 1. Business Overview -->
-        <a href="business-overview.html" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a href="business-overview.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
           <div class="flex items-center gap-2.5">
-            <i data-lucide="compass" class="w-4 h-4 text-slate-400"></i>
+            <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
             <span>Business Overview</span>
           </div>
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
         </a>
 
-        <!-- 2. Active: Order Operations -->
-        <a href="#" class="flex items-center justify-between px-2.5 py-2 rounded bg-slate-800 text-white font-medium text-xs">
-          <div class="flex items-center gap-2.5">
-            <i data-lucide="shopping-cart" class="w-4 h-4 text-white"></i>
-            <span>Order Operations</span>
+        <!-- 2. Active: Order Operations (Expanded Tree) -->
+        <div class="relative">
+          <span class="absolute -left-3 top-1.5 bottom-1.5 w-1 rounded-r bg-sky-500 h-6"></span>
+          <button onclick="switchWorkspace('command')" class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-sky-500 text-white font-semibold text-xs shadow-xs">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="shopping-cart" class="w-4 h-4 text-white"></i>
+              <span>Order Operations</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span id="sidebarQueueCount" class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20 text-white font-mono">6</span>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-white"></i>
+            </div>
+          </button>
+
+          <!-- Sub-items with Tree Connector -->
+          <div class="mt-1 ml-5 pl-3 border-l border-slate-200 space-y-0.5 text-xs">
+            <button onclick="switchWorkspace('command')" id="subtab-command" class="ws-subtab w-full text-left px-2.5 py-1.5 rounded-md font-semibold text-sky-600 bg-sky-50/70 transition">
+              Command Centre
+            </button>
+            <button onclick="switchWorkspace('explorer')" id="subtab-explorer" class="ws-subtab w-full text-left px-2.5 py-1.5 rounded-md font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition">
+              Order Explorer
+            </button>
+            <button onclick="switchWorkspace('returns')" id="subtab-returns" class="ws-subtab w-full text-left px-2.5 py-1.5 rounded-md font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition">
+              Returns &amp; Exceptions
+            </button>
+            <button onclick="switchWorkspace('rules')" id="subtab-rules" class="ws-subtab w-full text-left px-2.5 py-1.5 rounded-md font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition">
+              Rules &amp; SLAs
+            </button>
           </div>
-          <span id="sidebarQueueCount" class="px-1.5 py-0.2 rounded text-[10px] bg-slate-700 text-white border border-slate-600 font-mono">4</span>
-        </a>
+        </div>
 
         <!-- 3. Warehouse and Fulfillment -->
-        <a href="../dashboard/warehouse-and-fulfillment.md" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a href="../dashboard/warehouse-and-fulfillment.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
           <div class="flex items-center gap-2.5">
             <i data-lucide="truck" class="w-4 h-4 text-slate-400"></i>
             <span>Warehouse &amp; Fulfilment</span>
           </div>
-          <span class="text-[10px] text-slate-400 font-mono">18 Pick</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
         </a>
 
         <!-- 4. Inventory and Replenishment -->
-        <a href="../dashboard/inventory-and-replenishment.md" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a href="../dashboard/inventory-and-replenishment.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
           <div class="flex items-center gap-2.5">
             <i data-lucide="package" class="w-4 h-4 text-slate-400"></i>
             <span>Inventory &amp; Stock</span>
           </div>
-          <span class="text-[10px] text-slate-400 font-mono">Sync</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
         </a>
 
         <!-- 5. Finance and Reconciliation -->
-        <a href="../dashboard/finance-and-reconciliation.md" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a href="../dashboard/finance-and-reconciliation.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
           <div class="flex items-center gap-2.5">
             <i data-lucide="file-spreadsheet" class="w-4 h-4 text-slate-400"></i>
             <span>Finance &amp; Accounts</span>
           </div>
-          <span id="navFinanceBadge" class="text-[10px] text-slate-400 font-mono">API</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
         </a>
 
         <!-- 6. Store / POS -->
-        <a href="../dashboard/store-pos.md" class="flex items-center justify-between px-2.5 py-2 rounded text-slate-300 hover:bg-slate-800/60 hover:text-white text-xs transition">
+        <a href="../dashboard/store-pos.md" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
           <div class="flex items-center gap-2.5">
             <i data-lucide="store" class="w-4 h-4 text-slate-400"></i>
             <span>Store / POS</span>
           </div>
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
         </a>
       </nav>
+
+      <!-- OTHERS SECTION -->
+      <div class="px-3 pt-2 pb-4 space-y-1.5 border-t border-slate-100">
+        <div class="px-3 pt-2 pb-1 text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Others</div>
+
+        <div class="px-3 py-1">
+          <label class="block text-[10px] font-medium text-slate-400 mb-1">Channel Scope</label>
+          <select id="channelScopeSelect" onchange="filterByChannel(this.value)" class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-700 rounded-md px-2.5 py-1.5 focus:outline-none focus:border-sky-500 cursor-pointer">
+            <option value="all">All Channels &amp; Stores</option>
+            <option value="Website / D2C">Website / D2C</option>
+            <option value="Marketplace">Amazon / Marketplace</option>
+            <option value="B2B Portal">B2B Wholesale Portal</option>
+            <option value="POS">Retail Flagship POS</option>
+            <option value="EDI / API">EDI / Partner API</option>
+          </select>
+        </div>
+
+        <button onclick="openAuditLogModal()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition">
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Audit &amp; Governance</span>
+          </div>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
+        </button>
+      </div>
     </div>
 
-    <!-- User Profile & Role Footer -->
-    <div class="p-3 border-t border-slate-800 text-xs">
-      <div class="flex items-center justify-between px-2 py-1 text-slate-400 text-[11px]">
-        <span>Scope:</span>
-        <span id="sidebarScopeTag" class="font-mono text-slate-200 font-semibold">Global Ops</span>
-      </div>
-      <div class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between px-2">
-        <div class="min-w-0">
-          <div id="sidebarUserName" class="font-semibold text-white text-xs truncate">Arjun Mehta</div>
-          <div id="sidebarUserRole" class="text-[10px] text-slate-400 font-medium truncate">Order Manager</div>
+    <!-- User Profile Footer -->
+    <div class="p-3 border-t border-slate-100">
+      <div class="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-slate-50 transition cursor-pointer" onclick="document.getElementById('roleSelect').focus()">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-semibold text-xs flex-shrink-0" id="sidebarAvatar">
+            AM
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1">
+              <span id="sidebarUserName" class="font-semibold text-slate-900 text-xs truncate">Arjun Mehta</span>
+              <i data-lucide="badge-check" class="w-3.5 h-3.5 text-sky-500 flex-shrink-0"></i>
+            </div>
+            <div class="text-[10px] text-slate-400 truncate">
+              <span id="sidebarUserRole">Order Manager</span> &bull; <span id="sidebarScopeTag">Global Ops</span>
+            </div>
+          </div>
         </div>
-        <button onclick="openAuditLogModal()" title="Immutable Audit Trail" class="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800">
-          <i data-lucide="shield-check" class="w-4 h-4"></i>
-        </button>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
       </div>
     </div>
   </aside>
@@ -151,28 +189,16 @@
 
     <!-- GLOBAL HEADER BAR -->
     <header class="h-14 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-20">
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-2">
-          <span class="font-bold text-slate-900 text-sm tracking-tight">Order Operations</span>
-          <span class="text-xs text-slate-400 font-mono">/</span>
-          <span id="headerWorkspaceTitle" class="text-xs text-slate-500">Command Centre</span>
-        </div>
-
-        <!-- Compact Workspace Navigation (Section 6) -->
-        <nav class="hidden lg:flex items-center gap-1 ml-4 pl-4 border-l border-slate-200 text-xs">
-          <button onclick="switchWorkspace('command')" id="tab-command" class="ws-tab px-2.5 py-1.5 rounded font-medium bg-slate-900 text-white transition">Command Centre</button>
-          <button onclick="switchWorkspace('explorer')" id="tab-explorer" class="ws-tab px-2.5 py-1.5 rounded font-medium text-slate-600 hover:bg-slate-100 transition">Order Explorer</button>
-          <button onclick="switchWorkspace('returns')" id="tab-returns" class="ws-tab px-2.5 py-1.5 rounded font-medium text-slate-600 hover:bg-slate-100 transition">Returns &amp; Exceptions</button>
-          <button onclick="switchWorkspace('rules')" id="tab-rules" class="ws-tab px-2.5 py-1.5 rounded font-medium text-slate-600 hover:bg-slate-100 transition flex items-center gap-1">
-            <span>Rules &amp; SLAs</span>
-          </button>
-        </nav>
+      <div class="flex items-center gap-2 whitespace-nowrap">
+        <span class="font-bold text-slate-900 text-sm tracking-tight">Order Operations</span>
+        <span class="text-xs text-slate-400 font-mono">/</span>
+        <span id="headerWorkspaceTitle" class="text-xs text-slate-500">Command Centre</span>
       </div>
 
-      <div class="flex items-center gap-3 text-xs">
-        <!-- Role Lens Switcher (Section 5 & 10) -->
+      <div class="flex items-center gap-3 text-xs whitespace-nowrap">
+        <!-- Role Lens Switcher -->
         <div class="flex items-center bg-slate-50 border border-slate-300 rounded px-2.5 py-1 text-xs">
-          <i data-lucide="user-check" class="w-3.5 h-3.5 text-slate-500 mr-1.5"></i>
+          <i data-lucide="user-check" class="w-3.5 h-3.5 text-slate-500 mr-1.5 flex-shrink-0"></i>
           <span class="text-slate-500 font-medium mr-1.5">Role:</span>
           <select id="roleSelect" onchange="switchRole(this.value)" class="bg-transparent font-semibold text-slate-900 focus:outline-none cursor-pointer">
             <option value="manager">Order Manager (Command Centre)</option>
@@ -182,7 +208,7 @@
         </div>
 
         <!-- Ask Order Operations Trigger -->
-        <button onclick="focusAskBar()" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded transition">
+        <button onclick="focusAskBar()" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded transition whitespace-nowrap">
           <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
           <span>Ask OMS</span>
           <kbd class="text-[10px] font-mono text-slate-300 bg-slate-800 px-1 py-0.2 rounded border border-slate-700">Ctrl+K</kbd>
@@ -196,9 +222,12 @@
         <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-500"></i>
         <span id="roleContextBanner">Viewing as <strong>Order Manager</strong>: Full flow health, team workload rebalancing, SLA configuration, and B2B PO approvals.</span>
       </div>
-      <span id="rolePolicyBadge" class="text-[10px] font-mono font-semibold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
-        RBAC: FULL OPS CLEARANCE
-      </span>
+      <div class="flex items-center gap-2">
+        <button onclick="openAuditLogModal()" class="text-[10px] font-mono font-semibold text-slate-700 hover:underline">Audit Trail (<span id="auditCountBadge">3</span>)</button>
+        <span id="rolePolicyBadge" class="text-[10px] font-mono font-semibold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
+          RBAC: FULL OPS CLEARANCE
+        </span>
+      </div>
     </div>
 
     <!-- MAIN SCROLLABLE WORKSPACE -->
@@ -209,12 +238,12 @@
       <!-- ======================================================= -->
       <div id="view-command" class="space-y-5">
 
-        <!-- CS SEARCH-FIRST DESK (Only prominent for Customer Service Role) -->
+        <!-- CS SEARCH-FIRST DESK (Customer Service Role Only) -->
         <section id="csSearchDesk" class="hidden bg-white border border-slate-300 rounded-lg p-4 shadow-xs space-y-3">
           <div class="flex items-center justify-between">
             <div>
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900">Customer Resolution Desk — Quick Lookup</h3>
-              <p class="text-[11px] text-slate-500">Search by Order ID, tracking number, or permitted customer identifier. Internal margins &amp; B2B pricing are masked.</p>
+              <p class="text-[11px] text-slate-500">Search by Order ID, tracking number, or customer name. Internal margins &amp; B2B pricing are masked.</p>
             </div>
             <span class="text-[10px] font-mono bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-slate-600">CUSTOMER-SAFE VIEW</span>
           </div>
@@ -224,35 +253,35 @@
           </div>
         </section>
 
-        <!-- 1. FLOW PULSE (Section 7.2) -->
+        <!-- 1. FLOW PULSE -->
         <section class="bg-white border border-slate-200 rounded-lg p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div class="flex items-start sm:items-center gap-3.5">
-            <span id="flowPulseBadge" class="px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider bg-slate-900 text-white flex-shrink-0">
-              Bottleneck
+            <span class="px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider bg-slate-900 text-white flex-shrink-0">
+              Flow Pulse
             </span>
             <div>
-              <p id="flowPulseText" class="text-sm font-semibold text-slate-900 leading-snug">
-                Dispatch is the current bottleneck. 18 paid orders have not entered picking; 4 high-priority exceptions threaten today's SLA.
+              <p class="text-sm font-semibold text-slate-900 leading-snug">
+                Reservation &amp; dispatch are the active bottlenecks: <span id="flowPulseCount">6</span> priority exceptions require action, including 1 picking SLA risk.
               </p>
               <p class="text-[11px] text-slate-500 mt-0.5">
-                Deterministic projection from order events &bull; Updated 30s ago &bull; <button onclick="filterByStage('Picking')" class="underline font-medium text-slate-700 hover:text-slate-900">See 18 affected orders &rarr;</button>
+                Deterministic projection from order events &bull; Updated 30s ago &bull; <button onclick="filterByStage('Picking')" class="underline font-medium text-slate-700 hover:text-slate-900">See picking risk &rarr;</button>
               </p>
             </div>
           </div>
 
           <div class="flex items-center gap-2 flex-shrink-0">
-            <button id="btnBulkActionHeader" onclick="openSafeActionModal('bulk-retry', 'Bulk Retry Recoverable Syncs (3 Orders)', 'Marketplace & EDI sync retries')" class="px-3 py-1.5 border border-slate-300 hover:bg-slate-50 text-slate-800 rounded text-xs font-medium transition">
+            <button id="btnBulkActionHeader" onclick="openBulkModal()" class="px-3 py-1.5 border border-slate-300 hover:bg-slate-50 text-slate-800 rounded text-xs font-medium transition">
               Bulk Actions
             </button>
           </div>
         </section>
 
-        <!-- 2. LIVE ORDER JOURNEY MAP (Section 7.3 & 9.1) -->
+        <!-- 2. LIVE ORDER JOURNEY MAP -->
         <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h3 class="font-semibold text-slate-900 uppercase tracking-wider text-[11px]">Live Order Journey</h3>
-              <p class="text-xs text-slate-500 mt-0.5">Select any stage to filter the queue. Normal flow stays quiet; bottlenecks expand.</p>
+              <p class="text-xs text-slate-500 mt-0.5">Click any stage or side path to filter the queue. Normal orders stay quiet.</p>
             </div>
             <div class="flex items-center gap-2 text-[11px]">
               <button onclick="resetFilters()" id="btnClearStageFilter" class="hidden px-2 py-0.5 bg-slate-100 border border-slate-300 rounded text-slate-700 hover:bg-slate-200 font-medium">
@@ -267,19 +296,19 @@
             <button onclick="filterByStage('Received')" class="journey-node text-left p-2.5 rounded border border-slate-200 bg-slate-50 hover:border-slate-400 transition">
               <div class="text-[10px] font-semibold uppercase text-slate-500">1. Received</div>
               <div class="text-base font-bold font-mono text-slate-900 mt-0.5">126</div>
-              <div class="text-[10px] text-slate-500 mt-0.5">Avg 2m</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">0 exceptions</div>
             </button>
 
-            <button onclick="filterByStage('Verification')" class="journey-node text-left p-2.5 rounded border border-slate-200 bg-slate-50 hover:border-slate-400 transition">
-              <div class="text-[10px] font-semibold uppercase text-slate-500">2. Verification</div>
+            <button onclick="filterByStage('Verification')" class="journey-node text-left p-2.5 rounded border border-slate-300 bg-white hover:border-slate-500 transition">
+              <div class="text-[10px] font-semibold uppercase text-slate-700">2. Verification</div>
               <div class="text-base font-bold font-mono text-slate-900 mt-0.5">9</div>
-              <div class="text-[10px] text-slate-700 font-semibold mt-0.5">2 risk &bull; B2B PO</div>
+              <div class="text-[10px] text-amber-700 font-semibold mt-0.5">1 B2B PO wait</div>
             </button>
 
             <button onclick="filterByStage('Paid')" class="journey-node text-left p-2.5 rounded border border-slate-200 bg-slate-50 hover:border-slate-400 transition">
               <div class="text-[10px] font-semibold uppercase text-slate-500">3. Paid</div>
               <div class="text-base font-bold font-mono text-slate-900 mt-0.5">84</div>
-              <div class="text-[10px] text-slate-500 mt-0.5">3 pending</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">0 exceptions</div>
             </button>
 
             <button onclick="filterByStage('Reservation')" class="journey-node text-left p-2.5 rounded border border-slate-400 bg-white ring-1 ring-slate-300 hover:border-slate-600 transition">
@@ -288,7 +317,7 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
               </div>
               <div class="text-base font-bold font-mono text-slate-900 mt-0.5">71</div>
-              <div class="text-[10px] text-rose-700 font-semibold mt-0.5">18 stalled / fail</div>
+              <div class="text-[10px] text-rose-700 font-semibold mt-0.5">1 shortfall</div>
             </button>
 
             <button onclick="filterByStage('Picking')" class="journey-node text-left p-2.5 rounded border border-slate-400 bg-white ring-1 ring-slate-300 hover:border-slate-600 transition">
@@ -297,13 +326,13 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
               </div>
               <div class="text-base font-bold font-mono text-slate-900 mt-0.5">42</div>
-              <div class="text-[10px] text-amber-700 font-semibold mt-0.5">4 SLA risk</div>
+              <div class="text-[10px] text-amber-700 font-semibold mt-0.5">1 SLA risk</div>
             </button>
 
-            <button onclick="filterByStage('Packing')" class="journey-node text-left p-2.5 rounded border border-slate-200 bg-slate-50 hover:border-slate-400 transition">
-              <div class="text-[10px] font-semibold uppercase text-slate-500">6. Packing</div>
+            <button onclick="filterByStage('Packing')" class="journey-node text-left p-2.5 rounded border border-slate-300 bg-white hover:border-slate-500 transition">
+              <div class="text-[10px] font-semibold uppercase text-slate-700">6. Packing</div>
               <div class="text-base font-bold font-mono text-slate-900 mt-0.5">28</div>
-              <div class="text-[10px] text-slate-600 mt-0.5">2 carrier wait</div>
+              <div class="text-[10px] text-rose-700 font-semibold mt-0.5">1 carrier fail</div>
             </button>
 
             <button onclick="filterByStage('Dispatched')" class="journey-node text-left p-2.5 rounded border border-slate-200 bg-slate-50 hover:border-slate-400 transition">
@@ -316,14 +345,14 @@
           <!-- Side Paths / Exception Buckets -->
           <div class="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2 text-[11px]">
             <span class="text-slate-400 font-medium mr-1">Side Paths:</span>
-            <button onclick="filterByStage('On Hold')" class="px-2.5 py-1 rounded bg-slate-50 border border-slate-200 hover:border-slate-400 text-slate-700 font-mono">On Hold: <strong>7</strong></button>
-            <button onclick="filterByStage('Reservation')" class="px-2.5 py-1 rounded bg-slate-50 border border-slate-200 hover:border-slate-400 text-slate-700 font-mono">Stock Unavailable: <strong>3</strong></button>
-            <button onclick="filterByStage('Delivery Exception')" class="px-2.5 py-1 rounded bg-slate-50 border border-slate-200 hover:border-slate-400 text-slate-700 font-mono">Delivery Exception: <strong>6</strong></button>
-            <button onclick="switchWorkspace('returns')" class="px-2.5 py-1 rounded bg-slate-50 border border-slate-200 hover:border-slate-400 text-slate-700 font-mono">Returns &amp; Exchanges: <strong>9</strong></button>
+            <button onclick="filterByStage('On Hold')" class="px-2.5 py-1 rounded bg-slate-50 border border-slate-200 hover:border-slate-400 text-slate-700 font-mono">On Hold: <strong>1</strong></button>
+            <button onclick="filterByStage('Reservation')" class="px-2.5 py-1 rounded bg-slate-50 border border-slate-200 hover:border-slate-400 text-slate-700 font-mono">Stock Unavailable: <strong>1</strong></button>
+            <button onclick="filterByStage('Delivery Exception')" class="px-2.5 py-1 rounded bg-slate-50 border border-slate-200 hover:border-slate-400 text-slate-700 font-mono">Delivery Exception: <strong>1</strong></button>
+            <button onclick="switchWorkspace('returns')" class="px-2.5 py-1 rounded bg-slate-50 border border-slate-200 hover:border-slate-400 text-slate-700 font-mono">Returns &amp; Cancellations: <strong>3</strong></button>
           </div>
         </section>
 
-        <!-- 3. ATTENTION QUEUE + WORKLOAD & OWNERSHIP (Section 7.4 & 7.5) -->
+        <!-- 3. ATTENTION QUEUE + WORKLOAD & OWNERSHIP -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
           <!-- ATTENTION QUEUE (2/3 width) -->
@@ -331,84 +360,81 @@
             <div class="flex items-center justify-between">
               <div>
                 <h3 class="font-semibold text-slate-900 uppercase tracking-wider text-[11px]">Attention Queue</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Ranked by deterministic SLA urgency, customer promise impact, and downstream blockers.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Ranked deterministically by SLA urgency, customer promise impact, and downstream blockers.</p>
               </div>
-              <span id="queueFilterLabel" class="text-[11px] font-mono text-slate-500">Showing 4 Priority Items</span>
+              <span id="queueFilterLabel" class="text-[11px] font-mono text-slate-500">Showing 6 Priority Items</span>
             </div>
 
             <div id="attentionQueueList" class="space-y-3">
-              <!-- Populated dynamically by JS based on Role & Filters -->
+              <!-- Populated dynamically by JS -->
             </div>
 
             <div id="queueEmptyState" class="hidden py-8 text-center border border-dashed border-slate-200 rounded">
-              <p class="text-xs font-semibold text-slate-700">No blocking exceptions match this filter.</p>
-              <p class="text-[11px] text-slate-500 mt-0.5">Normal orders are flowing quietly without manual intervention.</p>
+              <p class="text-xs font-semibold text-slate-700">No blocking exceptions in this stage.</p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Orders in this stage are flowing normally without manual intervention.</p>
             </div>
           </section>
 
           <!-- WORKLOAD & OWNERSHIP (1/3 width) -->
-          <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-4 flex flex-col justify-between">
+          <section id="workloadPanel" class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-4 flex flex-col justify-between">
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-slate-900 uppercase tracking-wider text-[11px]">Workload &amp; Ownership</h3>
                 <span class="text-[10px] font-mono text-slate-500">SLA Watch</span>
               </div>
 
-              <!-- Operational Counts -->
               <div class="grid grid-cols-3 gap-2 text-center">
                 <div class="p-2.5 bg-slate-50 border border-slate-200 rounded">
-                  <div class="text-base font-bold font-mono text-slate-900" id="statUnassigned">2</div>
+                  <div class="text-base font-bold font-mono text-slate-900" id="statUnassigned">3</div>
                   <div class="text-[10px] text-slate-500">Unassigned</div>
                 </div>
                 <div class="p-2.5 bg-slate-50 border border-slate-200 rounded">
-                  <div class="text-base font-bold font-mono text-slate-900">12</div>
+                  <div class="text-base font-bold font-mono text-slate-900">4</div>
                   <div class="text-[10px] text-slate-500">Near SLA</div>
                 </div>
                 <div class="p-2.5 bg-slate-50 border border-slate-200 rounded">
                   <div class="text-base font-bold font-mono text-slate-900">1</div>
-                  <div class="text-[10px] text-slate-500">Overdue</div>
+                  <div class="text-[10px] text-slate-500">Stagnant &gt;2x</div>
                 </div>
               </div>
 
-              <!-- Team Distribution -->
               <div class="space-y-2.5 pt-2 border-t border-slate-100 text-xs">
                 <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium">
                   <span>Active Queue by Owner</span>
-                  <span>Avg Age: 34m</span>
+                  <span>Avg Age: 38m</span>
                 </div>
 
                 <div>
                   <div class="flex justify-between text-[11px] mb-1">
                     <span class="font-medium text-slate-800">A. Shah (Ops Specialist)</span>
-                    <span class="font-mono text-slate-600">7 open</span>
+                    <span class="font-mono text-slate-600" id="loadShah">2 open</span>
                   </div>
-                  <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-800 rounded-full" style="width: 70%"></div></div>
+                  <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-800 rounded-full" style="width: 65%"></div></div>
                 </div>
 
                 <div>
                   <div class="flex justify-between text-[11px] mb-1">
                     <span class="font-medium text-slate-800">R. Mehta (Ops Specialist)</span>
-                    <span class="font-mono text-slate-600">5 open</span>
+                    <span class="font-mono text-slate-600" id="loadMehta">1 open</span>
                   </div>
-                  <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-800 rounded-full" style="width: 50%"></div></div>
+                  <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-800 rounded-full" style="width: 35%"></div></div>
                 </div>
 
                 <div>
                   <div class="flex justify-between text-[11px] mb-1">
                     <span class="font-medium text-slate-800">S. Khan (Customer Service)</span>
-                    <span class="font-mono text-slate-600">9 open</span>
+                    <span class="font-mono text-slate-600">1 open</span>
                   </div>
-                  <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-900 rounded-full" style="width: 90%"></div></div>
+                  <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-900 rounded-full" style="width: 45%"></div></div>
                 </div>
               </div>
 
-              <!-- Stagnation & Promise Radar Summary (Section 9.3 & 9.4) -->
-              <div class="p-3 bg-slate-50 border border-slate-200 rounded space-y-1.5 text-[11px]">
+              <div class="p-3 bg-slate-50 border border-slate-200 rounded space-y-1 text-[11px]">
                 <div class="font-semibold text-slate-900 flex items-center justify-between">
-                  <span>Promise Risk &amp; Stagnation</span>
-                  <span class="font-mono text-[10px] text-slate-500">Rules-Based</span>
+                  <span>Stagnation &amp; Promise Radar</span>
+                  <span class="font-mono text-[10px] text-slate-500">Estimate</span>
                 </div>
-                <p class="text-slate-600">3 orders stagnant &gt;2x expected stage duration (Reservation &amp; Packing).</p>
+                <p class="text-slate-600">#ORD-10482 has stalled &gt;2x normal Reservation duration (42m vs 15m baseline).</p>
               </div>
             </div>
 
@@ -418,7 +444,7 @@
           </section>
         </div>
 
-        <!-- 4. CHANNEL SIGNALS RAIL (Section 7.6) -->
+        <!-- 4. CHANNEL SIGNALS RAIL -->
         <section class="bg-white border border-slate-200 rounded-lg p-4 shadow-xs space-y-2.5">
           <div class="flex items-center justify-between text-xs">
             <span class="font-semibold text-slate-900 uppercase tracking-wider text-[11px]">Channel Signals</span>
@@ -439,7 +465,7 @@
                 <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                 <span class="font-semibold text-slate-900">Marketplace</span>
               </div>
-              <span class="text-[10px] font-mono font-semibold text-rose-700">3 sync delays</span>
+              <span class="text-[10px] font-mono font-semibold text-rose-700">Carrier 504</span>
             </button>
 
             <button onclick="filterByChannel('POS')" class="flex items-center justify-between p-2.5 rounded border border-slate-200 bg-slate-50 hover:border-slate-400 transition text-left">
@@ -463,12 +489,12 @@
                 <span class="w-2 h-2 rounded-full bg-amber-500"></span>
                 <span class="font-semibold text-slate-900">EDI / API</span>
               </div>
-              <span class="text-[10px] font-mono font-semibold text-slate-700">2 retries</span>
+              <span class="text-[10px] font-mono font-semibold text-slate-700">1 hold</span>
             </button>
           </div>
         </section>
 
-        <!-- 5. ASK ORDER OPERATIONS (Section 7.7) -->
+        <!-- 5. ASK ORDER OPERATIONS -->
         <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-3">
           <div class="flex items-center justify-between">
             <div>
@@ -479,26 +505,25 @@
           </div>
 
           <form onsubmit="handleAskSubmit(event)" class="flex gap-2">
-            <input id="askInput" type="text" placeholder="Ask e.g. 'Why is #ORD-10482 on hold?' or 'Show orders at risk of missing dispatch today'..." class="flex-1 border border-slate-300 rounded px-3.5 py-2 text-xs focus:outline-none focus:border-slate-600">
+            <input id="askInput" type="text" placeholder="Ask e.g. 'Why is #ORD-10482 blocked?' or 'Show orders at risk of missing dispatch today'..." class="flex-1 border border-slate-300 rounded px-3.5 py-2 text-xs focus:outline-none focus:border-slate-600">
             <button type="submit" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded transition">Query</button>
           </form>
 
           <div class="flex flex-wrap gap-2 text-[11px]">
             <span class="text-slate-400 py-0.5">Try:</span>
-            <button onclick="askPreset('Why is #ORD-10482 on hold?')" class="px-2.5 py-0.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded text-slate-700">“Why is #ORD-10482 on hold?”</button>
+            <button onclick="askPreset('Why is #ORD-10482 blocked?')" class="px-2.5 py-0.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded text-slate-700">“Why is #ORD-10482 blocked?”</button>
             <button onclick="askPreset('Show orders at risk of missing dispatch today')" class="px-2.5 py-0.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded text-slate-700">“Orders at risk of missing dispatch”</button>
             <button onclick="askPreset('Find B2B orders waiting for approval')" class="px-2.5 py-0.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded text-slate-700">“B2B orders waiting for approval”</button>
             <button onclick="askPreset('Draft customer reply for #ORD-10510')" class="px-2.5 py-0.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded text-slate-700">“Draft customer reply for #ORD-10510”</button>
           </div>
 
-          <!-- Grounded Answer Box -->
           <div id="askResultBox" class="hidden p-4 bg-slate-50 border border-slate-300 rounded space-y-2 text-xs">
             <div class="flex items-center justify-between">
               <span id="askResultTitle" class="font-bold text-slate-900"></span>
               <button onclick="document.getElementById('askResultBox').classList.add('hidden')" class="text-slate-400 hover:text-slate-700">&times;</button>
             </div>
             <p id="askResultBody" class="text-slate-700 leading-relaxed"></p>
-            <div id="askResultActions" class="pt-2 border-t border-slate-200 flex items-center justify-between text-[11px]">
+            <div class="pt-2 border-t border-slate-200 flex items-center justify-between text-[11px]">
               <span id="askResultSource" class="font-mono text-slate-500"></span>
               <div id="askResultButtons" class="flex gap-2"></div>
             </div>
@@ -507,18 +532,24 @@
       </div>
 
       <!-- ======================================================= -->
-      <!-- VIEW 2: ORDER EXPLORER (SEARCH & INVESTIGATION TABLE) -->
+      <!-- VIEW 2: ORDER EXPLORER -->
       <!-- ======================================================= -->
       <div id="view-explorer" class="hidden space-y-4">
         <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-xs space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h3 class="font-semibold text-slate-900 text-sm">Order Explorer — Unified Order Inbox</h3>
-              <p class="text-xs text-slate-500">Normalized orders across D2C, Marketplace, B2B, and POS. Click any row to open its full Order Workspace.</p>
+              <p class="text-xs text-slate-500">Normalized orders across D2C, Marketplace, B2B, and EDI. Click any row to open its Order Workspace.</p>
             </div>
-            <div class="flex items-center gap-2">
-              <input id="explorerSearchInput" oninput="renderExplorerTable()" type="text" placeholder="Search Order ID, Channel, SKU, Customer..." class="border border-slate-300 rounded px-3 py-1.5 text-xs w-64 focus:outline-none focus:border-slate-500">
-            </div>
+            <input id="explorerSearchInput" oninput="renderExplorerTable()" type="text" placeholder="Search Order ID, Channel, Reason Code, Customer..." class="border border-slate-300 rounded px-3 py-1.5 text-xs w-72 focus:outline-none focus:border-slate-500">
+          </div>
+
+          <!-- Saved Views -->
+          <div class="flex flex-wrap gap-1.5 text-[11px]">
+            <button onclick="setExplorerPreset('all')" class="exp-pill px-2.5 py-1 rounded bg-slate-900 text-white font-medium">All Active</button>
+            <button onclick="setExplorerPreset('HIGH')" class="exp-pill px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium">High Priority</button>
+            <button onclick="setExplorerPreset('Unassigned')" class="exp-pill px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium">Unassigned</button>
+            <button onclick="setExplorerPreset('B2B')" class="exp-pill px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium">B2B Orders</button>
           </div>
 
           <div class="overflow-x-auto">
@@ -528,16 +559,14 @@
                   <th class="py-2.5 px-3">Order ID</th>
                   <th class="py-2.5 px-3">Channel / Model</th>
                   <th class="py-2.5 px-3">Customer / Org</th>
-                  <th class="py-2.5 px-3">Current Stage</th>
+                  <th class="py-2.5 px-3">Stage</th>
+                  <th class="py-2.5 px-3">Reason Code</th>
                   <th class="py-2.5 px-3">SLA Status</th>
                   <th class="py-2.5 px-3 text-right">Order Value</th>
                   <th class="py-2.5 px-3">Owner</th>
-                  <th class="py-2.5 px-3 text-right">Workspace</th>
                 </tr>
               </thead>
-              <tbody id="explorerTableBody" class="divide-y divide-slate-100 text-slate-800">
-                <!-- Populated by JS -->
-              </tbody>
+              <tbody id="explorerTableBody" class="divide-y divide-slate-100 text-slate-800"></tbody>
             </table>
           </div>
         </section>
@@ -551,9 +580,9 @@
           <div class="flex items-center justify-between">
             <div>
               <h3 class="font-semibold text-slate-900 text-sm">Returns, Exchanges &amp; Cancellations</h3>
-              <p class="text-xs text-slate-500">Order Operations coordinates reverse workflows; Warehouse owns inspection and Finance owns refund execution.</p>
+              <p class="text-xs text-slate-500">Order Operations coordinates reverse workflows; Warehouse owns inspection and Finance owns refund posting.</p>
             </div>
-            <span class="text-[11px] font-mono text-slate-500">Boundary Enforced</span>
+            <span class="text-[11px] font-mono text-slate-500">Service Boundaries Enforced</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
@@ -562,9 +591,9 @@
                 <span class="font-mono font-bold text-slate-900">#RMA-4092</span>
                 <span class="px-2 py-0.5 rounded bg-white border border-slate-300 text-[10px] font-semibold">Inspection Pending</span>
               </div>
-              <p class="text-slate-700">Orig: <strong>#ORD-10211</strong> (Marketplace) &bull; Sizing exchange requested.</p>
+              <p class="text-slate-700">Orig: <strong>#ORD-10491</strong> (Marketplace) &bull; Sizing exchange requested.</p>
               <div class="text-[11px] text-slate-500">Warehouse QC: Awaiting Hub-2 scan</div>
-              <button onclick="openOrderWorkspace('ORD-10482')" class="text-[11px] font-semibold text-slate-900 underline">View Linked Order &rarr;</button>
+              <button onclick="openOrderWorkspace('ORD-10491')" class="text-[11px] font-semibold text-slate-900 underline">Open Linked Order &rarr;</button>
             </div>
 
             <div class="p-4 border border-slate-200 rounded bg-slate-50 space-y-2">
@@ -573,8 +602,8 @@
                 <span class="px-2 py-0.5 rounded bg-slate-900 text-white text-[10px] font-semibold">Picking Cutoff Check</span>
               </div>
               <p class="text-slate-700">Orig: <strong>#ORD-10498</strong> (Website / D2C) &bull; Customer requested cancellation.</p>
-              <div class="text-[11px] text-slate-500">Fulfilment State: Picking started 12m ago</div>
-              <button onclick="openSafeActionModal('cancel-cutoff', 'Request Warehouse Stop for #ORD-10498', 'Picking already in progress; requires warehouse stop confirmation')" class="px-2.5 py-1 bg-white border border-slate-300 rounded text-[11px] font-medium hover:bg-slate-100">Request Warehouse Stop</button>
+              <div class="text-[11px] text-slate-500">Fulfilment State: Picking in progress</div>
+              <button onclick="openSafeActionModal('ORD-10498', 'Request Warehouse Stop for #ORD-10498', 'Picking already started; sends stop/cancel decision to Warehouse Hub-1')" class="px-2.5 py-1 bg-white border border-slate-300 rounded text-[11px] font-medium hover:bg-slate-100">Request Warehouse Stop</button>
             </div>
 
             <div class="p-4 border border-slate-200 rounded bg-slate-50 space-y-2">
@@ -582,9 +611,9 @@
                 <span class="font-mono font-bold text-slate-900">#RMA-4088</span>
                 <span class="px-2 py-0.5 rounded bg-white border border-slate-300 text-[10px] font-semibold">Finance Refund Queue</span>
               </div>
-              <p class="text-slate-700">Orig: <strong>#ORD-10104</strong> (Website / D2C) &bull; Warehouse QC passed.</p>
-              <div class="text-[11px] text-slate-500">Finance API: Refund ₹3,499 queued (T+1)</div>
-              <span class="inline-block text-[10px] font-mono text-slate-400">Executed by Finance Service</span>
+              <p class="text-slate-700">Orig: <strong>#ORD-10510</strong> (Website / D2C) &bull; Partial return QC passed.</p>
+              <div class="text-[11px] text-slate-500">Finance API: Refund ₹1,299 queued (T+1)</div>
+              <button onclick="openOrderWorkspace('ORD-10510')" class="text-[11px] font-semibold text-slate-900 underline">Open Linked Order &rarr;</button>
             </div>
           </div>
         </section>
@@ -625,33 +654,31 @@
   </div>
 
   <!-- ========================================================= -->
-  <!-- 3. SLIDE-OVER ORDER DETAIL WORKSPACE (Section 8D & 9) -->
+  <!-- 3. SLIDE-OVER ORDER DETAIL WORKSPACE -->
   <!-- ========================================================= -->
   <div id="orderWorkspaceBackdrop" onclick="closeOrderWorkspace()" class="fixed inset-0 bg-slate-950/30 z-40 hidden"></div>
   <aside id="orderWorkspaceDrawer" class="fixed inset-y-0 right-0 w-full max-w-2xl bg-white border-l border-slate-300 shadow-2xl z-50 transform translate-x-full transition-transform duration-200 flex flex-col">
-    <!-- Drawer Header -->
     <div class="p-5 border-b border-slate-200 bg-slate-50 flex items-start justify-between gap-4">
       <div>
-        <div class="flex items-center gap-2.5">
+        <div class="flex flex-wrap items-center gap-2">
           <h2 id="wsOrderId" class="text-base font-bold font-mono text-slate-900">#ORD-10482</h2>
           <span id="wsChannelBadge" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-white border border-slate-300 text-slate-700">Website / D2C</span>
-          <span id="wsPriorityBadge" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-900 text-white">High Priority</span>
+          <span id="wsPriorityBadge" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-900 text-white">HIGH</span>
+          <span id="wsReasonCode" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-200 text-slate-800">ERR_INV_SHORTFALL</span>
         </div>
-        <p id="wsSubtitle" class="text-xs text-slate-500 mt-1">Payment confirmed &bull; Stock reservation failed &bull; Owner: Unassigned</p>
+        <p id="wsSubtitle" class="text-xs text-slate-500 mt-1"></p>
       </div>
       <button onclick="closeOrderWorkspace()" class="p-1.5 text-slate-400 hover:text-slate-800 rounded hover:bg-slate-200">
         <i data-lucide="x" class="w-4 h-4"></i>
       </button>
     </div>
 
-    <!-- Drawer Scrollable Body -->
     <div class="flex-1 overflow-y-auto p-5 space-y-5 text-xs">
-
       <!-- Next Best Action Banner -->
       <div class="p-3.5 bg-slate-900 text-white rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <span class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Next Best Action</span>
-          <p id="wsNextAction" class="font-medium text-xs mt-0.5">Assign to inventory coordination to resolve SKU-8841 reservation shortfall.</p>
+          <p id="wsNextAction" class="font-medium text-xs mt-0.5"></p>
         </div>
         <div class="flex gap-2 flex-shrink-0">
           <button id="wsPrimaryActionBtn" onclick="triggerWorkspacePrimaryAction()" class="px-3 py-1.5 bg-white text-slate-900 hover:bg-slate-100 font-semibold rounded text-xs transition">
@@ -660,15 +687,13 @@
         </div>
       </div>
 
-      <!-- Journey Strip (Section 8D) -->
+      <!-- Journey Strip -->
       <div class="space-y-2">
         <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Order Journey</span>
-        <div id="wsJourneyStrip" class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] font-mono">
-          <!-- Populated by JS -->
-        </div>
+        <div id="wsJourneyStrip" class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] font-mono"></div>
       </div>
 
-      <!-- Order Dependency View (Section 9.5) -->
+      <!-- Order Dependency View -->
       <div class="p-3.5 bg-slate-50 border border-slate-200 rounded space-y-1.5">
         <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Dependency Chain (Root Blocker)</span>
         <p id="wsDependencyChain" class="font-mono text-[11px] text-slate-800"></p>
@@ -677,7 +702,7 @@
       <!-- Customer Promise & Payment Snapshot -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div class="p-3.5 border border-slate-200 rounded space-y-1">
-          <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Customer Promise View</span>
+          <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Customer Promise &amp; Context</span>
           <div id="wsPromiseText" class="font-semibold text-slate-900 mt-1"></div>
           <div id="wsCustomerContext" class="text-[11px] text-slate-600"></div>
         </div>
@@ -689,26 +714,44 @@
         </div>
       </div>
 
-      <!-- Items -->
-      <div class="space-y-2">
-        <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Order Line Items</span>
-        <div id="wsItemsList" class="border border-slate-200 rounded divide-y divide-slate-100">
-          <!-- Populated by JS -->
+      <!-- Fulfilment, Shipment & Documents -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="p-3.5 border border-slate-200 rounded space-y-1">
+          <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Fulfilment &amp; Shipment</span>
+          <div id="wsFulfilmentInfo" class="font-medium text-slate-800 mt-1"></div>
+        </div>
+
+        <div class="p-3.5 border border-slate-200 rounded space-y-1">
+          <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Documents</span>
+          <div id="wsDocumentsList" class="flex flex-wrap gap-1.5 mt-1"></div>
         </div>
       </div>
 
-      <!-- Chronological Event Timeline / Order Replay (Section 9.9) -->
+      <!-- CS Verified Reply Drafter (Visible for CS or Delivery Exceptions) -->
+      <div id="wsCsReplyBox" class="hidden p-3.5 bg-slate-50 border border-slate-300 rounded space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] uppercase font-bold tracking-wider text-slate-700">Customer-Safe Reply Draft (Grounded in Order Events)</span>
+          <button onclick="copyCsDraft()" class="text-[11px] font-semibold text-slate-900 underline">Copy Draft</button>
+        </div>
+        <p id="wsCsDraftText" class="text-xs text-slate-700 bg-white p-2.5 rounded border border-slate-200"></p>
+      </div>
+
+      <!-- Items -->
+      <div class="space-y-2">
+        <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Order Line Items</span>
+        <div id="wsItemsList" class="border border-slate-200 rounded divide-y divide-slate-100"></div>
+      </div>
+
+      <!-- Chronological Event Timeline / Order Replay -->
       <div class="space-y-2">
         <div class="flex items-center justify-between">
           <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Chronological Event Timeline (Order Replay)</span>
           <span class="text-[10px] font-mono text-slate-400">Immutable Event Log</span>
         </div>
-        <div id="wsTimeline" class="border-l-2 border-slate-200 ml-2 pl-4 space-y-3 py-1">
-          <!-- Populated by JS -->
-        </div>
+        <div id="wsTimeline" class="border-l-2 border-slate-200 ml-2 pl-4 space-y-3 py-1"></div>
       </div>
 
-      <!-- Notes & One-Click Handoff (Section 9.6) -->
+      <!-- Notes & One-Click Handoff -->
       <div class="p-4 bg-slate-50 border border-slate-200 rounded space-y-3">
         <div class="flex items-center justify-between">
           <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Notes &amp; One-Click Handoff</span>
@@ -728,7 +771,7 @@
   </aside>
 
   <!-- ========================================================= -->
-  <!-- 4. SAFE ACTION PREVIEW MODAL (Section 9.8) -->
+  <!-- 4. SAFE ACTION PREVIEW MODAL -->
   <!-- ========================================================= -->
   <div id="safeActionModal" class="fixed inset-0 bg-slate-950/40 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white border border-slate-300 rounded-lg max-w-md w-full p-5 shadow-lg space-y-4">
@@ -747,7 +790,7 @@
         </div>
 
         <div class="text-[11px] text-slate-600 space-y-1">
-          <div>&bull; <strong>Downstream Services Notified:</strong> Inventory API / Warehouse Task Queue</div>
+          <div>&bull; <strong>Downstream Services Notified:</strong> Inventory / Warehouse / Carrier API</div>
           <div>&bull; <strong>Audit Logging:</strong> Actor, before/after state, and reason recorded immutably.</div>
         </div>
 
@@ -765,6 +808,89 @@
   </div>
 
   <!-- ========================================================= -->
+  <!-- 5. SNOOZE MODAL -->
+  <!-- ========================================================= -->
+  <div id="snoozeModal" class="fixed inset-0 bg-slate-950/40 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-300 rounded-lg max-w-sm w-full p-5 shadow-lg space-y-4 text-xs">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+        <h3 class="font-bold text-slate-900 text-sm">Snooze Exception (<span id="snoozeOrderLabel"></span>)</h3>
+        <button onclick="closeSnoozeModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Snooze Duration</label>
+          <select id="snoozeDuration" class="w-full border border-slate-300 rounded px-2.5 py-1.5">
+            <option value="30m">30 minutes</option>
+            <option value="2h">2 hours</option>
+            <option value="End of Shift">Until End of Shift</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Required Reason</label>
+          <input id="snoozeReason" type="text" value="Awaiting customer / carrier callback" class="w-full border border-slate-300 rounded px-2.5 py-1.5">
+        </div>
+      </div>
+      <div class="pt-2 border-t border-slate-200 flex justify-end gap-2">
+        <button onclick="closeSnoozeModal()" class="px-3 py-1.5 border border-slate-300 rounded">Cancel</button>
+        <button onclick="confirmSnooze()" class="px-3 py-1.5 bg-slate-900 text-white rounded font-medium">Snooze Item</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- 6. BULK OPERATIONS PREVIEW MODAL -->
+  <!-- ========================================================= -->
+  <div id="bulkModal" class="fixed inset-0 bg-slate-950/40 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-300 rounded-lg max-w-md w-full p-5 shadow-lg space-y-4 text-xs">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+        <div>
+          <h3 class="font-bold text-slate-900 text-sm">Bulk Operation Eligibility Preview</h3>
+          <p class="text-[11px] text-slate-500">Asynchronous batch execution with state validation</p>
+        </div>
+        <button onclick="closeBulkModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded"><div class="font-mono font-bold text-base">3</div><div class="text-[10px] text-slate-500">Selected</div></div>
+        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded"><div class="font-mono font-bold text-base">2</div><div class="text-[10px] text-slate-500">Eligible</div></div>
+        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded"><div class="font-mono font-bold text-base">1</div><div class="text-[10px] text-slate-500">Excluded</div></div>
+      </div>
+      <div class="p-3 bg-slate-50 border border-slate-200 rounded space-y-1 text-[11px]">
+        <div><strong>Eligible:</strong> #ORD-10491, #ORD-10504 (Retry recoverable sync / release check)</div>
+        <div class="text-rose-700"><strong>Excluded:</strong> #B2B-2081 (Requires Manager PO approval before batching)</div>
+      </div>
+      <div class="pt-2 border-t border-slate-200 flex justify-end gap-2">
+        <button onclick="closeBulkModal()" class="px-3 py-1.5 border border-slate-300 rounded">Cancel</button>
+        <button onclick="executeBulkRetry()" class="px-3 py-1.5 bg-slate-900 text-white rounded font-medium">Run Eligible Batch (2)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- 7. IMMUTABLE AUDIT LOG MODAL -->
+  <!-- ========================================================= -->
+  <div id="auditModal" class="fixed inset-0 bg-slate-950/40 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-300 rounded-lg max-w-lg w-full p-5 shadow-lg space-y-4 text-xs">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+        <div>
+          <h3 class="font-bold text-slate-900 text-sm">Immutable Audit Trail</h3>
+          <p class="text-[11px] text-slate-500">Actor, action, timestamp, and reason code</p>
+        </div>
+        <button onclick="closeAuditModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <div id="auditLogList" class="space-y-2 max-h-64 overflow-y-auto"></div>
+      <div class="pt-2 border-t border-slate-200 flex justify-end">
+        <button onclick="closeAuditModal()" class="px-3 py-1.5 bg-slate-900 text-white rounded font-medium">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- IN-APP TOAST NOTIFICATION -->
+  <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white px-4 py-2.5 rounded-lg shadow-lg text-xs flex items-center gap-2.5 max-w-md border border-slate-700">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+    <span id="toastMessage"></span>
+  </div>
+
+  <!-- ========================================================= -->
   <!-- JAVASCRIPT: ROLE ENGINE, QUEUE & ORDER WORKSPACE -->
   <!-- ========================================================= -->
   <script>
@@ -773,10 +899,62 @@
     let currentRole = 'manager';
     let currentStageFilter = 'all';
     let currentChannelFilter = 'all';
+    let explorerPreset = 'all';
     let activeWorkspaceOrderId = null;
-    let pendingSafeAction = null;
+    let pendingActionOrderId = null;
+    let pendingSnoozeOrderId = null;
+
+    const auditLogs = [
+      { time: '15:18', actor: 'Arjun Mehta (Order Manager)', action: 'SLA Threshold Verified', reason: 'Marketplace 4h clock active' },
+      { time: '14:52', actor: 'A. Shah (Ops Specialist)', action: 'Handoff #ORD-10491', reason: 'Escalated BlueDart API 504 timeout' },
+      { time: '14:26', actor: 'System Rule Engine', action: 'Routed #ORD-10510', reason: 'Carrier marked undelivered -> CS Queue' }
+    ];
 
     const ordersData = [
+      {
+        id: 'ORD-10491',
+        channel: 'Marketplace',
+        model: 'B2C',
+        customer: 'Ananya Verma (Amazon Prime)',
+        customerContact: 'Masked by Amazon SP-API Policy',
+        stage: 'Packing',
+        reasonCode: 'ERR_CARRIER_504',
+        priorityReason: 'SLA < 20m + EasyShip Cutoff',
+        stagnant: false,
+        exception: 'Packed, carrier pickup manifest not confirmed (BlueDart API 504 timeout)',
+        waiting: '28m',
+        slaRemaining: 'Dispatch SLA in 18m',
+        priority: 'HIGH',
+        impact: 'Marketplace SLA penalty · ₹8,950',
+        impactSafe: 'Marketplace dispatch SLA in 18m',
+        value: '₹8,950',
+        owner: 'A. Shah',
+        nextStep: 'Retry carrier handover & re-generate shipping label',
+        actionLabel: 'Retry Handover',
+        dependency: 'Packed ✓ → Carrier Manifest Request TIMEOUT → Dispatch Clock Critical',
+        promise: 'Amazon EasyShip Cutoff: Today 16:30 IST (Critical)',
+        payment: 'Marketplace Prepaid · Settled',
+        marginNote: 'Net after 15% Amazon Fee: ₹7,607',
+        fulfilmentInfo: 'Hub-1 · Pkg #PK-9921 · BlueDart Express (Manifest Pending)',
+        documents: ['Tax Invoice #INV-9921', 'Packing Slip', 'Marketplace Manifest'],
+        items: [
+          { sku: 'SKU-5510', name: 'Urban Commuter Backpack 24L', qty: 1, status: 'Packed (Pkg #PK-9921)' }
+        ],
+        timeline: [
+          { time: '11:10', event: 'Order imported via Amazon SP-API' },
+          { time: '12:05', event: 'Picking & Packing completed at Hub-1' },
+          { time: '15:02', event: 'Carrier booking timed out (BlueDart API 504)' }
+        ],
+        journey: [
+          { label: 'Received', state: 'done' },
+          { label: 'Verified', state: 'done' },
+          { label: 'Paid', state: 'done' },
+          { label: 'Reserved', state: 'done' },
+          { label: 'Picking', state: 'done' },
+          { label: 'Packing', state: 'error' },
+          { label: 'Dispatch', state: 'todo' }
+        ]
+      },
       {
         id: 'ORD-10482',
         channel: 'Website / D2C',
@@ -784,7 +962,10 @@
         customer: 'Rohan Sharma',
         customerContact: 'rohan.sharma@example.com · +91 98***-4120',
         stage: 'Reservation',
-        exception: 'Payment verified, stock reservation failed (SKU-8841 shortfall)',
+        reasonCode: 'ERR_INV_SHORTFALL',
+        priorityReason: 'Stagnant >2x + Promise Risk',
+        stagnant: true,
+        exception: 'Payment verified, stock reservation failed (SKU-8841 shortfall in Hub-1)',
         waiting: '42m',
         slaRemaining: 'Dispatch SLA in 1h 18m',
         priority: 'HIGH',
@@ -792,12 +973,14 @@
         impactSafe: 'Customer dispatch promise at risk',
         value: '₹12,400',
         owner: 'Unassigned',
-        nextStep: 'Assign to inventory coordination or substitute warehouse Hub-2',
-        actionLabel: 'Assign / Coordinate',
+        nextStep: 'Assign to inventory coordination or route fulfilment to Hub-2 (14 units available)',
+        actionLabel: 'Route to Hub-2',
         dependency: 'Order Confirmed → Payment Captured → Stock Reservation FAILED → Warehouse Task Blocked',
         promise: 'Promised Dispatch: Today 18:00 IST (At Risk)',
         payment: 'UPI Paid · Captured (Ref: FIN-88412)',
         marginNote: 'Gross Margin: 42.1% (Internal)',
+        fulfilmentInfo: 'Hub-1 Shortfall · Alternate Stock Available in Hub-2',
+        documents: ['Tax Invoice #INV-88412'],
         items: [
           { sku: 'SKU-8841', name: 'Classic Runner 10 — Black / UK 9', qty: 2, status: 'Reservation Failed (0 in Hub-1, 14 in Hub-2)' },
           { sku: 'SKU-2041', name: 'Performance Socks 3-Pack', qty: 1, status: 'Reserved' }
@@ -818,41 +1001,45 @@
         ]
       },
       {
-        id: 'ORD-10491',
-        channel: 'Marketplace',
-        model: 'B2C',
-        customer: 'Ananya Verma (Amazon Prime)',
-        customerContact: 'Masked by Amazon SP-API Policy',
-        stage: 'Packing',
-        exception: 'Packed, carrier pickup manifest not confirmed (API timeout)',
-        waiting: '28m',
-        slaRemaining: 'Dispatch SLA in 18m',
+        id: 'ORD-10498',
+        channel: 'Website / D2C',
+        model: 'D2C',
+        customer: 'Vikram Patel',
+        customerContact: 'vikram.p@example.com · +91 99***-1102',
+        stage: 'Picking',
+        reasonCode: 'ERR_PICK_SLA',
+        priorityReason: 'Picking Overdue + Cancel Check',
+        stagnant: false,
+        exception: 'Picking SLA threshold exceeded (waiting 52m in Hub-1 Zone B)',
+        waiting: '52m',
+        slaRemaining: 'Dispatch SLA in 48m',
         priority: 'HIGH',
-        impact: 'Marketplace SLA penalty · ₹8,950',
-        impactSafe: 'Marketplace dispatch SLA in 18m',
-        value: '₹8,950',
-        owner: 'A. Shah',
-        nextStep: 'Retry carrier handover & re-generate shipping label',
-        actionLabel: 'Retry Handover',
-        dependency: 'Packed ✓ → Carrier Manifest Request TIMEOUT → Dispatch Clock Critical',
-        promise: 'Amazon EasyShip Cutoff: Today 16:30 IST (Critical)',
-        payment: 'Marketplace Prepaid · Settled',
-        marginNote: 'Net after 15% Amazon Fee: ₹7,607',
+        impact: 'Same-day promise risk · ₹6,800',
+        impactSafe: 'Same-day dispatch promise at risk',
+        value: '₹6,800',
+        owner: 'R. Mehta',
+        nextStep: 'Escalate pick wave priority to Warehouse Hub-1',
+        actionLabel: 'Prioritize Pick',
+        dependency: 'Reserved ✓ → Warehouse Pick Task #WH-4412 STALLED in Zone B → Packing Blocked',
+        promise: 'Promised Same-Day Dispatch: Today 18:00 IST',
+        payment: 'Card Paid · Captured',
+        marginNote: 'Gross Margin: 39.4% (Internal)',
+        fulfilmentInfo: 'Hub-1 Zone B · Pick Wave #WH-4412',
+        documents: ['Tax Invoice #INV-88498', 'Pick Ticket #WH-4412'],
         items: [
-          { sku: 'SKU-5510', name: 'Urban Commuter Backpack 24L', qty: 1, status: 'Packed (Pkg #PK-9921)' }
+          { sku: 'SKU-4410', name: 'Merino Travel Hoodie — Charcoal L', qty: 1, status: 'Awaiting Pick Scan' }
         ],
         timeline: [
-          { time: '11:10', event: 'Order imported via Amazon SP-API' },
-          { time: '12:05', event: 'Picking & Packing completed at Hub-1' },
-          { time: '15:02', event: 'Carrier booking timed out (BlueDart API 504)' }
+          { time: '15:10', event: 'Order confirmed and stock reserved at Hub-1' },
+          { time: '15:12', event: 'Warehouse pick task #WH-4412 created' },
+          { time: '16:04', event: 'Picking SLA warning triggered (52m elapsed)' }
         ],
         journey: [
           { label: 'Received', state: 'done' },
-          { label: 'Verified', state: 'done' },
           { label: 'Paid', state: 'done' },
           { label: 'Reserved', state: 'done' },
-          { label: 'Picking', state: 'done' },
-          { label: 'Packing', state: 'error' },
+          { label: 'Picking', state: 'error' },
+          { label: 'Packing', state: 'todo' },
           { label: 'Dispatch', state: 'todo' }
         ]
       },
@@ -863,7 +1050,10 @@
         customer: 'Apex Retail Distributors Pvt Ltd',
         customerContact: 'procurement@apexretail.in · PO #PO-2026-441',
         stage: 'Verification',
-        exception: 'Customer PO exceeds standard credit term; manager approval required',
+        reasonCode: 'B2B_PO_APPROVAL',
+        priorityReason: 'Value > ₹1L + Net-45 Term',
+        stagnant: false,
+        exception: 'Customer PO exceeds standard credit term; Order Manager approval required',
         waiting: '2h 15m',
         slaRemaining: 'B2B SLA in 3h 45m',
         priority: 'MED',
@@ -872,14 +1062,16 @@
         value: '₹1,84,000',
         owner: 'Unassigned',
         nextStep: 'Review B2B PO terms & approve for warehouse allocation',
-        actionLabel: 'Review & Approve PO',
+        actionLabel: 'Approve B2B PO',
         dependency: 'PO Uploaded ✓ → Credit Term Check (Net-45) → Awaiting Order Manager Approval',
         promise: 'Requested Delivery Window: Nov 28 – Nov 30',
         payment: 'Net-45 Credit Terms (Finance Pre-check Passed)',
         marginNote: 'Contract Tier-A Negotiated Margin: 22.4% (Restricted)',
+        fulfilmentInfo: 'B2B Pallet Allocation · Pending PO Approval',
+        documents: ['Customer PO #PO-2026-441', 'Contract Tier-A Sheet'],
         items: [
-          { sku: 'SKU-8841', name: 'Classic Runner 10 — Assorted Case (40 units)', qty: 40, status: 'Pending Approval' },
-          { sku: 'SKU-7102', name: 'Trail Grip Pro — Assorted Case (20 units)', qty: 20, status: 'Pending Approval' }
+          { sku: 'SKU-8841', name: 'Classic Runner 10 — Assorted Case (40 units)', qty: 40, status: 'MOQ Validated · Pending Approval' },
+          { sku: 'SKU-7102', name: 'Trail Grip Pro — Assorted Case (20 units)', qty: 20, status: 'MOQ Validated · Pending Approval' }
         ],
         timeline: [
           { time: '13:15', event: 'B2B Order submitted via Portal with PO-2026-441' },
@@ -901,6 +1093,9 @@
         customer: 'Priya Nair',
         customerContact: 'priya.nair@example.com · +91 97***-8812',
         stage: 'Delivery Exception',
+        reasonCode: 'ERR_DELIV_ADDR',
+        priorityReason: 'RTO Prevention Window',
+        stagnant: false,
         exception: 'Delivery attempt failed — recipient unreachable / incomplete landmark',
         waiting: '1h 05m',
         slaRemaining: 'CS Response SLA in 55m',
@@ -909,12 +1104,15 @@
         impactSafe: 'Customer contact needed to prevent RTO',
         value: '₹4,299',
         owner: 'S. Khan',
-        nextStep: 'Verify address with customer & trigger carrier re-attempt',
-        actionLabel: 'Open Service Case',
+        nextStep: 'Confirm landmark with customer & trigger carrier re-attempt',
+        actionLabel: 'Trigger Re-attempt',
         dependency: 'Dispatched ✓ → Out for Delivery → Carrier Marked Undelivered (Address Incomplete)',
         promise: 'Promised Delivery: Today (Delayed — Re-attempt Needed)',
         payment: 'Prepaid Card · Captured',
         marginNote: 'Gross Margin: 45.0% (Internal)',
+        fulfilmentInfo: 'Delhivery · AWB #DL-774821 · At Destination Hub',
+        documents: ['Tax Invoice #INV-88510', 'Carrier AWB #DL-774821'],
+        csDraft: 'Hi Priya, our courier attempted delivery for order #ORD-10510 today at 14:25 IST (AWB #DL-774821) but needed a landmark clarification. Please reply with your nearest landmark so we can schedule a priority re-attempt.',
         items: [
           { sku: 'SKU-3309', name: 'Canvas Weekender Tote — Olive', qty: 1, status: 'At Destination Hub' }
         ],
@@ -929,6 +1127,46 @@
           { label: 'Reserved', state: 'done' },
           { label: 'Dispatched', state: 'done' },
           { label: 'Delivery', state: 'error' }
+        ]
+      },
+      {
+        id: 'ORD-10504',
+        channel: 'EDI / API',
+        model: 'B2C',
+        customer: 'Karan Malhotra',
+        customerContact: 'karan.m@example.com · +91 96***-7731',
+        stage: 'On Hold',
+        reasonCode: 'ERR_ADDR_VERIFY',
+        priorityReason: 'Invalid Postal Code',
+        stagnant: false,
+        exception: 'Order placed on hold: pincode mismatch between billing and shipping API payload',
+        waiting: '1h 30m',
+        slaRemaining: 'Confirm SLA in 2h 10m',
+        priority: 'MED',
+        impact: 'Fulfilment paused · ₹5,450',
+        impactSafe: 'Address verification needed before fulfilment',
+        value: '₹5,450',
+        owner: 'Unassigned',
+        nextStep: 'Validate postal code and release hold for warehouse reservation',
+        actionLabel: 'Verify & Release Hold',
+        dependency: 'Order Received → Address Validation FAILED → Placed On Hold',
+        promise: 'Promised Dispatch: Tomorrow 12:00 IST',
+        payment: 'Prepaid NetBanking · Authorized',
+        marginNote: 'Gross Margin: 41.0% (Internal)',
+        fulfilmentInfo: 'Pending Address Release (Not yet sent to Warehouse)',
+        documents: ['EDI Payload #EDI-10504'],
+        items: [
+          { sku: 'SKU-6210', name: 'Everyday Leather Belt — Tan', qty: 2, status: 'On Hold' }
+        ],
+        timeline: [
+          { time: '14:00', event: 'Order ingested via Partner API' },
+          { time: '14:01', event: 'Address check failed: Postal code 40000A invalid; placed On Hold' }
+        ],
+        journey: [
+          { label: 'Received', state: 'done' },
+          { label: 'On Hold', state: 'error' },
+          { label: 'Reserved', state: 'todo' },
+          { label: 'Dispatch', state: 'todo' }
         ]
       }
     ];
@@ -950,7 +1188,7 @@
         name: 'A. Shah',
         roleTitle: 'Order Ops Specialist',
         scope: 'Assigned & Team Queue',
-        banner: 'Viewing as <strong>Order Ops Specialist</strong>: Action queue for blocked orders, dependency resolution, and handoffs. SLA config & refunds restricted.',
+        banner: 'Viewing as <strong>Order Ops Specialist</strong>: Action queue for blocked orders, dependency resolution, and handoffs. SLA config & margins masked.',
         policyBadge: 'RBAC: SPECIALIST WORKBENCH',
         showRulesTab: false,
         showCsDesk: false,
@@ -962,7 +1200,7 @@
         name: 'S. Khan',
         roleTitle: 'Customer Service',
         scope: 'Service Cases & Lookup',
-        banner: 'Viewing as <strong>Customer Service</strong>: Search-first lookup, customer-safe timeline, and verified reply drafts. Margins & B2B terms are masked.',
+        banner: 'Viewing as <strong>Customer Service</strong>: Search-first lookup, customer-safe timeline, and verified reply drafts. Margins & B2B terms masked.',
         policyBadge: 'RBAC: CUSTOMER-SAFE VIEW',
         showRulesTab: false,
         showCsDesk: true,
@@ -972,6 +1210,14 @@
       }
     };
 
+    function showToast(msg) {
+      const toast = document.getElementById('toastBanner');
+      document.getElementById('toastMessage').innerText = msg;
+      toast.classList.remove('hidden');
+      lucide.createIcons();
+      setTimeout(() => toast.classList.add('hidden'), 4000);
+    }
+
     function switchRole(role) {
       currentRole = role;
       const cfg = roleConfig[role];
@@ -979,59 +1225,46 @@
       document.getElementById('sidebarUserName').innerText = cfg.name;
       document.getElementById('sidebarUserRole').innerText = cfg.roleTitle;
       document.getElementById('sidebarScopeTag').innerText = cfg.scope;
+      const avatarEl = document.getElementById('sidebarAvatar');
+      if (avatarEl) {
+        avatarEl.innerText = cfg.name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
+      }
       document.getElementById('roleContextBanner').innerHTML = cfg.banner;
       document.getElementById('rolePolicyBadge').innerText = cfg.policyBadge;
 
-      // Rules tab visibility (Manager only)
-      const rulesTab = document.getElementById('tab-rules');
+      const rulesSubTab = document.getElementById('subtab-rules');
       if (cfg.showRulesTab) {
-        rulesTab.classList.remove('hidden');
+        if (rulesSubTab) rulesSubTab.classList.remove('hidden');
       } else {
-        rulesTab.classList.add('hidden');
+        if (rulesSubTab) rulesSubTab.classList.add('hidden');
         if (!document.getElementById('view-rules').classList.contains('hidden')) {
           switchWorkspace('command');
         }
       }
 
-      // CS Search Desk visibility
-      const csDesk = document.getElementById('csSearchDesk');
-      if (cfg.showCsDesk) csDesk.classList.remove('hidden');
-      else csDesk.classList.add('hidden');
-
-      // Bulk & Balance buttons
-      const btnBulk = document.getElementById('btnBulkActionHeader');
-      const btnBal = document.getElementById('btnBalanceWorkload');
-      btnBulk.classList.toggle('hidden', !cfg.canBulk);
-      btnBal.classList.toggle('hidden', !cfg.canBalance);
+      document.getElementById('csSearchDesk').classList.toggle('hidden', !cfg.showCsDesk);
+      document.getElementById('btnBulkActionHeader').classList.toggle('hidden', !cfg.canBulk);
+      document.getElementById('btnBalanceWorkload').classList.toggle('hidden', !cfg.canBalance);
 
       renderAttentionQueue();
       renderExplorerTable();
-      if (activeWorkspaceOrderId) {
-        openOrderWorkspace(activeWorkspaceOrderId);
-      }
+      if (activeWorkspaceOrderId) openOrderWorkspace(activeWorkspaceOrderId);
     }
 
     function switchWorkspace(ws) {
       ['command', 'explorer', 'returns', 'rules'].forEach(id => {
         document.getElementById('view-' + id).classList.toggle('hidden', id !== ws);
-        const tab = document.getElementById('tab-' + id);
-        if (tab) {
+        const subtab = document.getElementById('subtab-' + id);
+        if (subtab) {
           if (id === ws) {
-            tab.classList.add('bg-slate-900', 'text-white');
-            tab.classList.remove('text-slate-600', 'hover:bg-slate-100');
+            subtab.className = 'ws-subtab w-full text-left px-2.5 py-1.5 rounded-md font-semibold text-sky-600 bg-sky-50/70 transition';
           } else {
-            tab.classList.remove('bg-slate-900', 'text-white');
-            tab.classList.add('text-slate-600', 'hover:bg-slate-100');
+            subtab.className = 'ws-subtab w-full text-left px-2.5 py-1.5 rounded-md font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition';
           }
         }
       });
 
-      const titles = {
-        command: 'Command Centre',
-        explorer: 'Order Explorer',
-        returns: 'Returns & Exceptions',
-        rules: 'Rules & SLAs'
-      };
+      const titles = { command: 'Command Centre', explorer: 'Order Explorer', returns: 'Returns & Exceptions', rules: 'Rules & SLAs' };
       document.getElementById('headerWorkspaceTitle').innerText = titles[ws] || 'Command Centre';
     }
 
@@ -1044,9 +1277,7 @@
     function filterByChannel(channel) {
       currentChannelFilter = channel;
       document.getElementById('channelScopeSelect').value = channel;
-      if (channel !== 'all') {
-        document.getElementById('btnClearStageFilter').classList.remove('hidden');
-      }
+      if (channel !== 'all') document.getElementById('btnClearStageFilter').classList.remove('hidden');
       renderAttentionQueue();
       renderExplorerTable();
     }
@@ -1066,9 +1297,10 @@
       const cfg = roleConfig[currentRole];
 
       const filtered = ordersData.filter(o => {
+        if (o.resolved) return false;
         if (currentStageFilter !== 'all' && o.stage !== currentStageFilter) return false;
         if (currentChannelFilter !== 'all' && o.channel !== currentChannelFilter) return false;
-        if (currentRole === 'cs' && o.model === 'B2B') return false; // CS doesn't handle B2B PO approvals
+        if (currentRole === 'cs' && o.model === 'B2B') return false;
         return true;
       });
 
@@ -1078,6 +1310,8 @@
         (currentChannelFilter !== 'all' ? ` · ${currentChannelFilter}` : '');
 
       document.getElementById('sidebarQueueCount').innerText = filtered.length;
+      document.getElementById('flowPulseCount').innerText = filtered.length;
+      document.getElementById('statUnassigned').innerText = ordersData.filter(o => !o.resolved && o.owner === 'Unassigned').length;
 
       if (filtered.length === 0) {
         container.innerHTML = '';
@@ -1090,21 +1324,26 @@
         const impactText = cfg.canSeeMargins ? o.impact : o.impactSafe;
         const primaryActionHtml = currentRole === 'cs' && o.stage !== 'Delivery Exception'
           ? `<button onclick="openOrderWorkspace('${o.id}')" class="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded text-[11px] font-medium">Open Service View</button>`
-          : `<button onclick="openSafeActionModal('resolve-${o.id}', '${o.actionLabel} (#${o.id})', '${o.nextStep}')" class="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded text-[11px] font-medium">${o.actionLabel}</button>`;
+          : `<button onclick="openSafeActionModal('${o.id}', '${o.actionLabel} (#${o.id})', '${o.nextStep}')" class="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded text-[11px] font-medium">${o.actionLabel}</button>`;
 
         return `
           <div class="p-4 border border-slate-200 rounded-lg hover:border-slate-400 transition bg-white space-y-2.5">
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
                 <span class="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono ${o.priority === 'HIGH' ? 'bg-slate-900 text-white' : 'bg-slate-200 text-slate-800'}">${o.priority}</span>
                 <button onclick="openOrderWorkspace('${o.id}')" class="font-mono font-bold text-slate-900 hover:underline text-xs">#${o.id}</button>
                 <span class="text-[11px] text-slate-500">&bull; ${o.channel}</span>
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-[10px] font-medium text-slate-700">${o.stage}</span>
+                <span class="px-1.5 py-0.5 rounded bg-slate-50 border border-slate-200 text-[10px] font-mono text-slate-500" title="Priority Reason">${o.priorityReason}</span>
+                ${o.stagnant ? `<span class="px-1.5 py-0.5 rounded bg-amber-50 border border-amber-300 text-[10px] font-semibold text-amber-800">Stagnant &gt;2x</span>` : ''}
               </div>
               <div class="text-[11px] font-mono text-slate-700 font-semibold">${o.slaRemaining}</div>
             </div>
 
-            <p class="text-xs text-slate-800 font-medium">${o.exception}</p>
+            <div class="flex items-start justify-between gap-2">
+              <p class="text-xs text-slate-800 font-medium">${o.exception}</p>
+              <span class="text-[10px] font-mono text-slate-400 flex-shrink-0">${o.reasonCode}</span>
+            </div>
 
             <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-[11px]">
               <div class="text-slate-500">
@@ -1115,13 +1354,25 @@
                 <span>${impactText}</span>
               </div>
               <div class="flex items-center gap-1.5">
-                <button onclick="openOrderWorkspace('${o.id}')" class="px-2.5 py-1 border border-slate-300 hover:bg-slate-50 text-slate-700 rounded text-[11px] font-medium">Open Workspace</button>
+                <button onclick="openOrderWorkspace('${o.id}')" class="px-2.5 py-1 border border-slate-300 hover:bg-slate-50 text-slate-700 rounded text-[11px] font-medium">Workspace</button>
+                <button onclick="openSnoozeModal('${o.id}')" class="px-2 py-1 border border-slate-200 hover:bg-slate-50 text-slate-600 rounded text-[11px]">Snooze</button>
                 ${primaryActionHtml}
               </div>
             </div>
           </div>
         `;
       }).join('');
+    }
+
+    function setExplorerPreset(preset) {
+      explorerPreset = preset;
+      document.querySelectorAll('.exp-pill').forEach(btn => {
+        const match = btn.getAttribute('onclick').includes(`'${preset}'`);
+        btn.className = match
+          ? 'exp-pill px-2.5 py-1 rounded bg-slate-900 text-white font-medium'
+          : 'exp-pill px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium';
+      });
+      renderExplorerTable();
     }
 
     function renderExplorerTable() {
@@ -1132,10 +1383,14 @@
       const rows = ordersData.filter(o => {
         if (currentChannelFilter !== 'all' && o.channel !== currentChannelFilter) return false;
         if (currentRole === 'cs' && o.model === 'B2B') return false;
+        if (explorerPreset === 'HIGH' && o.priority !== 'HIGH') return false;
+        if (explorerPreset === 'Unassigned' && o.owner !== 'Unassigned') return false;
+        if (explorerPreset === 'B2B' && o.model !== 'B2B') return false;
         if (!query) return true;
         return o.id.toLowerCase().includes(query) ||
                o.channel.toLowerCase().includes(query) ||
                o.customer.toLowerCase().includes(query) ||
+               o.reasonCode.toLowerCase().includes(query) ||
                o.stage.toLowerCase().includes(query);
       });
 
@@ -1144,11 +1399,11 @@
           <td class="py-2.5 px-3 font-mono font-bold text-slate-900">#${o.id}</td>
           <td class="py-2.5 px-3">${o.channel} <span class="text-[10px] text-slate-400">(${o.model})</span></td>
           <td class="py-2.5 px-3">${o.customer}</td>
-          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[10px] font-medium">${o.stage}</span></td>
+          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[10px] font-medium">${o.resolved ? 'Resolved' : o.stage}</span></td>
+          <td class="py-2.5 px-3 font-mono text-[10px] text-slate-500">${o.reasonCode}</td>
           <td class="py-2.5 px-3 font-mono text-[11px]">${o.slaRemaining}</td>
           <td class="py-2.5 px-3 text-right font-mono">${cfg.canSeeMargins || currentRole === 'specialist' ? o.value : 'Masked'}</td>
           <td class="py-2.5 px-3">${o.owner}</td>
-          <td class="py-2.5 px-3 text-right"><span class="underline font-semibold text-slate-900">Open &rarr;</span></td>
         </tr>
       `).join('');
     }
@@ -1162,17 +1417,30 @@
       document.getElementById('wsOrderId').innerText = '#' + o.id;
       document.getElementById('wsChannelBadge').innerText = o.channel;
       document.getElementById('wsPriorityBadge').innerText = o.priority + ' PRIORITY';
+      document.getElementById('wsReasonCode').innerText = o.reasonCode;
       document.getElementById('wsSubtitle').innerText = `${o.stage} · Waiting ${o.waiting} · Owner: ${o.owner}`;
       document.getElementById('wsNextAction').innerText = o.nextStep;
-      document.getElementById('wsPrimaryActionBtn').innerText = currentRole === 'cs' ? 'Request Escalation' : o.actionLabel;
+      document.getElementById('wsPrimaryActionBtn').innerText = currentRole === 'cs' ? 'Escalate to Ops' : o.actionLabel;
       document.getElementById('wsDependencyChain').innerText = o.dependency;
       document.getElementById('wsPromiseText').innerText = o.promise;
       document.getElementById('wsCustomerContext').innerText = `${o.customer} (${o.customerContact})`;
       document.getElementById('wsPaymentSnapshot').innerText = o.payment;
       document.getElementById('wsFinancialNote').innerText = cfg.canSeeMargins ? o.marginNote : '[Commercial margin masked for your role]';
+      document.getElementById('wsFulfilmentInfo').innerText = o.fulfilmentInfo;
+      document.getElementById('wsDocumentsList').innerHTML = o.documents.map(doc =>
+        `<span class="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] font-mono text-slate-700">${doc}</span>`
+      ).join('');
       document.getElementById('wsNoteVisibilityTag').innerText = currentRole === 'cs' ? 'Customer-Service Note' : 'Internal Ops Note';
 
-      // Journey strip
+      // CS Reply Draft
+      const csBox = document.getElementById('wsCsReplyBox');
+      if ((currentRole === 'cs' || o.csDraft) && o.csDraft) {
+        csBox.classList.remove('hidden');
+        document.getElementById('wsCsDraftText').innerText = o.csDraft;
+      } else {
+        csBox.classList.add('hidden');
+      }
+
       document.getElementById('wsJourneyStrip').innerHTML = o.journey.map((step, idx) => {
         const symbol = step.state === 'done' ? '✓' : (step.state === 'error' ? '!' : '○');
         const cls = step.state === 'done'
@@ -1182,7 +1450,6 @@
                (idx < o.journey.length - 1 ? `<span class="text-slate-300">&rarr;</span>` : '');
       }).join('');
 
-      // Items
       document.getElementById('wsItemsList').innerHTML = o.items.map(it => `
         <div class="p-3 flex items-center justify-between gap-3">
           <div>
@@ -1193,7 +1460,6 @@
         </div>
       `).join('');
 
-      // Timeline
       document.getElementById('wsTimeline').innerHTML = o.timeline.map(ev => `
         <div class="relative">
           <span class="w-2 h-2 rounded-full bg-slate-900 absolute -left-[21px] top-1"></span>
@@ -1216,7 +1482,13 @@
     function triggerWorkspacePrimaryAction() {
       const o = ordersData.find(x => x.id === activeWorkspaceOrderId);
       if (!o) return;
-      openSafeActionModal('ws-' + o.id, `${o.actionLabel} on #${o.id}`, o.nextStep);
+      openSafeActionModal(o.id, `${o.actionLabel} on #${o.id}`, o.nextStep);
+    }
+
+    function copyCsDraft() {
+      const txt = document.getElementById('wsCsDraftText').innerText;
+      if (navigator.clipboard) navigator.clipboard.writeText(txt);
+      showToast('Verified customer-safe reply copied to clipboard.');
     }
 
     function addWorkspaceNote() {
@@ -1229,6 +1501,7 @@
       o.timeline.push({ time: 'Just now', event: `${tag} ${roleConfig[currentRole].name}: ${txt}` });
       input.value = '';
       openOrderWorkspace(o.id);
+      showToast(`Note added to #${o.id}.`);
     }
 
     function handoffOrder(targetTeam) {
@@ -1237,12 +1510,16 @@
       if (!o) return;
       o.owner = targetTeam;
       o.timeline.push({ time: 'Just now', event: `One-click handoff to ${targetTeam} by ${roleConfig[currentRole].name} (context attached)` });
+      auditLogs.unshift({ time: 'Just now', actor: roleConfig[currentRole].name, action: `Handoff #${o.id} → ${targetTeam}`, reason: 'One-click operational handoff' });
+      document.getElementById('auditCountBadge').innerText = auditLogs.length;
       renderAttentionQueue();
+      renderExplorerTable();
       openOrderWorkspace(o.id);
+      showToast(`#${o.id} handed off to ${targetTeam} with full timeline.`);
     }
 
-    function openSafeActionModal(actionId, title, desc) {
-      pendingSafeAction = actionId;
+    function openSafeActionModal(orderId, title, desc) {
+      pendingActionOrderId = orderId;
       document.getElementById('safeActionTitle').innerText = title;
       document.getElementById('safeActionDesc').innerText = desc;
       document.getElementById('safeActionModal').classList.remove('hidden');
@@ -1250,38 +1527,82 @@
 
     function closeSafeActionModal() {
       document.getElementById('safeActionModal').classList.add('hidden');
-      pendingSafeAction = null;
+      pendingActionOrderId = null;
     }
 
     function confirmSafeAction() {
       const reason = document.getElementById('safeActionReason').value.trim();
-      if (!reason) {
-        alert('An audit reason is required before executing state changes.');
-        return;
-      }
+      if (!reason) return;
       const title = document.getElementById('safeActionTitle').innerText;
+      const orderId = pendingActionOrderId;
+      const o = ordersData.find(x => x.id === orderId);
+      if (o) {
+        o.resolved = true;
+        o.timeline.push({ time: 'Just now', event: `Action Executed (${o.actionLabel}) by ${roleConfig[currentRole].name} — Reason: ${reason}` });
+      }
+      auditLogs.unshift({ time: 'Just now', actor: roleConfig[currentRole].name, action: title, reason });
+      document.getElementById('auditCountBadge').innerText = auditLogs.length;
       closeSafeActionModal();
-      alert(`[Action Executed & Audited]\n${title}\nReason: ${reason}\nAudit Ref: AUD-${Math.floor(10000 + Math.random() * 90000)}`);
+      if (activeWorkspaceOrderId === orderId) closeOrderWorkspace();
+      renderAttentionQueue();
+      renderExplorerTable();
+      showToast(`Executed & audited: ${title}`);
+    }
+
+    function openSnoozeModal(orderId) {
+      pendingSnoozeOrderId = orderId;
+      document.getElementById('snoozeOrderLabel').innerText = '#' + orderId;
+      document.getElementById('snoozeModal').classList.remove('hidden');
+    }
+
+    function closeSnoozeModal() {
+      document.getElementById('snoozeModal').classList.add('hidden');
+      pendingSnoozeOrderId = null;
+    }
+
+    function confirmSnooze() {
+      const dur = document.getElementById('snoozeDuration').value;
+      const reason = document.getElementById('snoozeReason').value.trim() || 'Snoozed by operator';
+      const o = ordersData.find(x => x.id === pendingSnoozeOrderId);
+      if (o) {
+        o.resolved = true;
+        o.timeline.push({ time: 'Just now', event: `Snoozed for ${dur} by ${roleConfig[currentRole].name} — ${reason}` });
+        auditLogs.unshift({ time: 'Just now', actor: roleConfig[currentRole].name, action: `Snoozed #${o.id} (${dur})`, reason });
+        document.getElementById('auditCountBadge').innerText = auditLogs.length;
+      }
+      closeSnoozeModal();
+      renderAttentionQueue();
+      showToast(`#${o ? o.id : ''} snoozed for ${dur}.`);
+    }
+
+    function openBulkModal() { document.getElementById('bulkModal').classList.remove('hidden'); }
+    function closeBulkModal() { document.getElementById('bulkModal').classList.add('hidden'); }
+    function executeBulkRetry() {
+      auditLogs.unshift({ time: 'Just now', actor: roleConfig[currentRole].name, action: 'Bulk Retry (2 Eligible Orders)', reason: 'Async sync recovery batch' });
+      document.getElementById('auditCountBadge').innerText = auditLogs.length;
+      closeBulkModal();
+      showToast('Queued 2 eligible orders for asynchronous retry (#B2B-2081 excluded).');
     }
 
     function balanceWorkload() {
-      alert('[Workload Rebalanced]\n2 unassigned exceptions routed evenly to A. Shah and R. Mehta based on active SLA capacity.');
-      ordersData.forEach(o => {
-        if (o.owner === 'Unassigned') o.owner = 'R. Mehta';
+      let reassigned = 0;
+      ordersData.forEach((o, idx) => {
+        if (!o.resolved && o.owner === 'Unassigned') {
+          o.owner = idx % 2 === 0 ? 'A. Shah' : 'R. Mehta';
+          reassigned++;
+        }
       });
-      document.getElementById('statUnassigned').innerText = '0';
+      auditLogs.unshift({ time: 'Just now', actor: roleConfig[currentRole].name, action: `Balanced Workload (${reassigned} orders)`, reason: 'SLA capacity distribution' });
+      document.getElementById('auditCountBadge').innerText = auditLogs.length;
       renderAttentionQueue();
       renderExplorerTable();
+      showToast(`Rebalanced ${reassigned} unassigned exceptions across Ops Specialists.`);
     }
 
     function runCsLookup() {
       const q = (document.getElementById('csQuickLookupInput').value || '').trim().toUpperCase();
-      const match = ordersData.find(o => o.id.includes(q) || o.customer.toUpperCase().includes(q));
-      if (match) {
-        openOrderWorkspace(match.id);
-      } else {
-        openOrderWorkspace('ORD-10510');
-      }
+      const match = ordersData.find(o => (o.id.includes(q) || o.customer.toUpperCase().includes(q)) && o.model !== 'B2B');
+      openOrderWorkspace(match ? match.id : 'ORD-10510');
     }
 
     function focusAskBar() {
@@ -1309,8 +1630,8 @@
       const ql = q.toLowerCase();
       title.innerText = `Query: "${q}"`;
 
-      if (ql.includes('10482') || ql.includes('hold')) {
-        body.innerText = 'Order #ORD-10482 is blocked at Stock Reservation: SKU-8841 (Classic Runner 10) has 0 available units in Hub-1, though 14 units are available in Hub-2. Payment (FIN-88412) is already captured.';
+      if (ql.includes('10482') || ql.includes('hold') || ql.includes('blocked')) {
+        body.innerText = 'Order #ORD-10482 is blocked at Stock Reservation (ERR_INV_SHORTFALL): SKU-8841 has 0 units in Hub-1, though 14 units are available in Hub-2. Payment (FIN-88412) is captured.';
         src.innerText = 'Source: Order Events + Inventory Reservation API';
         btns.innerHTML = `<button onclick="openOrderWorkspace('ORD-10482')" class="px-2.5 py-1 bg-slate-900 text-white rounded">Open #ORD-10482</button>`;
       } else if (ql.includes('b2b') || ql.includes('approval')) {
@@ -1319,25 +1640,39 @@
           src.innerText = 'Policy: Server-Side RBAC';
           btns.innerHTML = '';
         } else {
-          body.innerText = '1 B2B order is awaiting manager approval: #B2B-2081 (Apex Retail Distributors, PO-2026-441, ₹1,84,000) — waiting 2h 15m under Net-45 credit verification.';
+          body.innerText = '1 B2B order is awaiting manager approval: #B2B-2081 (Apex Retail Distributors, PO-2026-441, ₹1,84,000) — waiting 2h 15m under Net-45 credit check.';
           src.innerText = 'Source: B2B Approval Queue';
           btns.innerHTML = `<button onclick="openOrderWorkspace('B2B-2081')" class="px-2.5 py-1 bg-slate-900 text-white rounded">Review #B2B-2081</button>`;
         }
       } else if (ql.includes('reply') || ql.includes('10510')) {
-        body.innerText = 'Verified Draft for Priya Nair (#ORD-10510): "Hi Priya, our courier attempted delivery today at 14:25 IST but needed a landmark clarification. Please confirm your nearest landmark so we can schedule a priority re-attempt."';
+        body.innerText = 'Verified Draft for Priya Nair (#ORD-10510): "Hi Priya, our courier attempted delivery today at 14:25 IST (AWB #DL-774821) but needed a landmark clarification. Please confirm your nearest landmark for a priority re-attempt."';
         src.innerText = 'Grounded in verified carrier event AWB #DL-774821';
         btns.innerHTML = `<button onclick="openOrderWorkspace('ORD-10510')" class="px-2.5 py-1 bg-slate-900 text-white rounded">Open Service Case</button>`;
       } else {
-        body.innerText = '2 orders are at immediate risk of missing today\'s dispatch SLA: #ORD-10491 (Amazon carrier manifest timeout, 18m left) and #ORD-10482 (Stock reservation shortfall, 1h 18m left).';
+        body.innerText = '3 orders are at immediate risk of missing today\'s dispatch SLA: #ORD-10491 (Carrier 504, 18m left), #ORD-10498 (Picking overdue, 48m left), and #ORD-10482 (Stock shortfall, 1h 18m left).';
         src.innerText = 'Source: Deterministic SLA Engine';
-        btns.innerHTML = `<button onclick="filterByStage('Packing')" class="px-2.5 py-1 bg-slate-900 text-white rounded">Filter At-Risk</button>`;
+        btns.innerHTML = `<button onclick="filterByStage('Picking')" class="px-2.5 py-1 bg-slate-900 text-white rounded">Filter Picking Risk</button>`;
       }
 
       box.classList.remove('hidden');
     }
 
     function openAuditLogModal() {
-      alert('[Immutable Audit Trail]\nAll sensitive order holds, PO approvals, handoffs, and cancellations are logged with actor, timestamp, before/after state, and reason code.');
+      const list = document.getElementById('auditLogList');
+      list.innerHTML = auditLogs.map(log => `
+        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded space-y-0.5">
+          <div class="flex justify-between font-semibold text-slate-900">
+            <span>${log.action}</span>
+            <span class="font-mono text-[10px] text-slate-500">${log.time}</span>
+          </div>
+          <div class="text-[11px] text-slate-600">${log.actor} &bull; Reason: ${log.reason}</div>
+        </div>
+      `).join('');
+      document.getElementById('auditModal').classList.remove('hidden');
+    }
+
+    function closeAuditModal() {
+      document.getElementById('auditModal').classList.add('hidden');
     }
 
     document.addEventListener('keydown', function(e) {
